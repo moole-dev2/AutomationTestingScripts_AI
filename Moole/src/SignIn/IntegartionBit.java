@@ -75,7 +75,10 @@ public class IntegartionBit {
             // --- Step 8: Enter API Token ---
             WebElement tokenField = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.xpath("//input[@type='password']")));
-            tokenField.sendKeys("ATATT3xFfGF0NQe_BmhVoHFA0UObX3O2OOmTzC_YPcVN24CkAGa8ZznWKZtzmJrJ-HhbdzyTpL0uuEHdcYr0y8lksRIX5rWBhpNIrM0WpO5CoNHEgFQNw6vM1jewL6DsYWELv4M5vgFnWlO5uTtu7vbc5Bios4pLK2-B3wJr9KQOL1n84onh46I=9FAE8D37");  // replace with your token
+
+           // tokenField.sendKeys("ATATT3xFfGF0NQe_BmhVoHFA0UObX3O2OOmTzC_YPcVN24CkAGa8ZznWKZtzmJrJ-HhbdzyTpL0uuEHdcYr0y8lksRIX5rWBhpNIrM0WpO5CoNHEgFQNw6vM1jewL6DsYWELv4M5vgFnWlO5uTtu7vbc5Bios4pLK2-B3wJr9KQOL1n84onh46I=9FAE8D37");  // replace with your token
+            tokenField.sendKeys("");  // replace with your token
+//>>>>>>> branch 'main' of https://github.com/moole-dev2/Moole.AI_AutomationTesting.git
 
 
             // --- Step 9: Save Integration ---

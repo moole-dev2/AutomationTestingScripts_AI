@@ -64,6 +64,7 @@ public class IntegrationGL {
             ));
             gitlabToken.clear();
             //gitlabToken.sendKeys("glpat-8kDQ37D5CdcoQb9BYUe0u2M6MQpvOjEKdTpsMmlmdg8.01.1713cfbrl");
+//gitlabToken.sendKeys("glpat-8kDQ37D5CdcoQb9BYUe0u2M6MQpvOjEKdTpsMmlmdg8.01.1713cfbrl");
 
             // --- Step 9: Save GitLab Integration ---
             WebElement updateBtn = wait.until(ExpectedConditions.elementToBeClickable(
