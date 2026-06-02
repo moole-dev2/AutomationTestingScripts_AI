@@ -18,6 +18,14 @@ public class OperationsTheater {
 	            driver.get("https://moole.ai/");
 	            driver.manage().window().maximize();
 	            Thread.sleep(2000);
+	            // -------- Handle Privacy Popup --------
+	            try {
+	                wait.until(ExpectedConditions.elementToBeClickable(
+	                        By.xpath("//button[text()='OK']"))).click();
+	            } catch (Exception e) {
+	                System.out.println("No popup");
+	            }
+
 
 	            // ---------------- Click Company ----------------
 	            WebElement companyBtn = wait.until(

@@ -47,10 +47,10 @@ public class PAT {
             Thread.sleep(2000);
 
             // --- Step 4: Navigate directly to Integrations page ---
-            driver.get("https://moole.ai/settings/project/integrations");
+            driver.get("https://moole.ai/app/settings/project/integrations");
             // --- Step 5: Click on PAT menu ---
             WebElement patMenu = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//a[@href='/settings/developer/pat']//span[text()='PAT']")));
+                    By.xpath("//a[contains(@href,'developer/pat')]//span[text()='PAT']")));
             patMenu.click();
 
             // --- Step 6: Enter Token Name ---

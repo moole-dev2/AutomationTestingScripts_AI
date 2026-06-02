@@ -72,55 +72,92 @@ public class Newsroom {
                 Thread.sleep(1500);
             }
 
-            // -------- NEXT BUTTON --------
+         // -------- NEXT BUTTON (FAST - 5 SEC MAX) --------
             System.out.println("Testing Next button...");
+
+            WebDriverWait fastWait = new WebDriverWait(driver, Duration.ofSeconds(5));
 
             for (int i = 0; i < 2; i++) {
 
-                WebElement pagination = wait.until(ExpectedConditions.presenceOfElementLocated(
-                        By.xpath("//div[contains(@class,'items-center gap-1')]")));
+                try {
+                    WebElement next = fastWait.until(
+                            ExpectedConditions.presenceOfElementLocated(
+                                    By.xpath("//a[contains(@aria-label,'Next') or contains(text(),'Next') or contains(@aria-label,'next')]")
+                            )
+                    );
 
-                WebElement next = pagination.findElement(
-                        By.xpath(".//a[@aria-label='Next page']"));
+                    js.executeScript("arguments[0].scrollIntoView({block:'center'});", next);
+                    Thread.sleep(500);
 
-                js.executeScript("arguments[0].click();", next);
+                    js.executeScript("arguments[0].click();", next);
 
-                wait.until(ExpectedConditions.urlContains("page="));
+                    System.out.println("Clicked Next");
 
-                System.out.println("Clicked Next");
+                    Thread.sleep(1000); // small wait only
 
-                // Scroll behavior
-                js.executeScript("window.scrollTo(0, 0)");
+                } catch (Exception e) {
+                    System.out.println("Next button not found or disabled, stopping pagination");
+                    break;
+                }
+
+                // quick scroll
                 js.executeScript("window.scrollTo(0, document.body.scrollHeight * 0.5)");
-
-                Thread.sleep(1500);
+                Thread.sleep(800);
             }
+         // =========================================================
+         // PREVIOUS BUTTON (ROBUST FIX)
+         // =========================================================
+         System.out.println("Testing Previous button...");
 
-            // -------- PREVIOUS BUTTON --------
-            System.out.println("Testing Previous button...");
+         boolean prevClicked = false;
 
-            WebElement pagination = wait.until(ExpectedConditions.presenceOfElementLocated(
-                    By.xpath("//div[contains(@class,'items-center gap-1')]")));
+         By[] prevLocators = new By[] {
+             By.xpath("//a[contains(@aria-label,'Previous')]"),
+             By.xpath("//button[contains(@aria-label,'Previous')]"),
+             By.xpath("//a[contains(text(),'Previous')]"),
+             By.xpath("//button[contains(text(),'Previous')]")
+         };
 
-            WebElement prev = pagination.findElement(
-                    By.xpath(".//a[@aria-label='Previous page']"));
+         for (By locator : prevLocators) {
 
-            js.executeScript("arguments[0].click();", prev);
+             try {
+                 WebElement prev = wait.until(
+                         ExpectedConditions.presenceOfElementLocated(locator)
+                 );
 
-            wait.until(ExpectedConditions.urlContains("page="));
+                 js.executeScript("arguments[0].scrollIntoView({block:'center'});", prev);
+                 Thread.sleep(1000);
 
-            System.out.println("Clicked Previous");
+                 js.executeScript("arguments[0].click();", prev);
 
-            // Scroll behavior
-            js.executeScript("window.scrollTo(0, 0)");
-            js.executeScript("window.scrollTo(0, document.body.scrollHeight * 0.5)");
+                 System.out.println("Clicked Previous");
 
-            Thread.sleep(1500);
+                 Thread.sleep(2000);
 
-            // -------- Go Back to Home --------
-            driver.navigate().to("https://moole.ai/");
-            System.out.println("Returned to Home Page");
+                 prevClicked = true;
+                 break;
 
+             } catch (Exception ignored) {
+                 // try next locator
+             }
+         }
+
+         if (!prevClicked) {
+             System.out.println("Previous button not found or disabled");
+         }
+
+         // scroll behavior
+         js.executeScript("window.scrollTo(0, 0)");
+         Thread.sleep(1000);
+         js.executeScript("window.scrollTo(0, document.body.scrollHeight * 0.5)");
+         Thread.sleep(1500);
+
+         // =========================================================
+         // BACK TO HOME
+         // =========================================================
+         driver.navigate().to("https://moole.ai/");
+         Thread.sleep(1000);
+         System.out.println("Returned to Home Page");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

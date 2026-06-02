@@ -1,6 +1,7 @@
 package Platform;
 
 import java.time.Duration;
+import java.util.List;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -9,117 +10,176 @@ import org.openqa.selenium.support.ui.*;
 
 public class PlatformDrop {
 
-	public static void main(String[] args) {
-		 WebDriver driver = new ChromeDriver();
-	        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-	        Actions actions = new Actions(driver);
-	        JavascriptExecutor js = (JavascriptExecutor) driver;
+    public static void main(String[] args) {
 
-	        try {
-	            driver.get("https://moole.ai/");
-	            driver.manage().window().maximize();
+        WebDriver driver = new ChromeDriver();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        Actions actions = new Actions(driver);
 
-	            // ===== Hover Platform =====
-	            WebElement platform = wait.until(
-	                    ExpectedConditions.presenceOfElementLocated(
-	                            By.xpath("//button[.//span[text()='Platform']]")
-	                    )
-	            );
+        try {
 
-	            actions.moveToElement(platform).perform();
-	            Thread.sleep(2000);
+            // =========================================================
+            // OPEN WEBSITE
+            // =========================================================
+            driver.get("https://moole.ai/");
+            driver.manage().window().maximize();
+            Thread.sleep(3000);
+         // =========================================================
+            // HANDLE POPUP
+            // =========================================================
+            try {
+                WebElement ok = wait.until(ExpectedConditions.elementToBeClickable(
+                        By.xpath("//button[contains(text(),'OK')]")));
+                js.executeScript("arguments[0].click();", ok);
+                System.out.println("Popup closed");
+            } catch (Exception e) {
+                System.out.println("No popup found");
+            }
 
-	            // ===== Click Switchboard =====
-	            WebElement switchboard = wait.until(
-	                    ExpectedConditions.presenceOfElementLocated(
-	                            By.xpath("//span[contains(text(),'The Switchboard')]")
-	                    )
-	            );
+            Thread.sleep(2000);
 
-	            js.executeScript("arguments[0].click();", switchboard);
-	            System.out.println("Switchboard clicked");
+            // =========================================================
+            // PLATFORM HOVER
+            // =========================================================
+            WebElement platform = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//button[.//span[text()='Platform']]")
+                    )
+            );
 
-	            Thread.sleep(3000);
+            actions.moveToElement(platform).perform();
+            Thread.sleep(1500);
 
-	            // ===== Scroll Down =====
-	            long height = (long) js.executeScript("return document.body.scrollHeight");
+            // =========================================================
+            // CLICK SWITCHBOARD
+            // =========================================================
+            WebElement switchboard = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//span[contains(text(),'The Switchboard')]")
+                    )
+            );
 
-	            for (int i = 0; i < height; i += 300) {
-	                js.executeScript("window.scrollBy(0,300)");
-	                Thread.sleep(500);
-	            }
+            js.executeScript("arguments[0].click();", switchboard);
+            System.out.println("Switchboard clicked");
 
-	            System.out.println("Scrolled down");
+            Thread.sleep(4000);
 
-	            // ===== Scroll Up =====
-	            for (int i = 0; i < height; i += 300) {
-	                js.executeScript("window.scrollBy(0,-300)");
-	                Thread.sleep(500);
-	            }
+            // =========================================================
+            // SCROLL PAGE
+            // =========================================================
+            scroll(js);
 
-	            System.out.println("Scrolled up");
+            // =========================================================
+            // CATEGORY LIST
+            // =========================================================
+            List<WebElement> categories = driver.findElements(
+                    By.xpath("//ul/li/button")
+            );
 
-	            Thread.sleep(2000);
+            System.out.println("Total categories: " + categories.size());
 
-	            // ===== Back to Home =====
-	            driver.navigate().back();
-	            Thread.sleep(2000);
+            for (int i = 0; i < categories.size(); i++) {
 
-	            // ===== Hover Platform again =====
-	            WebElement platform2 = wait.until(
-	                    ExpectedConditions.presenceOfElementLocated(
-	                            By.xpath("//button[.//span[text()='Platform']]")
-	                    )
-	            );
+                categories = driver.findElements(By.xpath("//ul/li/button"));
+                WebElement cat = categories.get(i);
 
-	            actions.moveToElement(platform2).perform();
-	            Thread.sleep(2000);
+                String name = cat.getText();
 
-	            // ===== Click The Terrain =====
-	            WebElement terrain = wait.until(
-	                    ExpectedConditions.presenceOfElementLocated(
-	                            By.xpath("//span[contains(text(),'The Terrain')]")
-	                    )
-	            );
+                js.executeScript("arguments[0].scrollIntoView({block:'center'});", cat);
+                Thread.sleep(1000);
 
-	            js.executeScript("arguments[0].click();", terrain);
-	            System.out.println("The Terrain clicked");
+                js.executeScript("arguments[0].click();", cat);
+                System.out.println("Clicked Category: " + name);
 
-	            Thread.sleep(3000);
+                Thread.sleep(2000);
 
-	            // ===== Scroll Down =====
-	            long height2 = (long) js.executeScript("return document.body.scrollHeight");
+                // =========================================================
+                // SEARCH ACTIONS
+                // =========================================================
+                if (name.contains("Source Code Management")) {
 
-	            for (int i = 0; i < height2; i += 300) {
-	                js.executeScript("window.scrollBy(0,300)");
-	                Thread.sleep(500);
-	            }
+                    search(driver, wait, js, "gitlab");
 
-	            System.out.println("Scrolled down (Terrain)");
+                } else if (name.contains("CI/CD Pipelines")) {
 
-	            // ===== Scroll Up =====
-	            for (int i = 0; i < height2; i += 300) {
-	                js.executeScript("window.scrollBy(0,-300)");
-	                Thread.sleep(500);
-	            }
+                    search(driver, wait, js, "gitlab");
 
-	            System.out.println("Scrolled up (Terrain)");
+                } else if (name.contains("Container Registries")) {
 
-	            Thread.sleep(2000);
+                    search(driver, wait, js, "nexus");
 
-	            // ===== Back to Home =====
-	            driver.navigate().back();
+                } else {
 
-	            System.out.println("Returned to Home Page");
+                    System.out.println("No search required for: " + name);
+                }
 
-	            Thread.sleep(3000);
+                Thread.sleep(2000);
+            }
 
-	        } catch (Exception e) {
-	            System.out.println("Error: " + e.getMessage());
-	        } finally {
-	            driver.quit();
-	            System.out.println("Browser closed");
-	        }
-	}
+            // =========================================================
+            // SCROLL FINAL
+            // =========================================================
+            scroll(js);
 
+            // =========================================================
+            // BACK TO HOME
+            // =========================================================
+            driver.get("https://moole.ai/");
+            Thread.sleep(3000);
+
+            System.out.println("Returned to Home Page");
+
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
+        } finally {
+            driver.quit();
+            System.out.println("Browser closed");
+        }
+    }
+
+    // =========================================================
+    // SEARCH FUNCTION
+    // =========================================================
+    public static void search(WebDriver driver, WebDriverWait wait,
+                              JavascriptExecutor js, String value) {
+
+        try {
+
+            WebElement searchBox = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//input[@type='text' or @placeholder='Search']")
+                    )
+            );
+
+            searchBox.clear();
+            searchBox.sendKeys(value);
+            searchBox.sendKeys(Keys.ENTER);
+
+            System.out.println("Searched: " + value);
+
+            Thread.sleep(3000);
+
+        } catch (Exception e) {
+            System.out.println("Search failed for: " + value);
+        }
+    }
+
+    // =========================================================
+    // SCROLL FUNCTION
+    // =========================================================
+    public static void scroll(JavascriptExecutor js) throws InterruptedException {
+
+        for (int i = 0; i <= 2000; i += 300) {
+            js.executeScript("window.scrollBy(0,300)");
+            Thread.sleep(300);
+        }
+
+        for (int i = 0; i <= 2000; i += 300) {
+            js.executeScript("window.scrollBy(0,-300)");
+            Thread.sleep(300);
+        }
+
+        System.out.println("Scrolled page");
+    }
 }
