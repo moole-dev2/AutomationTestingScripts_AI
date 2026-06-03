@@ -67,6 +67,7 @@ public class IntegrationGitHub {
             // --- Step 8: Enter GitHub Token ---
             WebElement githubToken = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.xpath("//input[@class='col-start-1 row-start-1 w-full pl-10 pr-10 py-4 text-base font-medium rounded-sm transition-all bg-bg duration-200 focus:outline-none focus:ring-2']")));
+           // githubToken.sendKeys("ghp_YOUR_GITHUB_PERSONAL_ACCESS_TOKEN");
             // githubToken.sendKeys("ghp_YOUR_GITHUB_PERSONAL_ACCESS_TOKEN");
 
             // --- Step 9: Save GitHub Integration ---
