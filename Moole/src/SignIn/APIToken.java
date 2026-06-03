@@ -1,6 +1,7 @@
 package SignIn;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -15,140 +16,532 @@ public class APIToken {
 
     public static void main(String[] args) {
 
-        // --- ChromeOptions to use existing profile ---
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("user-data-dir=C:\\Users\\psiri\\AppData\\Local\\Google\\User Data");
-        options.addArguments("profile-directory=Profile 1");
+        // =====================================================
+        // CHROME SETUP
+        // =====================================================
 
-        WebDriver driver = new ChromeDriver();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        ChromeOptions options = new ChromeOptions();
+
+        options.addArguments("--start-maximized");
+
+        options.addArguments("--remote-allow-origins=*");
+
+        options.addArguments("--disable-notifications");
+
+        options.addArguments("--disable-popup-blocking");
+
+        options.addArguments("--disable-dev-shm-usage");
+
+        options.addArguments("--no-sandbox");
+
+        // Dedicated Selenium Chrome Profile
+        options.addArguments(
+                "user-data-dir=C:\\SeleniumChromeProfile"
+        );
+
+        WebDriver driver = new ChromeDriver(options);
+
+        WebDriverWait wait =
+                new WebDriverWait(driver, Duration.ofSeconds(30));
+
+        JavascriptExecutor js =
+                (JavascriptExecutor) driver;
 
         try {
-            // --- Step 1: Open Moole.ai and click Sign In ---
-            driver.get("https://moole.ai/");
-            driver.manage().window().maximize();
-            driver.get("https://moole.ai/auth/signin");
-            Thread.sleep(2000);
 
-            // --- Step 2: Enter Email ---
-            WebElement emailField = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//input[@type='email']")));
+            // =====================================================
+            // OPEN LOGIN PAGE
+            // =====================================================
+
+            driver.get("https://moole.ai/auth/signin");
+
+            Thread.sleep(3000);
+
+            // =====================================================
+            // EMAIL FIELD
+            // =====================================================
+
+            WebElement emailField = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//input[@type='email']")
+                    )
+            );
+
+            highlight(driver, emailField);
+
             emailField.sendKeys("moole.dev.2@gmail.com");
 
-            WebElement continueBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                   By.xpath("//button[contains(text(),'Continue')]")));
-            continueBtn.click();
+            // =====================================================
+            // CONTINUE BUTTON
+            // =====================================================
 
-            // --- Step 3: Wait for OTP manually ---
-            System.out.println("Please enter your OTP manually in the browser, then press Enter here...");
-            @SuppressWarnings("resource")
+            WebElement continueBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[contains(.,'Continue')]")
+                    )
+            );
+
+            highlight(driver, continueBtn);
+
+            js.executeScript("arguments[0].click();", continueBtn);
+
+            // =====================================================
+            // MANUAL OTP
+            // =====================================================
+
+            System.out.println(
+                    "Enter OTP manually in browser and press ENTER");
+
             Scanner scanner = new Scanner(System.in);
+
             scanner.nextLine();
+
+            Thread.sleep(3000);
+
+            // =====================================================
+            // OPEN API TOKEN PAGE
+            // =====================================================
+
+            driver.get(
+                    "https://moole.ai/app/settings/developer/api-token"
+            );
+
+            Thread.sleep(5000);
+
+            // =====================================================
+            // 1. GENERATE TOKEN
+            // =====================================================
+
+            generateToken(
+                    driver,
+                    wait,
+                    js,
+                    "BITBUCKET",
+                    "Organization"
+            );
+
+            // =====================================================
+            // 2. DELETE TOKEN
+            // =====================================================
+
+            deleteToken(
+                    driver,
+                    wait,
+                    js,
+                    "BITBUCKET"
+            );
+
+            // =====================================================
+            // 3. GENERATE AGAIN
+            // =====================================================
+
+            generateToken(
+                    driver,
+                    wait,
+                    js,
+                    "BITBUCKET",
+                    "Organization"
+            );
+
+            // =====================================================
+            // 4. REGENERATE TOKEN
+            // =====================================================
+
+            regenerateToken(
+                    driver,
+                    wait,
+                    js
+            );
+
+            // =====================================================
+            // 5. CLICK DELETE
+            // =====================================================
+
+            clickDelete(
+                    driver,
+                    wait,
+                    js
+            );
+
+            // =====================================================
+            // ENTER DELETE INPUT
+            // =====================================================
+
+            WebElement deleteInput = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//input[@type='text']")
+                    )
+            );
+
+            highlight(driver, deleteInput);
+
+            deleteInput.sendKeys("BITBUCKET");
+
             Thread.sleep(2000);
 
-            // --- Step 4: Navigate directly to Integrations page ---
-            driver.get("https://moole.ai/settings/project/integrations");
-            
-         // --- Step 5: Click API Token menu ---
-            WebElement apiTokenMenu = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//a[@href='/settings/developer/api-token']//span[text()='API Token']")));
-            apiTokenMenu.click();
+            // =====================================================
+            // CLICK CANCEL
+            // =====================================================
+
+            WebElement cancelBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath(
+                                    "//button[@type='button' and contains(.,'Cancel')]"
+                            )
+                    )
+            );
+
+            highlight(driver, cancelBtn);
+
+            js.executeScript("arguments[0].click();", cancelBtn);
+
+            System.out.println("Clicked Cancel");
+
+            Thread.sleep(3000);
+
+            // =====================================================
+            // CLICK DELETE AGAIN
+            // =====================================================
+
+            clickDelete(
+                    driver,
+                    wait,
+                    js
+            );
+
             Thread.sleep(2000);
 
+            // =====================================================
+            // CLOSE POPUP
+            // =====================================================
 
-            // --- Step 6: Enter Token Name ---
-            WebElement tokenName = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//input[@name='tokenName']")));
-            tokenName.sendKeys("BITBUCKET");
-            Thread.sleep(2000);
-            
-         // --- Step 6.1: Click "Choose Type" dropdown ---
-            WebElement chooseType = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[.//span[contains(text(),'Choose Type')]]")));
-            chooseType.click();
+            WebElement closePopup = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[@aria-label='Close popup']")
+                    )
+            );
 
-            // --- Step 7: Click Organization Type ---
-            WebElement orgType = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//div[text()='Organization']")));
-            orgType.click();
-            Thread.sleep(2000);
+            highlight(driver, closePopup);
 
-            // --- Step 8: Click Organization Dropdown ---
-            WebElement orgDropdown = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[.//span[contains(text(),'Choose organization')]]")));
-            orgDropdown.click();
+            js.executeScript("arguments[0].click();", closePopup);
 
-            // --- Step 9: Select Organization ---
-            WebElement selectOrg = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//div[contains(text(),'Milky Way-Barnards Star1205')]")));
-            selectOrg.click();
-            Thread.sleep(2000);
+            System.out.println("Closed Popup");
 
-            // --- Step 10: Click Generate Button ---
-            WebElement generateBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[@type='submit' and contains(.,'Generate')]")));
-            generateBtn.click();
-
-            System.out.println("API Token Generated");
-         // --- Step 12: Wait after generation ---
-            System.out.println("Waiting 20 seconds after token generation...");
-            Thread.sleep(2000);
-
-            // --- Step 13: Click Regenerate Token ---
-            WebElement regenerateBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[@aria-label='Regenerate Token']")));
-            regenerateBtn.click();
-            Thread.sleep(2000);
-
-            System.out.println("Clicked Regenerate Token");
-
-         // --- Step 14: Click Regenerate confirm button ---
-         WebElement regenerateConfirm = wait.until(ExpectedConditions.elementToBeClickable(
-                 By.xpath("//button[@type='submit']//span[text()='Regenerate']")));
-         regenerateConfirm.click();
-
-         System.out.println("Clicked Regenerate Confirm");
-
-         // --- Step 15: Click Cancel button ---
-         WebElement cancelBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                 By.xpath("//button[text()='Cancel']")));
-         cancelBtn.click();
-         Thread.sleep(2000);
-
-         System.out.println("Clicked Cancel");
-
-            // --- Step 14: Wait another 10 seconds ---
-            System.out.println("Waiting 20 seconds after regeneration...");
-            Thread.sleep(10000);
-
-            // --- Step 15: Click Delete Token ---
-            WebElement deleteBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[@aria-label='Delete Token']")));
-            deleteBtn.click();
-            Thread.sleep(2000);
-            System.out.println("Clicked Delete Token");
-
-         // --- Step 16: Click Cancel after Delete ---
-            WebElement cancelAfterDelete = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[contains(text(),'Cancel')]")));
-            cancelAfterDelete.click();
-
-            System.out.println("Clicked Cancel after Delete");
-            
-            // --- Step 11: Click Copy Button ---
-            WebElement copyBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[.//svg[@aria-label='Copy']]")));
-            copyBtn.click();
-
-            System.out.println("Token Copied Successfully");
-            
+            Thread.sleep(5000);
 
         } catch (Exception e) {
+
+            System.out.println("TEST FAILED");
+
             e.printStackTrace();
+
         } finally {
-            // driver.quit(); // optional
+
+            driver.quit();
+
+            System.out.println("Browser Closed");
         }
     }
+
+    // =====================================================
+    // HIGHLIGHT ELEMENT
+    // =====================================================
+
+    public static void highlight(WebDriver driver,
+                                 WebElement element) {
+
+        JavascriptExecutor js =
+                (JavascriptExecutor) driver;
+
+        js.executeScript(
+                "arguments[0].style.border='4px solid red';" +
+                        "arguments[0].style.background='yellow';",
+                element
+        );
+    }
+
+    // =====================================================
+    // GENERATE TOKEN
+    // =====================================================
+
+    public static void generateToken(WebDriver driver,
+                                     WebDriverWait wait,
+                                     JavascriptExecutor js,
+                                     String tokenNameText,
+                                     String type)
+            throws InterruptedException {
+
+        // =====================================================
+        // TOKEN NAME
+        // =====================================================
+
+        WebElement tokenName = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//input[@name='tokenName']")
+                )
+        );
+
+        tokenName.clear();
+
+        highlight(driver, tokenName);
+
+        tokenName.sendKeys(tokenNameText);
+
+        Thread.sleep(2000);
+
+        // =====================================================
+        // WAIT FOR OVERLAY
+        // =====================================================
+
+        try {
+
+            wait.until(
+                    ExpectedConditions.invisibilityOfElementLocated(
+                            By.xpath(
+                                    "//div[contains(@class,'backdrop-blur')]"
+                            )
+                    )
+            );
+
+        } catch (Exception e) {
+
+            System.out.println("Overlay still visible");
+        }
+
+        // =====================================================
+        // CHOOSE TYPE
+        // =====================================================
+
+        WebElement chooseType = wait.until(
+                ExpectedConditions.presenceOfElementLocated(
+                        By.xpath(
+                                "//button[.//span[contains(text(),'Choose Type')]]"
+                        )
+                )
+        );
+
+        js.executeScript(
+                "arguments[0].scrollIntoView({block:'center'});",
+                chooseType
+        );
+
+        Thread.sleep(1000);
+
+        highlight(driver, chooseType);
+
+        js.executeScript("arguments[0].click();", chooseType);
+
+        Thread.sleep(2000);
+
+        // =====================================================
+        // SELECT TYPE
+        // =====================================================
+
+        WebElement typeOption = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        By.xpath("//div[text()='" + type + "']")
+                )
+        );
+
+        highlight(driver, typeOption);
+
+        js.executeScript("arguments[0].click();", typeOption);
+
+        Thread.sleep(2000);
+
+        // =====================================================
+        // ORGANIZATION FLOW
+        // =====================================================
+
+        if (type.equalsIgnoreCase("Organization")) {
+
+            WebElement orgDropdown = wait.until(
+                    ExpectedConditions.presenceOfElementLocated(
+                            By.xpath(
+                                    "//button[.//span[contains(text(),'Choose organization')]]"
+                            )
+                    )
+            );
+
+            highlight(driver, orgDropdown);
+
+            js.executeScript("arguments[0].click();", orgDropdown);
+
+            Thread.sleep(2000);
+
+            WebElement selectOrg = wait.until(
+                    ExpectedConditions.presenceOfElementLocated(
+                            By.xpath(
+                                    "//div[contains(text(),'Milky Way-Barnards Star1205')]"
+                            )
+                    )
+            );
+
+            highlight(driver, selectOrg);
+
+            js.executeScript("arguments[0].click();", selectOrg);
+
+            Thread.sleep(2000);
+        }
+
+        // =====================================================
+        // PROJECT FLOW
+        // =====================================================
+
+        if (type.equalsIgnoreCase("Project")) {
+
+            WebElement projectDropdown = wait.until(
+                    ExpectedConditions.presenceOfElementLocated(
+                            By.xpath(
+                                    "//button[contains(.,'Choose project')]"
+                            )
+                    )
+            );
+
+            highlight(driver, projectDropdown);
+
+            js.executeScript("arguments[0].click();", projectDropdown);
+
+            Thread.sleep(2000);
+
+            WebElement selectProject = wait.until(
+                    ExpectedConditions.presenceOfElementLocated(
+                            By.xpath(
+                                    "//div[contains(text(),'BITBUCKET')]"
+                            )
+                    )
+            );
+
+            highlight(driver, selectProject);
+
+            js.executeScript("arguments[0].click();", selectProject);
+
+            Thread.sleep(2000);
+        }
+
+        // =====================================================
+        // GENERATE BUTTON
+        // =====================================================
+
+        WebElement generateBtn = wait.until(
+                ExpectedConditions.presenceOfElementLocated(
+                        By.xpath(
+                                "//button[@type='submit' and contains(.,'Generate')]"
+                        )
+                )
+        );
+
+        highlight(driver, generateBtn);
+
+        js.executeScript("arguments[0].click();", generateBtn);
+
+        System.out.println("Generated Token");
+
+        Thread.sleep(5000);
+    }
+
+    // =====================================================
+    // CLICK DELETE
+    // =====================================================
+
+    public static void clickDelete(WebDriver driver,
+                                   WebDriverWait wait,
+                                   JavascriptExecutor js)
+            throws InterruptedException {
+
+        WebElement deleteBtn = wait.until(
+                ExpectedConditions.presenceOfElementLocated(
+                        By.xpath("//button[@aria-label='Delete Token']")
+                )
+        );
+
+        js.executeScript(
+                "arguments[0].scrollIntoView({block:'center'});",
+                deleteBtn
+        );
+
+        Thread.sleep(1000);
+
+        highlight(driver, deleteBtn);
+
+        js.executeScript("arguments[0].click();", deleteBtn);
+
+        System.out.println("Clicked Delete");
+
+        Thread.sleep(3000);
+    }
+
+    // =====================================================
+    // DELETE TOKEN
+    // =====================================================
+
+    public static void deleteToken(WebDriver driver,
+                                   WebDriverWait wait,
+                                   JavascriptExecutor js,
+                                   String tokenNameText)
+            throws InterruptedException {
+
+        clickDelete(driver, wait, js);
+
+        WebElement deleteInput = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//input[@type='text']")
+                )
+        );
+
+        highlight(driver, deleteInput);
+
+        deleteInput.sendKeys(tokenNameText);
+
+        Thread.sleep(2000);
+
+        WebElement removeBtn = wait.until(
+                ExpectedConditions.presenceOfElementLocated(
+                        By.xpath(
+                                "//button[@type='submit' and .//span[text()='Remove']]"
+                        )
+                )
+        );
+
+        highlight(driver, removeBtn);
+
+        js.executeScript("arguments[0].click();", removeBtn);
+
+        System.out.println("Deleted Token");
+
+        Thread.sleep(5000);
+    }
+
+    // =====================================================
+    // REGENERATE TOKEN
+    // =====================================================
+
+    public static void regenerateToken(WebDriver driver,
+                                       WebDriverWait wait,
+                                       JavascriptExecutor js)
+            throws InterruptedException {
+
+        WebElement regenerateBtn = wait.until(
+                ExpectedConditions.presenceOfElementLocated(
+                        By.xpath(
+                                "//button[@aria-label='Regenerate Token']"
+                        )
+                )
+        );
+
+        js.executeScript(
+                "arguments[0].scrollIntoView({block:'center'});",
+                regenerateBtn
+        );
+
+        Thread.sleep(1000);
+
+        highlight(driver, regenerateBtn);
+
+        js.executeScript("arguments[0].click();", regenerateBtn);
+
+        System.out.println("Regenerated Token");
+
+        Thread.sleep(5000);
+    }
 }
-            
-            

@@ -51,6 +51,7 @@ public class CreatTeam {
             @SuppressWarnings("resource")
             Scanner scanner = new Scanner(System.in);
             scanner.nextLine();
+            Thread.sleep(2000);
             
             // --- Step 4: Navigate directly to Integrations page ---
             driver.get("https://moole.ai/settings/project/integrations");
@@ -152,6 +153,52 @@ public class CreatTeam {
       ));
       addButton.click();
       System.out.println("ADDED THE REPOSITORY SUCCESSFULLY!");
+
+      // =====================================================
+      // DELETE REPOSITORY FROM TEAM
+      // =====================================================
+
+      Thread.sleep(4000);
+
+      // Click Delete Repository button
+      WebElement deleteRepoBtn = wait.until(
+              ExpectedConditions.elementToBeClickable(
+                      By.xpath("//button[@aria-label='Remove repository from team']")
+              )
+      );
+
+      try {
+          deleteRepoBtn.click();
+      } catch (Exception e) {
+          ((JavascriptExecutor) driver).executeScript(
+                  "arguments[0].click();",
+                  deleteRepoBtn
+          );
+      }
+
+      System.out.println("Clicked Delete Repository Button");
+
+      Thread.sleep(3000);
+
+      // Click Remove button
+      WebElement removeBtn = wait.until(
+              ExpectedConditions.elementToBeClickable(
+                      By.xpath("//button[@type='submit' and normalize-space()='Remove']")
+              )
+      );
+
+      try {
+          removeBtn.click();
+      } catch (Exception e) {
+          ((JavascriptExecutor) driver).executeScript(
+                  "arguments[0].click();",
+                  removeBtn
+          );
+      }
+
+      System.out.println("Repository Removed Successfully!");
+
+      Thread.sleep(3000);
 
 
       } catch (Exception e) {

@@ -1,145 +1,167 @@
 package Resources;
 
 import java.time.Duration;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.*;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class MooleField {
 
     public static void main(String[] args) {
 
         WebDriver driver = new ChromeDriver();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));
         JavascriptExecutor js = (JavascriptExecutor) driver;
+        Actions actions = new Actions(driver);
 
         try {
-            // -------- Open Website --------
+
+            // =========================================================
+            // OPEN WEBSITE
+            // =========================================================
             driver.get("https://moole.ai/");
             driver.manage().window().maximize();
-            Thread.sleep(2000);
+            Thread.sleep(3000);
 
-            // -------- Handle Privacy Popup --------
+            // =========================================================
+            // HANDLE POPUP
+            // =========================================================
             try {
-                WebElement privacyOk = wait.until(ExpectedConditions.presenceOfElementLocated(
-                        By.xpath("//button[contains(@class,'rounded-sm bg-indigo') and text()='OK']")));
-                js.executeScript("arguments[0].click();", privacyOk);
-                System.out.println("Clicked Privacy OK button");
+                WebElement ok = wait.until(ExpectedConditions.elementToBeClickable(
+                        By.xpath("//button[contains(text(),'OK')]")));
+                js.executeScript("arguments[0].click();", ok);
+                System.out.println("Popup closed");
             } catch (Exception e) {
-                System.out.println("Privacy popup not found");
+                System.out.println("No popup found");
             }
 
-            // -------- Click Resources --------
+            Thread.sleep(2000);
+
+            // =========================================================
+            // OPEN RESOURCES DROPDOWN
+            // =========================================================
             WebElement resources = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//span[normalize-space()='Resources']")));
-            resources.click();
-            Thread.sleep(2000);
 
-            // -------- Click "Hard Lessons..." --------
-            WebElement hardLessons = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//span[contains(text(),'Hard Lessons from the Digital Frontline')]")));
-            js.executeScript("arguments[0].scrollIntoView(true);", hardLessons);
-            Thread.sleep(2000);
-            hardLessons.click();
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", resources);
+            Thread.sleep(1000);
 
-            System.out.println("Opened Hard Lessons page");
+            actions.moveToElement(resources).perform();
+            Thread.sleep(1500);
+
+            js.executeScript("arguments[0].click();", resources);
+            System.out.println("Resources opened");
+
             Thread.sleep(3000);
 
-            // -------- Scroll Page --------
-            scrollDownUp(js);
+            // =========================================================
+            // CLICK CASE STUDIES
+            // =========================================================
+            WebElement caseStudies = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//a[@href='/resources/case-studies']")));
 
-            // -------- Click Read More --------
-            WebElement readMore = wait.until(ExpectedConditions.presenceOfElementLocated(
-                    By.xpath("(//button[contains(.,'Read More')])[3]")));
-            js.executeScript("arguments[0].scrollIntoView(true);", readMore);
-            Thread.sleep(2000);
+            highlight(js, caseStudies, "red");
+            js.executeScript("arguments[0].click();", caseStudies);
+
+            System.out.println("Clicked Case Studies");
+            Thread.sleep(5000);
+
+            scroll(js);
+
+            // =========================================================
+            // CLICK READ MORE
+            // =========================================================
+            WebElement readMore = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("(//button[contains(.,'Read More')])[1]")));
+
+            highlight(js, readMore, "blue");
             js.executeScript("arguments[0].click();", readMore);
 
-            System.out.println("Clicked Read More");
             Thread.sleep(3000);
 
-            // -------- Scroll --------
-            scrollDownUp(js);
+            scroll(js);
 
-         // -------- Click Scenario (FIXED) --------
-            WebElement scenario = wait.until(ExpectedConditions.presenceOfElementLocated(
+            // =========================================================
+            // CLICK SCENARIO
+            // =========================================================
+            WebElement scenario = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[.//span[text()='Scenario']]")));
-            js.executeScript("arguments[0].scrollIntoView({block:'center'});", scenario);
-            Thread.sleep(1000);
-            js.executeScript("window.scrollBy(0,100)");
-            Thread.sleep(1000);
+
+            highlight(js, scenario, "green");
             js.executeScript("arguments[0].click();", scenario);
 
-            System.out.println("Clicked Scenario");
             Thread.sleep(2000);
 
-         // Locate Impact button
-         WebElement impact = wait.until(ExpectedConditions.presenceOfElementLocated(
-                 By.xpath("//span[text()='Impact']")));
+            // =========================================================
+            // CLICK IMPACT
+            // =========================================================
+            WebElement impact = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//span[text()='Impact']")));
 
-         js.executeScript("arguments[0].scrollIntoView({block:'center'});", impact);
+            highlight(js, impact, "orange");
+            js.executeScript("arguments[0].click();", impact);
 
-         js.executeScript("window.scrollBy(0, 50);");
+            Thread.sleep(2000);
 
-         js.executeScript("arguments[0].click();", impact);
+            // =========================================================
+            // CLICK CASE STUDY CARD
+            // =========================================================
+            WebElement caseStudy = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//a[.//h3[contains(.,'CV')]]")));
 
-         System.out.println("Clicked Impact successfully");
-         Thread.sleep(2000);
-         
-      // -------- Click Case Study under Impact --------
-         WebElement caseStudy = wait.until(ExpectedConditions.presenceOfElementLocated(
-                 By.xpath("//h3[text()='Turning CVE Intelligence into Operational Security Decisions']/ancestor::a")));
+            highlight(js, caseStudy, "red");
+            js.executeScript("arguments[0].click();", caseStudy);
 
-         js.executeScript("arguments[0].scrollIntoView({block:'center'});", caseStudy);
+            Thread.sleep(4000);
 
-         js.executeScript("window.scrollBy(0,50);");
+            scroll(js);
 
-         js.executeScript("arguments[0].click();", caseStudy);
-
-         System.out.println("Clicked Case Study successfully");
-
-         // Optional: wait for page to load
-         Thread.sleep(3000);
-
-            // -------- Scroll --------
-            scrollDownUp(js);
-
-            // -------- Navigate Back --------
+            // =========================================================
+            // NAV BACK
+            // =========================================================
             driver.navigate().back();
             Thread.sleep(3000);
-            scrollDownUp(js);
 
             driver.navigate().back();
             Thread.sleep(3000);
-            scrollDownUp(js);
 
-            System.out.println("Returned to Home Page");
+            System.out.println("Back to Home Page");
 
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+
+            System.out.println("GLOBAL ERROR: " + e.getMessage());
+
         } finally {
+
             driver.quit();
             System.out.println("Browser closed");
         }
     }
 
-    // -------- Scroll Down & Up --------
-    public static void scrollDownUp(JavascriptExecutor js) throws InterruptedException {
+    // =========================================================
+    // SCROLL METHOD
+    // =========================================================
+    public static void scroll(JavascriptExecutor js) throws InterruptedException {
 
-        long height = (long) js.executeScript("return document.body.scrollHeight");
-
-        // Scroll Down
-        for (int i = 0; i < height; i += 300) {
+        for (int i = 0; i <= 2000; i += 300) {
             js.executeScript("window.scrollBy(0,300)");
-            Thread.sleep(500);
+            Thread.sleep(400);
         }
 
-        // Scroll Up
-        for (int i = 0; i < height; i += 300) {
+        for (int i = 0; i <= 2000; i += 300) {
             js.executeScript("window.scrollBy(0,-300)");
-            Thread.sleep(500);
+            Thread.sleep(400);
         }
+    }
 
-        System.out.println("Scrolled down and up");
+    // =========================================================
+    // HIGHLIGHT METHOD
+    // =========================================================
+    public static void highlight(JavascriptExecutor js, WebElement element, String color) {
+
+        js.executeScript("arguments[0].style.border='4px solid " + color + "'", element);
     }
 }
