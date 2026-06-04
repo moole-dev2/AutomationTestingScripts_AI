@@ -54,7 +54,7 @@ public class CreatTeam {
             Thread.sleep(2000);
             
             // --- Step 4: Navigate directly to Integrations page ---
-            driver.get("https://moole.ai/settings/project/integrations");
+            driver.get("https://moole.ai/app/settings/project/integrations");
             Thread.sleep(5000);
             
       // Step 1: Click Teams icon
@@ -199,6 +199,184 @@ public class CreatTeam {
       System.out.println("Repository Removed Successfully!");
 
       Thread.sleep(3000);
+      
+   // ======================================
+   // BACK TO TEAMS PAGE
+   // ======================================
+
+   WebElement teamsBreadcrumb = wait.until(
+           ExpectedConditions.elementToBeClickable(
+                   By.xpath("//a[@href='/app/project/list-teams']")
+           )
+   );
+
+   ((JavascriptExecutor) driver).executeScript(
+           "arguments[0].click();",
+           teamsBreadcrumb
+   );
+
+   System.out.println("Navigated back to Teams page");
+
+   Thread.sleep(3000);
+   
+		// ======================================
+		// EDIT TEAM
+		// ======================================
+		
+		// Wait for page to load completely
+		Thread.sleep(5000);
+		
+		// Scroll down slightly
+		((JavascriptExecutor) driver).executeScript("window.scrollBy(0,500)");
+		
+		Thread.sleep(2000);
+		
+		// Locate Edit Team element
+		WebElement editTeam = wait.until(
+		        ExpectedConditions.presenceOfElementLocated(
+		                By.xpath("//div[@aria-label='Edit Team']")
+		        )
+		);
+		
+		// Scroll element into view
+		((JavascriptExecutor) driver).executeScript(
+		        "arguments[0].scrollIntoView({block:'center'});",
+		        editTeam
+		);
+		
+		Thread.sleep(2000);
+		
+		// Click using JavaScript
+		((JavascriptExecutor) driver).executeScript(
+		        "arguments[0].click();",
+		        editTeam
+		);
+		
+		System.out.println("Clicked Edit Team");
+		
+		Thread.sleep(3000);
+		
+		// Team Name Input
+		
+		WebElement teamNameInput = wait.until(
+		        ExpectedConditions.visibilityOfElementLocated(
+		                By.xpath("//input[@id='name']")
+		        )
+		);
+		
+		teamNameInput.clear();
+		teamNameInput.sendKeys("Test");
+		
+		System.out.println("Updated Team Name");
+		
+		Thread.sleep(2000);
+		
+		// Save Changes
+		
+		WebElement saveChangesBtn = wait.until(
+		        ExpectedConditions.elementToBeClickable(
+		                By.xpath("//button[contains(.,'Save Changes')]")
+		        )
+		);
+		
+		((JavascriptExecutor) driver).executeScript(
+		        "arguments[0].click();",
+		        saveChangesBtn
+		);
+		
+		System.out.println("Saved Team Changes");
+		
+		Thread.sleep(4000);
+		
+		
+		//======================================
+		//REMOVE TEAM -> CANCEL
+		//======================================
+		
+		Thread.sleep(3000);
+		
+		WebElement removeTeam = wait.until(
+		     ExpectedConditions.presenceOfElementLocated(
+		             By.xpath("//div[@aria-label='Remove Team']")
+		     )
+		);
+		
+		((JavascriptExecutor) driver).executeScript(
+		     "arguments[0].scrollIntoView({block:'center'});",
+		     removeTeam
+		);
+		
+		Thread.sleep(1000);
+		
+		((JavascriptExecutor) driver).executeScript(
+		     "arguments[0].click();",
+		     removeTeam
+		);
+		
+		System.out.println("Clicked Remove Team");
+		
+		Thread.sleep(3000);
+		
+		//Click Cancel
+		
+		WebElement cancelBtn = wait.until(
+		     ExpectedConditions.elementToBeClickable(
+		             By.xpath("//button[contains(text(),'Cancel')]")
+		     )
+		);
+		
+		((JavascriptExecutor) driver).executeScript(
+		     "arguments[0].click();",
+		     cancelBtn
+		);
+		
+		System.out.println("Clicked Cancel");
+		
+		Thread.sleep(3000);
+		
+		//======================================
+		//DELETE TEAM
+		//======================================
+		
+		WebElement deleteTeam = wait.until(
+		     ExpectedConditions.presenceOfElementLocated(
+		             By.xpath("//div[@aria-label='Delete Team']")
+		     )
+		);
+		
+		((JavascriptExecutor) driver).executeScript(
+		     "arguments[0].scrollIntoView({block:'center'});",
+		     deleteTeam
+		);
+		
+		Thread.sleep(1000);
+		
+		((JavascriptExecutor) driver).executeScript(
+		     "arguments[0].click();",
+		     deleteTeam
+		);
+		
+		System.out.println("Clicked Delete Team");
+		
+		Thread.sleep(3000);
+		
+		//Confirm Delete
+		
+		WebElement deleteBtn = wait.until(
+		     ExpectedConditions.elementToBeClickable(
+		             By.xpath("//button[contains(text(),'Delete')]")
+		     )
+		);
+		
+		((JavascriptExecutor) driver).executeScript(
+		     "arguments[0].click();",
+		     deleteBtn
+		);
+		
+		System.out.println("Team Deleted Successfully");
+		
+		Thread.sleep(5000);
+
 
 
       } catch (Exception e) {

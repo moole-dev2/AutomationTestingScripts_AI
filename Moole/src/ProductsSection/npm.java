@@ -1,4 +1,4 @@
-package ProductsSection;
+	package ProductsSection;
 
 import java.time.Duration;
 
@@ -44,7 +44,7 @@ public class npm {
 
 	            analyzeBtn.click();
 
-	            System.out.println("✅ Analyze button clicked");
+	            System.out.println("Analyze button clicked");
 
 	            // ---------------- VALIDATION ----------------
 	            
@@ -67,7 +67,7 @@ public class npm {
 	            // Click the npm icon
 	            npm.click();
 
-	            System.out.println("✅ npm icon clicked");
+	            System.out.println("npm icon clicked");
 
 	            // Click npm
 	            try {
@@ -76,15 +76,15 @@ public class npm {
 	 	            e.printStackTrace();
 	 	        }
 
-	            System.out.println("✅ npm link clicked");
+	            System.out.println("npm link clicked");
 
 
 
 	        } catch (Exception e) {
-	            System.out.println("❌ Error: " + e.getMessage());
+	            System.out.println("Error: " + e.getMessage());
 	        } finally {
 	            driver.quit();
-	            System.out.println("✅ Browser closed");
+	            System.out.println("Browser closed");
 	        }
 	}
 

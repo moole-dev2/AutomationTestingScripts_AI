@@ -1,11 +1,11 @@
+
+
 package SignIn;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -16,244 +16,356 @@ public class DashboardPage {
 
     public static void main(String[] args) {
 
-        // --- ChromeOptions to use existing profile (so cookies/OTP sessions persist if needed) ---
         ChromeOptions options = new ChromeOptions();
         options.addArguments("user-data-dir=C:\\Users\\psiri\\AppData\\Local\\Google\\Chrome\\User Data");
         options.addArguments("profile-directory=Profile 1");
 
         WebDriver driver = new ChromeDriver();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
-
         try {
-            // --- Step 1: Open Moole.ai and click Sign In ---
-            driver.get("https://moole.ai/");
-            driver.manage().window().maximize();
-            driver.get("https://moole.ai/auth/signin");
-            try {
-	            Thread.sleep(5000);
-	        } catch (InterruptedException e) {
-	            e.printStackTrace();
-	        }
 
-            // --- Step 2: Enter Email ---
+            // ================= LOGIN =================
+            driver.get("https://moole.ai/auth/signin");
+            driver.manage().window().maximize();
+
             WebElement emailField = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='email']")));
+                    ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='email']"))
+            );
             emailField.sendKeys("moole.dev.2@gmail.com");
 
-            WebElement continueBtn = wait.until(
-                    ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(),'Continue')]")));
-            continueBtn.click();
+            wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[contains(text(),'Continue')]")
+            )).click();
 
-            // --- Step 3: Wait for OTP manually ---
-            System.out.println("Please enter your OTP manually in the browser, then press Enter here...");
-            @SuppressWarnings("resource")
-            Scanner scanner = new Scanner(System.in);
-            scanner.nextLine();  
-            
-            // 4️. Search Repository
+            System.out.println("Enter OTP manually...");
+            new Scanner(System.in).nextLine();
+
+            // ================= NAVIGATE =================
             WebElement searchInput = wait.until(
                     ExpectedConditions.elementToBeClickable(
                             By.xpath("//input[@placeholder='Search Repositories']")
                     )
             );
 
-            searchInput.click();
-            searchInput.clear();
             searchInput.sendKeys("node-test");
-
-            // Trigger JS input event for filtering
             js.executeScript("arguments[0].dispatchEvent(new Event('input'));", searchInput);
 
-            System.out.println("Repository searched: node-test");
-
-            // Wait for filtering
             Thread.sleep(3000);
 
-         // Locate the correct "View details" button
             WebElement viewDetails = wait.until(
                     ExpectedConditions.elementToBeClickable(
-                            By.xpath("//a[@aria-label='View details' and contains(@href,'/project/report/repository')]")
+                            By.xpath("//a[contains(@aria-label,'View details')]")
                     )
             );
 
-            // Scroll into view (VERY IMPORTANT for React apps)
-            js.executeScript("arguments[0].scrollIntoView(true);", viewDetails);
-
-            // Small wait for stability
-            Thread.sleep(1000);
-
-            // Click using JavaScript (avoids overlay issues)
             js.executeScript("arguments[0].click();", viewDetails);
 
-            System.out.println("Clicked View Details successfully!");
-
-            // Wait for report page to load
             wait.until(ExpectedConditions.urlContains("/project/report/repository"));
 
-            System.out.println("Report page opened successfully!");
+            System.out.println("Report page opened");
 
-            // Open Fix Available dropdown and click checkbox
-            wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[@aria-label='Sort by Fix Available']"))).click();
-            Thread.sleep(2000);
+            // ================= FIX AVAILABLE (FIXED PART) =================
 
-            wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//div[@class='px-3 py-2 rounded-md cursor-pointer text-white text-sm font-medium mt-2 transition-colors flex items-center gap-2 text-nowrap']"))).click();
+            Thread.sleep(3000);
 
-            // Close the dropdown by clicking button again
-            driver.findElement(By.xpath("//button[@aria-label='Sort by Fix Available']")).click();
+            js.executeScript("window.scrollBy(0, 400);");
+            Thread.sleep(1500);
+
+            WebElement fixAvailableBtn = wait.until(driver1 -> {
+                try {
+                    WebElement el = driver1.findElement(
+                            By.xpath("//button[contains(@aria-label,'Fix Available')]")
+                    );
+                    return (el.isDisplayed() && el.isEnabled()) ? el : null;
+                } catch (Exception e) {
+                    return null;
+                }
+            });
+
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", fixAvailableBtn);
             Thread.sleep(1000);
 
-            System.out.println("Clicked checkbox and closed Fix Available dropdown");
-            
-            // --- DEPENDENCY TYPE DROPDOWN ---
-            WebElement depTypeBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[@aria-label='Sort by Dependency Type']")));
-            depTypeBtn.click();
-            Thread.sleep(1000);
+            js.executeScript("arguments[0].click();", fixAvailableBtn);
 
-            // Click first three checkboxes in Dependency Type
-            for (int i = 1; i <= 2; i++) {
-                WebElement depCheckbox = wait.until(ExpectedConditions.elementToBeClickable(
-                        By.xpath("(//div[@class='px-3 py-2 rounded-md cursor-pointer text-white text-sm font-medium mt-2 transition-colors flex items-center gap-2 text-nowrap'])[" + i + "]")));
-                depCheckbox.click();
-                Thread.sleep(500); // small wait to ensure click is registered
-            }
+            System.out.println("Fix Available dropdown opened");
 
-            // Close Dependency Type dropdown
-            depTypeBtn.click();
-            System.out.println("Dependency Type checkboxes clicked and dropdown closed");
-            Thread.sleep(500);
+            Thread.sleep(1500);
 
-            // --- CLICK CLEAR FILTERS ---
-            WebElement clearFiltersBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[contains(text(),'Clear Filters')]")));
-            clearFiltersBtn.click();
-            Thread.sleep(1000);
-            System.out.println("Clear Filters button clicked successfully");
-            
-            // --- CLICK REPOSITORIES ON BREADCRUMB ---
-            WebElement repoBreadcrumb = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//a[contains(@href,'/project/list-repos')]"))); // Adjust if href differs
-            js.executeScript("arguments[0].scrollIntoView(true);", repoBreadcrumb);
-            js.executeScript("arguments[0].click();", repoBreadcrumb);
-
-            System.out.println("Clicked on Repositories breadcrumb successfully!");
-            
-            // 2️ Click Ascending / Descending toggle
-            WebElement sortOrder = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[@aria-label='Switch to descending order' or @aria-label='Switch to ascending order']")
-            ));
-
-            js.executeScript("arguments[0].scrollIntoView({block:'center'});", sortOrder);
-            Thread.sleep(500);
-            js.executeScript("arguments[0].click();", sortOrder);
-
-            System.out.println("Clicked Sort Order (Ascending/Descending)");
-      
-            // --- Step: Click Export SBOM (Download icon) ---
-
-            WebElement exportBtn = wait.until(
+            // click checkbox inside dropdown
+            WebElement fixCheckbox = wait.until(
                     ExpectedConditions.elementToBeClickable(
-                            By.xpath("//*[name()='svg' and @aria-label='Export SBOM']")
+                            By.xpath("//div[contains(@class,'cursor-pointer') and contains(@class,'text-white')]")
                     )
             );
 
-            // Scroll into view (important for visibility)
-            org.openqa.selenium.interactions.Actions actions =
-                    new org.openqa.selenium.interactions.Actions(driver);
+            js.executeScript("arguments[0].click();", fixCheckbox);
 
-            actions.moveToElement(exportBtn).pause(Duration.ofSeconds(1)).click().perform();
+            System.out.println("Checkbox clicked");
 
-            System.out.println("Export SBOM (Download) clicked!");
+            Thread.sleep(1000);
 
-            // Wait so you can SEE download happening
-            Thread.sleep(8000);
-            
-            // --- Step: Click Rescan Repository ---
+            // close dropdown
+            js.executeScript("arguments[0].click();", fixAvailableBtn);
 
-            WebElement rescanBtn = wait.until(
+            System.out.println("Fix Available dropdown closed");
+
+            // ================= DEPENDENCY TYPE =================
+         // ================= WAIT FOR PAGE STABILITY =================
+            Thread.sleep(3000);
+
+            // wait for overlays (React loader fix)
+            try {
+                wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                        By.xpath("//div[contains(@class,'loading')] | //div[contains(@class,'spinner')] | //div[contains(@class,'backdrop')]")
+                ));
+            } catch (Exception ignored) {}
+
+            js.executeScript("window.scrollBy(0, 400);");
+            Thread.sleep(2000);
+
+            // ================= FIND DEPENDENCY BUTTON (RETRY SAFE) =================
+            WebElement depTypeBtn = null;
+
+            String[] xpaths = new String[] {
+                    "//button[contains(@aria-label,'Dependency')]",
+                    "//button[contains(.,'Dependency')]",
+                    "//button[contains(text(),'Dependency')]"
+            };
+
+            // retry loop (VERY IMPORTANT)
+            for (int i = 0; i < 5; i++) {
+                try {
+                    for (String xp : xpaths) {
+                        try {
+                            depTypeBtn = driver.findElement(By.xpath(xp));
+                            if (depTypeBtn.isDisplayed()) {
+                                break;
+                            }
+                        } catch (Exception ignored) {}
+                    }
+
+                    if (depTypeBtn != null && depTypeBtn.isDisplayed()) {
+                        break;
+                    }
+
+                } catch (Exception ignored) {}
+
+                Thread.sleep(1000);
+            }
+
+            // ================= FINAL VALIDATION =================
+            if (depTypeBtn == null) {
+                throw new RuntimeException("Dependency Type button NOT FOUND in DOM");
+            }
+
+            // ================= CLICK SAFELY =================
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", depTypeBtn);
+            Thread.sleep(1000);
+
+            try {
+                depTypeBtn.click();
+            } catch (Exception e) {
+                js.executeScript("arguments[0].click();", depTypeBtn);
+            }
+
+            System.out.println("Dependency dropdown opened");
+
+            // ================= SELECT OPTIONS =================
+            Thread.sleep(1500);
+
+            for (int i = 1; i <= 2; i++) {
+                WebElement option = wait.until(
+                        ExpectedConditions.elementToBeClickable(
+                                By.xpath("(//div[contains(@class,'cursor-pointer')])[ " + i + " ]")
+                        )
+                );
+
+                js.executeScript("arguments[0].click();", option);
+                Thread.sleep(500);
+            }
+
+            System.out.println("Dependency options selected");
+
+            // ================= CLOSE DROPDOWN =================
+            try {
+                depTypeBtn.click();
+            } catch (Exception e) {
+                js.executeScript("arguments[0].click();", depTypeBtn);
+            }
+      /*      // ================= CLEAR FILTERS =================
+            wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[contains(text(),'Clear Filters')]")
+            )).click();
+
+            System.out.println("Filters cleared");*/
+
+         // ================= OPEN FILTER =================
+         WebElement filterBtn = wait.until(
+                 ExpectedConditions.elementToBeClickable(
+                         By.xpath("//button[contains(@aria-label,'Filter') or .//span[text()='Filter']]")
+                 )
+         );
+
+         js.executeScript("arguments[0].click();", filterBtn);
+         System.out.println("Filter opened");
+
+         Thread.sleep(1500);
+
+      // ================= SELECT HIGH =================
+         WebElement highOption = wait.until(
+                 ExpectedConditions.elementToBeClickable(
+                         By.xpath("//p[normalize-space()='high']/ancestor::div[contains(@class,'cursor-pointer')]")
+                 )
+         );
+
+         js.executeScript("arguments[0].click();", highOption);
+         System.out.println("High selected");
+
+         Thread.sleep(1500);
+
+         // ================= UNSELECT HIGH =================
+         WebElement highOptionAgain = wait.until(
+                 ExpectedConditions.elementToBeClickable(
+                         By.xpath("//p[normalize-space()='high']/ancestor::div[contains(@class,'cursor-pointer')]")
+                 )
+         );
+
+         js.executeScript("arguments[0].click();", highOptionAgain);
+         System.out.println("High unchecked");
+
+         Thread.sleep(1500);
+
+         // ================= CLOSE FILTER =================
+         js.executeScript("arguments[0].click();", filterBtn);
+         System.out.println("Filter closed");
+
+         Thread.sleep(2000);
+
+            // ================= NAV BACK =================
+            WebElement repoBreadcrumb = wait.until(
                     ExpectedConditions.elementToBeClickable(
+                            By.xpath("//a[contains(@href,'list-repos')]")
+                    )
+            );
+
+            js.executeScript("arguments[0].click();", repoBreadcrumb);
+
+            System.out.println("Back to repositories");
+
+
+         // ================= OPEN FILTER =================
+         WebElement filterBtn1 = wait.until(
+                 ExpectedConditions.elementToBeClickable(
+                         By.xpath("//button[@aria-label='Sort by Filter']")
+                 )
+         );
+
+         js.executeScript("arguments[0].click();", filterBtn1);
+         System.out.println("Filter opened");
+
+         // IMPORTANT: wait for dropdown animation/render
+         Thread.sleep(2000);
+
+         // ================= SELECT CRITICAL =================
+         // click by label container (NOT input, NOT text-only div)
+         WebElement criticalOption = wait.until(
+                 ExpectedConditions.elementToBeClickable(
+                         By.xpath("//*[contains(.,'Critical') and @role='button'] | //label[contains(.,'Critical')] | //div[contains(.,'Critical')]")
+                 )
+         );
+
+         js.executeScript("arguments[0].click();", criticalOption);
+         System.out.println("Critical selected");
+
+         Thread.sleep(1500);
+
+         // ================= UNSELECT CRITICAL =================
+         WebElement criticalOptionAgain = wait.until(
+                 ExpectedConditions.elementToBeClickable(
+                         By.xpath("//*[contains(.,'Critical') and @role='button'] | //label[contains(.,'Critical')] | //div[contains(.,'Critical')]")
+                 )
+         );
+
+         js.executeScript("arguments[0].click();", criticalOptionAgain);
+         System.out.println("Critical unchecked");
+
+         Thread.sleep(1500);
+
+         // ================= CLOSE FILTER =================
+         js.executeScript("arguments[0].click();", filterBtn1);
+         System.out.println("Filter closed");
+    
+
+            // ================= RESCAN =================
+            WebElement rescan = wait.until(
+                    ExpectedConditions.presenceOfElementLocated(
                             By.xpath("//*[name()='svg' and @aria-label='Rescan Repository']")
                     )
             );
 
-            // Move + click (important for SVG)
-            org.openqa.selenium.interactions.Actions actions1 =
-                    new org.openqa.selenium.interactions.Actions(driver);
-
-            actions1.moveToElement(rescanBtn)
-                   .pause(Duration.ofSeconds(1))
-                   .click()
-                   .perform();
-
-            System.out.println("Rescan Repository clicked!");
-
-            // Wait so tester can clearly see action
-            Thread.sleep(8000);
-            // ---------- STEP 5: Click Rescan ----------
-            WebElement rescanBtn1 = wait.until(
-                    ExpectedConditions.elementToBeClickable(
-                            By.xpath("//button[normalize-space()='Rescan']")
-                    )
-            );
-            rescanBtn1.click();
-
+            new Actions(driver).moveToElement(rescan).click().perform();
             System.out.println("Rescan clicked");
-            Thread.sleep(8000);
 
-            // Wait so tester can clearly see
-            Thread.sleep(8000);
-            
-            // ---------- STEP: Click Remove Repository (Trash Icon) ----------
-
-         // Wait for any overlay to disappear (VERY IMPORTANT)
-         wait.until(ExpectedConditions.invisibilityOfElementLocated(
-                 By.xpath("//div[contains(@class,'backdrop-blur')]")
+            Thread.sleep(5000);
+         
+      // ================= RESCAN TOGGLE =================
+         WebElement rescanToggle = wait.until(ExpectedConditions.elementToBeClickable(
+                 By.xpath("//button[@role='switch' and contains(@aria-checked,'false') or contains(@aria-checked,'true')]")
          ));
 
-         WebElement removeBtn = wait.until(
-                 ExpectedConditions.elementToBeClickable(
-                         By.xpath("//*[name()='svg' and @aria-label='Remove Repository']")
-                 )
-         );
+         js.executeScript("arguments[0].scrollIntoView({block:'center'});", rescanToggle);
+         Thread.sleep(1000);
 
-         // Use Actions (best for SVG)
-         new org.openqa.selenium.interactions.Actions(driver)
-                 .moveToElement(removeBtn)
-                 .pause(Duration.ofSeconds(1))
-                 .click()
-                 .perform();
+         // click ON/OFF toggle
+         js.executeScript("arguments[0].click();", rescanToggle);
+         System.out.println("Rescan toggle clicked");
 
-         System.out.println("Remove Repository icon clicked");
+         Thread.sleep(2000);
 
-         // Pause so tester can see
-         Thread.sleep(5000);
-         
-            // Locate View button (FIRST row)
-            WebElement viewBtn = wait.until(
-                ExpectedConditions.presenceOfElementLocated(
-                    By.xpath("(//a[@aria-label='View Report'])[1]")
-                )
+         // optional second toggle (ON/OFF cycle)
+         js.executeScript("arguments[0].click();", rescanToggle);
+         System.out.println("Rescan toggle toggled again");
+
+            // ================= REMOVE REPO =================
+            WebElement remove = wait.until(
+                    ExpectedConditions.presenceOfElementLocated(
+                            By.xpath("//*[name()='svg' and @aria-label='Remove Repository']")
+                    )
             );
 
-            // Scroll into view
-            js.executeScript("arguments[0].scrollIntoView({block:'center'});", viewBtn);
+            new Actions(driver).moveToElement(remove).click().perform();
+            System.out.println("Remove repo clicked");
+
+            Thread.sleep(5000);
+
+            // ================= VIEW REPORT =================
+            WebElement view = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("(//a[@aria-label='View Report'])[1]")
+                    )
+            );
+
+            js.executeScript("arguments[0].click();", view);
+
+            System.out.println("View report clicked");
+
+            // ================= EXPORT SBOM =================
+            WebElement exportPdfBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[@aria-label='Export report as PDF']")
+                    )
+            );
+
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", exportPdfBtn);
             Thread.sleep(1000);
 
-            // Click using JS (React-safe)
-            js.executeScript("arguments[0].click();", viewBtn);
+            js.executeScript("arguments[0].click();", exportPdfBtn);
 
-            System.out.println("View Report clicked!");
+            System.out.println("Export Report PDF clicked");
+            Thread.sleep(1000); 
 
-            // Wait for navigation
-            wait.until(ExpectedConditions.urlContains("/project/report/repository"));
-
-            System.out.println("Navigated to Report page successfully!");
-
-         
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -261,6 +373,3 @@ public class DashboardPage {
         }
     }
 }
-            
-            
-

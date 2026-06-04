@@ -1,6 +1,7 @@
 package SignIn;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -45,9 +46,9 @@ public class IntegrationGL {
             @SuppressWarnings("resource")
             Scanner scanner = new Scanner(System.in);
             scanner.nextLine();
-
+            Thread.sleep(1000);
             // --- Step 4: Navigate directly to Integrations page ---
-            driver.get("https://moole.ai/settings/project/integrations");
+            driver.get("https://moole.ai/app/settings/project/integrations");
             // --- Step 5: Click GitLab Integration ---
             WebElement gitlabBtn = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//img[@alt='GitLab']")));
@@ -58,25 +59,53 @@ public class IntegrationGL {
             WebElement nextBtn = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[contains(text(),'Next')]")));
             nextBtn.click();
+            
+            WebElement userName = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.id("username")
+                    )
+            );
+
+            userName.clear();
+            userName.sendKeys("Moole");
+
+            System.out.println("Entered username: Moole");
 
             WebElement gitlabToken = wait.until(ExpectedConditions.elementToBeClickable(
                     By.id("personalAccessToken")
             ));
             gitlabToken.clear();
-//gitlabToken.sendKeys("glpat-8kDQ37D5CdcoQb9BYUe0u2M6MQpvOjEKdTpsMmlmdg8.01.1713cfbrl");
+ gitlabToken.sendKeys("glpat-8kDQ37D5CdcoQb9BYUe0u2M6MQpvOjEKdTpsMmlmdg8.01.1713cfbrl");
+ 			
+			//--- Click Save Button ---
+			WebElement saveBtn = wait.until(
+			      ExpectedConditions.elementToBeClickable(
+			              By.xpath("//button[@type='submit' and contains(.,'Save')]")
+			      )
+			);
+			
+			saveBtn.click();
+			
+			System.out.println("Clicked Save Button");
+			
+			Thread.sleep(3000);
+			 // ================= CLICK REPOSITORIES =================
+            WebElement repoMenu = wait.until(driver1 -> {
+                try {
+                    return driver1.findElement(
+                            By.xpath("//a[@href='/project/list-repos' or .//img[contains(@alt,'Repositories')]]")
+                    );
+                } catch (Exception e) {
+                    return null;
+                }
+            });
 
-            // --- Step 9: Save GitLab Integration ---
-            WebElement updateBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[contains(text(),'Update')]")));
-            updateBtn.click();
-            Thread.sleep(5000);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", repoMenu);
+            Thread.sleep(1000);
 
-            // --- Step 10a: Click Repositories menu ---
-            WebElement repoMenu = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//a[@href='/project/list-repos' and .//img[@alt='Repositories icon']]")
-            ));
-            repoMenu.click();
-            System.out.println("Repositories menu clicked!");
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", repoMenu);
+
+            System.out.println("Repositories clicked");
 
             // --- Step 10b: Click "Import Repositories" ---
             WebElement importRepo = wait.until(ExpectedConditions.elementToBeClickable(

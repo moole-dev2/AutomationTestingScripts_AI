@@ -1,6 +1,7 @@
 package SignIn;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,7 +10,10 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import io.netty.handler.timeout.TimeoutException;
+
 import java.time.Duration;
+import java.util.List;
 import java.util.Scanner;
 
 public class OrganizationPage {
@@ -49,55 +53,59 @@ public class OrganizationPage {
             System.out.println("Please enter your OTP manually in the browser, then press Enter here...");
             @SuppressWarnings("resource")
             Scanner scanner = new Scanner(System.in);
-            scanner.nextLine();  // waits until you press Enter
+            scanner.nextLine();
+            Thread.sleep(2000);// waits until you press Enter
 
             // --- Step 4: Navigate directly to Integrations page ---
-            driver.get("https://moole.ai/settings/project/integrations");
+            driver.get("https://moole.ai/app/settings/project/integrations");
          // ================= FIXED TEAM CREATION =================
 
          // Wait for dashboard after OTP
          Thread.sleep(5000);
          
-      // Step: Click Profile button (SP) on Integrations page
-         WebElement profileBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                 By.xpath("//button[contains(@aria-label,'Profile menu for Sirisha Peddaboini')]")
-         ));
+         WebElement profileBtn = wait.until(
+        		    ExpectedConditions.elementToBeClickable(
+        		        By.xpath("//button[contains(@aria-label,'Profile menu')]")
+        		    )
+        		);
 
-         try {
-             profileBtn.click();
-          } catch (Exception e) {
-             // Use JS click as fallback in case React blocks normal click
-             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", profileBtn);
-         }
+        		((JavascriptExecutor)driver).executeScript(
+        		        "arguments[0].click();", profileBtn);
+        		
+        		WebElement orgBtn = wait.until(
+        		        ExpectedConditions.elementToBeClickable(
+        		                By.xpath("//button[contains(.,'Organizations')]")
+        		        )
+        		);
 
-         System.out.println("Clicked Profile button (SP)");
-         // Step 2: Click "Organizations"
-         WebElement orgBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                 By.xpath("//button[@type='submit' and .//text()[contains(.,'Organizations')]]")
-         ));
+        		orgBtn.click();
+        		System.out.println("Organizations clicked");
+        		// Wait for organization button (robust)
+        		WebElement orgButton = wait.until(driver1 -> {
+        		    try {
+        		        WebElement el = driver1.findElement(
+        		                By.xpath("//button[contains(normalize-space(),'Milky Way-Barnards Star')]")
+        		        );
+        		        return el.isDisplayed() ? el : null;
+        		    } catch (Exception e) {
+        		        return null;
+        		    }
+        		});
 
-         try {
-             orgBtn.click();
-         } catch (Exception e) {
-             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", orgBtn);
-         }
+        		// Scroll + click safely
+        		((JavascriptExecutor) driver)
+        		        .executeScript("arguments[0].scrollIntoView({block:'center'});", orgButton);
 
-         System.out.println("Clicked Organizations");
-         
-      // Step 1: Click the organization "Andromeda-cyan1169"
-         WebElement orgButton = wait.until(ExpectedConditions.elementToBeClickable(
-                 By.xpath("//button[@type='submit' and contains(.,'Andromeda-cyan1169')]")
-         ));
-         Thread.sleep(1000);
+        		Thread.sleep(1000);
 
-         try {
-             orgButton.click();
-         } catch (Exception e) {
-             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", orgButton);
-         }
-         Thread.sleep(1000);
+        		try {
+        		    orgButton.click();
+        		} catch (Exception e) {
+        		    ((JavascriptExecutor) driver)
+        		            .executeScript("arguments[0].click();", orgButton);
+        		}
 
-         System.out.println("Clicked Organization: Andromeda-cyan1169");
+        		System.out.println("Organization clicked successfully");
 
          // Step 2: Click "Create Project" button
          WebElement createProjectBtn = wait.until(ExpectedConditions.elementToBeClickable(
@@ -136,34 +144,37 @@ public class OrganizationPage {
          Thread.sleep(1000);
 
          System.out.println("Clicked Browse");
+         
+       
+         JavascriptExecutor js = (JavascriptExecutor) driver;
 
-         // Step 5: Select existing project "Andromeda-cyan1169" in browse list
-         WebElement selectProject = wait.until(ExpectedConditions.elementToBeClickable(
-                 By.xpath("//span[@class='truncate select-none' and text()='Andromeda-cyan1169']")
-         ));
+         WebElement arrowBtn = wait.until(ExpectedConditions.elementToBeClickable(
+        	        By.xpath("//button[contains(@class,'w-8 h-8') and contains(@class,'rounded-full') and contains(@class,'shrink-0')]")));
 
-         try {
-             selectProject.click();
-         } catch (Exception e) {
-             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", selectProject);
-         }
-         Thread.sleep(1000);
+        	js.executeScript("arguments[0].scrollIntoView({block:'center'});", arrowBtn);
+        	Thread.sleep(1000);
+        	js.executeScript("arguments[0].click();", arrowBtn);
+        	System.out.println("Arrow button clicked!");
+        	Thread.sleep(1000);
 
-         System.out.println("Selected project in Browse");
+      // 2. Wait for "Testing" to appear
+      WebElement testing = wait.until(ExpectedConditions.visibilityOfElementLocated(
+              By.xpath("//span[normalize-space()='Testing']")
+      ));
 
-         // Step 6: Click "Select" button to confirm project selection
-         WebElement selectBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                 By.xpath("//button[contains(@class,'px-3 py-2.5 text-sm rounded') and text()='Select']")
-         ));
+      // 3. Click Testing
+      js.executeScript("arguments[0].click();", testing);
+      Thread.sleep(1000);
 
-         try {
-             selectBtn.click();
-         } catch (Exception e) {
-             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", selectBtn);
-         }
-         Thread.sleep(1000);
+      // 4. Click Select button
+      WebElement selectBtn = wait.until(ExpectedConditions.elementToBeClickable(
+              By.xpath("//button[normalize-space()='Select']")
+      ));
 
-         System.out.println("Clicked Select button, project assigned successfully!");
+      js.executeScript("arguments[0].click();", selectBtn);
+      Thread.sleep(1000);
+      System.out.println("SUCCESS: Testing selected and clicked Select");
+
       // Step 7: Click the "Create" button to finalize project creation
         WebElement createBtn = wait.until(ExpectedConditions.elementToBeClickable(
                  By.xpath("//button[@type='submit' and contains(@class,'bg-indigo') and text()='Create']")
@@ -177,7 +188,76 @@ public class OrganizationPage {
          }
 
          System.out.println("Clicked Create button, project created successfully!");
-   
+         
+      // Click first arrow
+         WebElement arrow1 = wait.until(ExpectedConditions.elementToBeClickable(
+                 By.xpath("(//button[contains(@class,'shrink-0') and contains(@class,'rounded-full') and not(contains(@class,'w-8'))])[1]")));
+         js.executeScript("arguments[0].scrollIntoView({block:'center'});", arrow1);
+         Thread.sleep(1000);
+         js.executeScript("arguments[0].click();", arrow1);
+         System.out.println("First arrow clicked!");
+         Thread.sleep(1500);
+
+         // Click second arrow
+         WebElement arrow2 = wait.until(ExpectedConditions.elementToBeClickable(
+                 By.xpath("(//button[contains(@class,'shrink-0') and contains(@class,'rounded-full') and not(contains(@class,'w-8'))])[2]")));
+         js.executeScript("arguments[0].scrollIntoView({block:'center'});", arrow2);
+         Thread.sleep(1000);
+         js.executeScript("arguments[0].click();", arrow2);
+         System.out.println("Second arrow clicked!");
+         
+      // ======================================
+      // SEARCH INPUT
+      // ======================================
+
+      // Wait for page to load completely
+      Thread.sleep(5000);
+
+      // Scroll down slightly
+      ((JavascriptExecutor) driver).executeScript("window.scrollBy(0,500)");
+      Thread.sleep(2000);
+
+      // Locate Search Input
+      WebElement searchInput = wait.until(
+              ExpectedConditions.visibilityOfElementLocated(
+                      By.xpath("//input[@placeholder='Search projects and folders']")
+              )
+      );
+      ((JavascriptExecutor) driver).executeScript(
+              "arguments[0].scrollIntoView({block:'center'});",
+              searchInput
+      );
+      Thread.sleep(2000);
+
+      // Type "Test"
+      searchInput.clear();
+      searchInput.sendKeys("Test");
+      System.out.println("Searched: Test");
+      Thread.sleep(3000);
+
+      // Clear search
+      searchInput.clear();
+      System.out.println("Cleared Search");
+      Thread.sleep(2000);
+
+      // Type "jjjj"
+      searchInput.sendKeys("jjjj");
+      System.out.println("Searched: jjjj");
+      Thread.sleep(3000);
+
+      // Clear search
+      searchInput.clear();
+      System.out.println("Cleared Search");
+      Thread.sleep(2000);
+
+      // Close — click outside the search box
+      ((JavascriptExecutor) driver).executeScript(
+              "document.activeElement.blur();"
+      );
+      System.out.println("Closed Search");
+      Thread.sleep(2000);
+         Thread.sleep(1500);
+         
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -185,5 +265,3 @@ public class OrganizationPage {
         }
     }
 }
-
-         

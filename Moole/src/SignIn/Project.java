@@ -1,6 +1,7 @@
 package SignIn;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -41,9 +42,10 @@ public class Project {
             @SuppressWarnings("resource")
             Scanner scanner = new Scanner(System.in);
             scanner.nextLine();
+            Thread.sleep(2000);
 
             // --- Step 3: Navigate directly to Integrations page ---
-            driver.get("https://moole.ai/settings/project/integrations");
+            driver.get("https://moole.ai/app/settings/project/integrations");
             Thread.sleep(5000); // pause to let page load
             System.out.println("Integrations page opened!");
 
@@ -67,29 +69,94 @@ public class Project {
             Thread.sleep(5000);
             allButton.click();
             System.out.println("'All' button clicked!");
+            
+         // ======================================
+         // ARROW BUTTON
+         // ======================================
 
-            // --- Step 7: Click the first project dropdown ---
-            WebElement projectDropdown = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("/html/body/div[2]/main/div[3]/div[2]/div[5]/div/table/tbody/div/div[1]/button")));
-            Thread.sleep(5000);
-            projectDropdown.click();
-            System.out.println("Project dropdown clicked!");
+         // Wait for page to load completely
+         Thread.sleep(5000);
 
-        // --- Step: Click on the first available resource ---
-            WebElement firstResource = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("(//div[contains(@class,'group grid')])[1]")  // selects the first resource in the list
-            ));
-            firstResource.click();
-            System.out.println("First resource clicked successfully!");
+         // Scroll down slightly
+         ((JavascriptExecutor) driver).executeScript("window.scrollBy(0,500)");
+         Thread.sleep(2000);
 
+         // Click Arrow button
+         WebElement arrowBtn = wait.until(
+                 ExpectedConditions.presenceOfElementLocated(
+                         By.xpath("//button[contains(@class,'w-8 h-8') and contains(@class,'rounded-full') and contains(@class,'shrink-0')]")
+                 )
+         );
+         ((JavascriptExecutor) driver).executeScript(
+                 "arguments[0].scrollIntoView({block:'center'});",
+                 arrowBtn
+         );
+         Thread.sleep(2000);
+         ((JavascriptExecutor) driver).executeScript(
+                 "arguments[0].click();",
+                 arrowBtn
+         );
+         System.out.println("Clicked Arrow Button");
+         Thread.sleep(3000);
+         
+      // ======================================
+      // SECOND ARROW BUTTON
+      // ======================================
 
-         // --- Step: Click "Cancel" button at the end ---
-            WebElement cancelBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[text()='Cancel' and contains(@class,'px-3 py-2.5')]")
-            ));
-            Thread.sleep(500);
-            cancelBtn.click();
-            System.out.println("'Cancel' button clicked successfully!");
+      // Wait for page to load completely
+      Thread.sleep(5000);
+
+      // Scroll down slightly
+      ((JavascriptExecutor) driver).executeScript("window.scrollBy(0,500)");
+      Thread.sleep(2000);
+
+      // Click Second Arrow button
+      WebElement arrowBtn2 = wait.until(
+              ExpectedConditions.presenceOfElementLocated(
+                      By.xpath("(//button[contains(@class,'w-8 h-8') and contains(@class,'rounded-full') and contains(@class,'shrink-0')])[2]")
+              )
+      );
+      ((JavascriptExecutor) driver).executeScript(
+              "arguments[0].scrollIntoView({block:'center'});",
+              arrowBtn2
+      );
+      Thread.sleep(2000);
+      ((JavascriptExecutor) driver).executeScript(
+              "arguments[0].click();",
+              arrowBtn2
+      );
+      System.out.println("Clicked Second Arrow Button");
+      Thread.sleep(3000);
+      
+  
+   // ======================================
+   // CLICK MOOLE PROJECT
+   // ======================================
+
+   // Wait for page to load completely
+   Thread.sleep(5000);
+
+   // Scroll down slightly
+   ((JavascriptExecutor) driver).executeScript("window.scrollBy(0,500)");
+   Thread.sleep(2000);
+
+   // Click Moole project
+   WebElement mooleProject = wait.until(
+           ExpectedConditions.presenceOfElementLocated(
+                   By.xpath("//span[normalize-space()='Moole']")
+           )
+   );
+   ((JavascriptExecutor) driver).executeScript(
+           "arguments[0].scrollIntoView({block:'center'});",
+           mooleProject
+   );
+   Thread.sleep(2000);
+   ((JavascriptExecutor) driver).executeScript(
+           "arguments[0].click();",
+           mooleProject
+   );
+   System.out.println("Clicked Moole Project");
+   Thread.sleep(3000);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
