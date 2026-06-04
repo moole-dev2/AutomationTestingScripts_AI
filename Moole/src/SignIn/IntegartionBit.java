@@ -1,6 +1,7 @@
 package SignIn;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -47,10 +48,11 @@ public class IntegartionBit {
             System.out.println("Please enter your OTP manually in the browser, then press Enter here...");
             @SuppressWarnings("resource")
             Scanner scanner = new Scanner(System.in);
-            scanner.nextLine();  // waits until you press Enter
+            scanner.nextLine();
+            Thread.sleep(1000); // waits until you press Enter
 
             // --- Step 4: Navigate directly to Integrations page ---
-            driver.get("https://moole.ai/settings/project/integrations");
+            driver.get("https://moole.ai/app/settings/project/integrations");
 
             // --- Step 5: Click Bitbucket Integration ---
             WebElement bitbucketBtn = wait.until(ExpectedConditions.elementToBeClickable(
@@ -76,7 +78,7 @@ public class IntegartionBit {
             WebElement tokenField = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.xpath("//input[@type='password']")));
 
-           // tokenField.sendKeys("ATATT3xFfGF0NQe_BmhVoHFA0UObX3O2OOmTzC_YPcVN24CkAGa8ZznWKZtzmJrJ-HhbdzyTpL0uuEHdcYr0y8lksRIX5rWBhpNIrM0WpO5CoNHEgFQNw6vM1jewL6DsYWELv4M5vgFnWlO5uTtu7vbc5Bios4pLK2-B3wJr9KQOL1n84onh46I=9FAE8D37");  // replace with your token
+            tokenField.sendKeys("ATATT3xFfGF0NQe_BmhVoHFA0UObX3O2OOmTzC_YPcVN24CkAGa8ZznWKZtzmJrJ-HhbdzyTpL0uuEHdcYr0y8lksRIX5rWBhpNIrM0WpO5CoNHEgFQNw6vM1jewL6DsYWELv4M5vgFnWlO5uTtu7vbc5Bios4pLK2-B3wJr9KQOL1n84onh46I=9FAE8D37");  // replace with your token
             tokenField.sendKeys("");  // replace with your token
 //>>>>>>> branch 'main' of https://github.com/moole-dev2/Moole.AI_AutomationTesting.git
 
@@ -90,12 +92,31 @@ public class IntegartionBit {
 	            e.printStackTrace();
 	        }
          
-         // --- Step 10a: Click the Repositories menu ---
-            WebElement repoMenu = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//a[@href='/project/list-repos' and .//img[@alt='Repositories icon']]")
+         // ================= WAIT AFTER UPDATE =================
+            Thread.sleep(5000);
+
+            // wait for page stability
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                    By.xpath("//div[contains(@class,'loading') or contains(@class,'spinner') or contains(@class,'backdrop')]")
             ));
-            repoMenu.click();
-            System.out.println("Repositories menu clicked!");
+
+            // ================= CLICK REPOSITORIES =================
+            WebElement repoMenu = wait.until(driver1 -> {
+                try {
+                    return driver1.findElement(
+                            By.xpath("//a[@href='/project/list-repos' or .//img[contains(@alt,'Repositories')]]")
+                    );
+                } catch (Exception e) {
+                    return null;
+                }
+            });
+
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", repoMenu);
+            Thread.sleep(1000);
+
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", repoMenu);
+
+            System.out.println("Repositories clicked");
             
             // --- Step 10b: Click "Import Repositories" ---
             WebElement importRepo = wait.until(ExpectedConditions.elementToBeClickable(

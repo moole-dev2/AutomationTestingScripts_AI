@@ -1,6 +1,7 @@
 package SignIn;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -92,20 +93,88 @@ public class PAT {
             System.out.println("Token regeneration started...");
 
             // --- Step 12: Wait for 20 seconds (as requested) ---
-            Thread.sleep(20000);
+            Thread.sleep(2000);
+            
+            
 
-            // --- Step 13: Click Delete Token icon ---
-            WebElement deleteIcon = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[@aria-label='Delete Token']")));
-            deleteIcon.click();
+            By deleteIcon = By.xpath("//button[@aria-label='Delete Token']");
+            By removeBtn = By.xpath("//button[@type='submit']//span[text()='Remove']");
 
-            // --- Step 14: Click Remove confirmation button ---
-            WebElement removeBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[@type='submit']//span[text()='Remove']")));
-            removeBtn.click();
+		// ==========================
+		// SAFE CLICK METHOD
+		// ==========================
+		for (int i = 0; i < 3; i++) {
+		    try {
+		        WebElement del = wait.until(ExpectedConditions.elementToBeClickable(deleteIcon));
+		        del.click();
+		        System.out.println("Clicked Delete Token");
+		        break;
+		    } catch (org.openqa.selenium.StaleElementReferenceException e) {
+		        System.out.println("Retrying Delete click due to stale element...");
+		    }
+		}
+		
+		Thread.sleep(1500); // allow modal to appear
+		
+		// ==========================
+		// CLICK REMOVE SAFELY
+		// ==========================
+		for (int i = 0; i < 3; i++) {
+		    try {
+		        WebElement rm = wait.until(ExpectedConditions.elementToBeClickable(removeBtn));
+		        rm.click();
+		        System.out.println("Clicked Remove");
+		        break;
+		    } catch (org.openqa.selenium.StaleElementReferenceException e) {
+		        System.out.println("Retrying Remove click due to stale element...");
+		    }
+		}
 
-            System.out.println("Token deleted successfully.");
+		System.out.println("Token deleted successfully.");
+		Thread.sleep(2000);
+		
+		// =====================================================
+		// FINAL FLOW: DELETE AGAIN + CANCEL
+		// =====================================================
 
+		try {
+
+		    // Click Delete Token again
+		    for (int i = 0; i < 3; i++) {
+		        try {
+		            WebElement deleteAgain = wait.until(
+		                    ExpectedConditions.elementToBeClickable(
+		                            By.xpath("//button[@aria-label='Delete Token']")
+		                    )
+		            );
+
+		            deleteAgain.click();
+		            System.out.println("Clicked Delete Token (Again)");
+		            break;
+
+		        } catch (org.openqa.selenium.StaleElementReferenceException e) {
+		            System.out.println("Retrying Delete click due to stale element...");
+		        }
+		    }
+
+		    Thread.sleep(1500); // wait for modal to open
+
+		    // Click Cancel button (your provided path)
+		    WebElement cancelBtn = wait.until(
+		            ExpectedConditions.elementToBeClickable(
+		                    By.xpath("//button[normalize-space()='Cancel' or contains(.,'Cancel')]")
+		            )
+		    );
+
+		    cancelBtn.click();
+
+		    System.out.println("Clicked Cancel Button Successfully");
+
+		    Thread.sleep(2000);
+
+		} catch (Exception e) {
+		    System.out.println("Cancel Flow Failed: " + e.getMessage());
+		}
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

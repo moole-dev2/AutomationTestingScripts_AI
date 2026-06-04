@@ -53,7 +53,7 @@ public class InviteUser {
             scanner.nextLine();  // waits until you press Enter
 
             // --- Step 4: Navigate directly to Integrations page ---
-            driver.get("https://moole.ai/settings/project/integrations");
+            driver.get("https://moole.ai/app/settings/project/integrations");
          // ================= FIXED TEAM CREATION =================
 
          // Wait for dashboard after OTP
@@ -79,7 +79,7 @@ public class InviteUser {
       } catch (Exception e) {
           ((JavascriptExecutor) driver).executeScript("arguments[0].click();", inviteMemberBtn);
       }
-
+      Thread.sleep(1000);
       System.out.println("Clicked Invite Member button");
    // Step 3: Enter Email
       WebElement emailInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -87,6 +87,7 @@ public class InviteUser {
       ));
       emailInput.clear();
       emailInput.sendKeys("lemici3525@exespay.com");
+      Thread.sleep(1000);
       System.out.println("Entered email");
 
       // Step 4: Click dropdown arrow (SVG inside span)
@@ -99,6 +100,7 @@ public class InviteUser {
       } catch (Exception e) {
           ((JavascriptExecutor) driver).executeScript("arguments[0].click();", dropdownArrow);
       }
+      Thread.sleep(2000);
       System.out.println("Clicked dropdown arrow");
 
       // Step 5: Select "Tester"
@@ -111,6 +113,7 @@ public class InviteUser {
       } catch (Exception e) {
           ((JavascriptExecutor) driver).executeScript("arguments[0].click();", testerOption);
       }
+      Thread.sleep(1000);
       System.out.println("Selected Tester role");
 
       // Step 6: Click "Invite User" button
@@ -123,7 +126,7 @@ public class InviteUser {
       } catch (Exception e) {
           ((JavascriptExecutor) driver).executeScript("arguments[0].click();", inviteUserBtn);
       }
-
+      Thread.sleep(1000);
       System.out.println("USER INVITED SUCCESSFULLY!");
 
         } catch (Exception e) {

@@ -1,6 +1,7 @@
 package SignIn;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -44,9 +45,10 @@ public class IntegrationGitHub {
             @SuppressWarnings("resource")
             Scanner scanner = new Scanner(System.in);
             scanner.nextLine();
+            Thread.sleep(1000);
 
             // --- Step 4: Navigate directly to Integrations page ---
-            driver.get("https://moole.ai/settings/project/integrations");
+            driver.get("https://moole.ai/app/settings/project/integrations");
 
             // --- Step 5: Click GitHub Integration ---
             WebElement githubBtn = wait.until(ExpectedConditions.elementToBeClickable(
@@ -67,20 +69,27 @@ public class IntegrationGitHub {
             // --- Step 8: Enter GitHub Token ---
             WebElement githubToken = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.xpath("//input[@class='col-start-1 row-start-1 w-full pl-10 pr-10 py-4 text-base font-medium rounded-sm transition-all bg-bg duration-200 focus:outline-none focus:ring-2']")));
-            // githubToken.sendKeys("ghp_YOUR_GITHUB_PERSONAL_ACCESS_TOKEN");
+             githubToken.sendKeys("ghp_YOUR_GITHUB_PERSONAL_ACCESS_TOKEN");
+             
+             
+             // ================= CLICK REPOSITORIES =================
+             WebElement repoMenu = wait.until(driver1 -> {
+                 try {
+                     return driver1.findElement(
+                             By.xpath("//a[@href='/project/list-repos' or .//img[contains(@alt,'Repositories')]]")
+                     );
+                 } catch (Exception e) {
+                     return null;
+                 }
+             });
 
-            // --- Step 9: Save GitHub Integration ---
-            WebElement updateBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[contains(text(),'Update')]")));
-            updateBtn.click();
-            Thread.sleep(5000);
+             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", repoMenu);
+             Thread.sleep(1000);
 
-            // --- Step 10a: Click Repositories menu ---
-            WebElement repoMenu = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//a[@href='/project/list-repos' and .//img[@alt='Repositories icon']]")
-            ));
-            repoMenu.click();
-            System.out.println("Repositories menu clicked!");
+             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", repoMenu);
+
+             System.out.println("Repositories clicked");
+
 
             // --- Step 10b: Click "Import Repositories" ---
             WebElement importRepo = wait.until(ExpectedConditions.elementToBeClickable(
