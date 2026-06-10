@@ -1,5 +1,3 @@
-
-
 package SignIn;
 
 import org.openqa.selenium.*;
@@ -41,8 +39,91 @@ public class DashboardPage {
 
             System.out.println("Enter OTP manually...");
             new Scanner(System.in).nextLine();
+            Thread.sleep(2000);
 
             // ================= NAVIGATE =================
+            WebElement dashboard = wait.until(
+                    ExpectedConditions.presenceOfElementLocated(
+                            By.xpath("//a[@href='/app/project/dashboard']")));
+
+            js.executeScript("arguments[0].click();", dashboard);
+
+            System.out.println("Dashboard clicked successfully");
+            Thread.sleep(2000);
+            
+            
+       /*    WebElement importRepoBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[contains(.,'Import Repositories')]")));
+
+            importRepoBtn.click();
+
+            System.out.println("Import Repositories clicked successfully");
+            Thread.sleep(2000);
+            
+            WebElement closePopupBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[@aria-label='Close popup']")));
+
+            closePopupBtn.click();
+
+            System.out.println("Popup closed successfully");
+            Thread.sleep(2000);
+            
+            
+            WebElement addRepositoryBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[.//p[normalize-space()='Add Repository']]")));
+
+            addRepositoryBtn.click();
+
+            System.out.println("Add Repository button clicked successfully");
+            Thread.sleep(2000);
+            
+            WebElement viewReposBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[normalize-space()='View Repos']")));
+
+            viewReposBtn.click();
+
+            System.out.println("View Repos button clicked successfully");
+            Thread.sleep(2000);
+            
+            WebElement addBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[@type='submit' and normalize-space()='Add']")));
+
+            addBtn.click();
+
+            System.out.println("Add button clicked successfully");
+            Thread.sleep(2000);
+            
+            WebElement repositories = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//a[@href='/app/project/list-repos']")));
+
+            js.executeScript("arguments[0].click();", repositories);
+
+            System.out.println("Repositories clicked successfully");*/
+            Thread.sleep(2000);
+            
+         // Open Filter Dropdown
+            WebElement filterDropdown = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[@aria-label='Sort by Filter']")));
+
+            js.executeScript("arguments[0].click();", filterDropdown);
+
+            System.out.println("Filter dropdown opened");
+            Thread.sleep(2000);
+
+            // Close Filter Dropdown
+            js.executeScript("arguments[0].click();", filterDropdown);
+
+            System.out.println("Filter dropdown closed");
+            Thread.sleep(2000);
+            
+            
             WebElement searchInput = wait.until(
                     ExpectedConditions.elementToBeClickable(
                             By.xpath("//input[@placeholder='Search Repositories']")
@@ -65,6 +146,7 @@ public class DashboardPage {
             wait.until(ExpectedConditions.urlContains("/project/report/repository"));
 
             System.out.println("Report page opened");
+           
 
             // ================= FIX AVAILABLE (FIXED PART) =================
 
@@ -236,6 +318,25 @@ public class DashboardPage {
          System.out.println("High unchecked");
 
          Thread.sleep(1500);
+         
+
+         // STEP 1: find dropdown more safely
+         WebElement sastDropdown = wait.until(
+                 ExpectedConditions.elementToBeClickable(
+                         By.xpath("//*[contains(text(),'SAST')]/ancestor::*[self::button or self::div][1]"))
+         );
+
+         sastDropdown.click();
+         System.out.println("Dropdown opened");
+
+         // STEP 2: wait for option
+         WebElement sastOption = wait.until(
+                 ExpectedConditions.visibilityOfElementLocated(
+                         By.xpath("//p[normalize-space()='SAST']"))
+         );
+
+         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", sastOption);
+         System.out.println("SAST clicked");
 
          // ================= CLOSE FILTER =================
          js.executeScript("arguments[0].click();", filterBtn);
@@ -253,6 +354,21 @@ public class DashboardPage {
             js.executeScript("arguments[0].click();", repoBreadcrumb);
 
             System.out.println("Back to repositories");
+            
+            WebElement importRepoBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[.//p[normalize-space()='Import Repositories']]")
+                    )
+            );
+
+            try {
+                importRepoBtn.click();
+            } catch (Exception e) {
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", importRepoBtn);
+            }
+
+            System.out.println("Import Repositories button clicked");
+            Thread.sleep(2000);
 
 
          // ================= OPEN FILTER =================
@@ -339,7 +455,8 @@ public class DashboardPage {
             System.out.println("Remove repo clicked");
 
             Thread.sleep(5000);
-
+      
+        
             // ================= VIEW REPORT =================
             WebElement view = wait.until(
                     ExpectedConditions.elementToBeClickable(
@@ -350,6 +467,71 @@ public class DashboardPage {
             js.executeScript("arguments[0].click();", view);
 
             System.out.println("View report clicked");
+            
+            WebElement historyBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[normalize-space()='History']")
+                    )
+            );
+
+            try {
+                historyBtn.click();
+            } catch (Exception e) {
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", historyBtn);
+            }
+
+            System.out.println("History button clicked");
+            Thread.sleep(2000);
+            
+            WebElement scmBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[normalize-space()='Software Composition']")
+                    )
+            );
+
+            try {
+                scmBtn.click();
+            } catch (Exception e) {
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", scmBtn);
+            }
+
+            System.out.println("Software Composition button clicked");
+            Thread.sleep(2000);
+            
+            WebElement componentsBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[normalize-space()='Components']")
+                    )
+            );
+
+            try {
+                componentsBtn.click();
+            } catch (Exception e) {
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", componentsBtn);
+            }
+
+            System.out.println("Components button clicked");
+            Thread.sleep(2000);
+           
+            WebElement overviewBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("(//button[normalize-space()='Overview'])[last()]")
+                    )
+            );
+
+            overviewBtn.click();
+            System.out.println("Overview clicked (last match)");
+            Thread.sleep(2000);
+            
+            WebElement rawBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[normalize-space()='Raw']")
+                    )
+            );
+
+            rawBtn.click();
+            System.out.println("Raw button clicked");
+            Thread.sleep(2000);
 
             // ================= EXPORT SBOM =================
             WebElement exportPdfBtn = wait.until(
@@ -365,7 +547,6 @@ public class DashboardPage {
 
             System.out.println("Export Report PDF clicked");
             Thread.sleep(1000); 
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
