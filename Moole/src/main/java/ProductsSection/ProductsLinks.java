@@ -1,116 +1,191 @@
 package ProductsSection;
 
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import java.time.Duration;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ProductsLinks {
 
     public static void main(String[] args) throws Exception {
 
         WebDriver driver = new ChromeDriver();
-       // WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
         try {
-            // Open website
+
+            // =====================================================
+            // STEP 1: OPEN WEBSITE
+            // =====================================================
             driver.get("https://moole.ai/");
             driver.manage().window().maximize();
             Thread.sleep(3000);
 
-            // Click Privacy OK (if present)
+            System.out.println("Website Opened");
+
+            // =====================================================
+            // CLOSE POPUP
+            // =====================================================
             try {
-                WebElement ok = driver.findElement(By.xpath("//button[normalize-space()='OK']"));
+                WebElement ok = wait.until(
+                        ExpectedConditions.elementToBeClickable(
+                                By.xpath("//button[normalize-space()='OK']")));
                 js.executeScript("arguments[0].click();", ok);
-                Thread.sleep(1000);
+                System.out.println("Popup Closed");
             } catch (Exception e) {
                 System.out.println("No popup");
             }
 
-         // -------- FUNCTION: SLOW SCROLL --------
-            for (int i = 0; i <= 1500; i += 100) {
-                js.executeScript("window.scrollBy(0,200)");
-                Thread.sleep(1000);
-            }
+            // =====================================================
+            // STEP 2: SCROLL HOME PAGE
+            // =====================================================
+            scroll(driver, js);
 
-            // ========== STEP 2: Click SCA ==========
-            WebElement sca = driver.findElement(By.xpath("//a[contains(@href,'software-composition-analysis')]"));
-            js.executeScript("arguments[0].click();", sca);
-            Thread.sleep(3000);
-            System.out.println("Clicked SCA");
+         // =====================================================
+         // STEP: SCROLL FULL HOME PAGE FIRST
+         // =====================================================
+         for (int i = 0; i < 2500; i += 300) {
+             js.executeScript("window.scrollBy(0,300)");
+             Thread.sleep(600);
+         }
 
-            // Scroll inside About page
-            for (int i = 0; i <= 2000; i += 100) {
-                js.executeScript("window.scrollBy(0,200)");
-                Thread.sleep(1000);
-            }
+         // small pause for lazy load
+         Thread.sleep(2000);
 
-            Thread.sleep(2000);
+         // =====================================================
+         // STEP: CLICK SCA 
+         // =====================================================
+         By scaLocator = By.xpath("//a[contains(@href,'software-composition-analysis')]");
 
-            // Scroll page
-            js.executeScript("window.scrollBy(0,1000)");
-            Thread.sleep(4000);
+         WebElement sca = wait.until(ExpectedConditions.presenceOfElementLocated(scaLocator));
 
+         // IMPORTANT: force scroll into center
+         js.executeScript("arguments[0].scrollIntoView({block:'center'});", sca);
+         Thread.sleep(1500);
 
-            // ========== STEP 4: Click 2nd link ==========
-            WebElement ContainerSecurity = driver.findElement(By.xpath("/html/body/div[2]/footer/div/div[1]/div[2]/ul/li[2]/a"));
-            js.executeScript("arguments[0].click();", ContainerSecurity);
-            Thread.sleep(3000);
-            System.out.println("Clicked ContainerSecurity");
+      // IMPORTANT: sometimes React re-renders -> re-fetch element
+         sca = driver.findElement(scaLocator);
 
-            // Scroll inside About page
-            for (int i = 0; i <= 2000; i += 100) {
-                js.executeScript("window.scrollBy(0,200)");
-                Thread.sleep(1000);
-            }
+         // scroll again (double safety)
+         js.executeScript("arguments[0].scrollIntoView({block:'center'});", sca);
+         Thread.sleep(1000);
 
-            Thread.sleep(2000);
-            
-            js.executeScript("window.scrollBy(0,1000)");
-            Thread.sleep(4000);
+         // =====================================================
+         // STEP: CLICK USING JS (MOST STABLE)
+         // =====================================================
+         js.executeScript("arguments[0].click();", sca);
 
-            WebElement SAST = driver.findElement(By.xpath("/html/body/div[2]/footer/div/div[1]/div[2]/ul/li[3]/a"));
-            js.executeScript("arguments[0].click();", SAST);
-            Thread.sleep(4000);
-            System.out.println("Clicked SAST");
-            // Scroll inside About page
-            for (int i = 0; i <= 2000; i += 100) {
-                js.executeScript("window.scrollBy(0,200)");
-                Thread.sleep(1000);
-            }
+         System.out.println("Clicked SCA");
 
-            Thread.sleep(2000);
+         Thread.sleep(5000);
          
-            // ========== STEP 6 ==========
-            js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+	      // =====================================================
+	      // SCROLL SCA PAGE
+	      // =====================================================
+	      for (int i = 0; i < 3000; i += 250) {
+	          js.executeScript("window.scrollBy(0,250)");
+	          Thread.sleep(500);
+	      }
+	
+	      System.out.println("Scrolled SCA page");
+
+            // =====================================================
+            // STEP 4: FOOTER FLOW (ALL PRODUCT LINKS)
+            // =====================================================
+
+            clickFooterProduct(driver, wait, js,
+                    "Container Security",
+                    "//*[contains(text(),'Container Security')]");
+
+            clickFooterProduct(driver, wait, js,
+                    "SAST",
+                    "//*[contains(text(),'SAST')]");
+
+            clickFooterProduct(driver, wait, js,
+                    "Vulnerability Database",
+                    "//*[contains(text(),'Vulnerability')]");
+
+            // =====================================================
+            // BACK TO HOME
+            // =====================================================
+            driver.get("https://moole.ai/");
             Thread.sleep(3000);
 
-            WebElement Vulnerability = driver.findElement(By.xpath("/html/body/div[2]/footer/div/div[1]/div[2]/ul/li[4]/a"));
-            js.executeScript("arguments[0].click();", Vulnerability);
-            Thread.sleep(4000);
-            System.out.println("Clicked Vulnerability");
-         // Scroll inside About page
-            for (int i = 0; i <= 2000; i += 100) {
-                js.executeScript("window.scrollBy(0,200)");
-                Thread.sleep(1000);
-            }
-
-
-            Thread.sleep(1000);
-            driver.get("https://moole.ai/");
-            Thread.sleep(500);
-            System.out.println("Back to the HomePage");
-
-            // Done
+            System.out.println("Back to Home");
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         } finally {
             driver.quit();
             System.out.println("Browser closed");
+        }
+    }
+
+    // =====================================================
+    // CLICK METHOD (SAFE + DYNAMIC)
+    // =====================================================
+    public static void click(WebDriver driver, WebDriverWait wait, JavascriptExecutor js,
+                             String xpath, String name) {
+
+        try {
+            WebElement el = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
+
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", el);
+            Thread.sleep(1000);
+
+            js.executeScript("arguments[0].click();", el);
+
+            System.out.println("Clicked: " + name);
+            Thread.sleep(4000);
+
+        } catch (Exception e) {
+            System.out.println("Failed clicking " + name + " -> " + e.getMessage());
+        }
+    }
+
+    // =====================================================
+    // FOOTER CLICK METHOD (IMPORTANT FIX)
+    // =====================================================
+    public static void clickFooterProduct(WebDriver driver,
+                                          WebDriverWait wait,
+                                          JavascriptExecutor js,
+                                          String name,
+                                          String xpath) throws Exception {
+
+        // scroll to footer every time (VERY IMPORTANT)
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+        Thread.sleep(2000);
+
+        WebElement el = wait.until(
+                ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+
+        js.executeScript("arguments[0].scrollIntoView(true);", el);
+        Thread.sleep(1000);
+
+        js.executeScript("arguments[0].click();", el);
+
+        System.out.println("Clicked Footer: " + name);
+        Thread.sleep(4000);
+
+        // scroll inside page
+        scroll(driver, js);
+
+        // go back to SCA page again
+        driver.navigate().back();
+        Thread.sleep(4000);
+    }
+
+    // =====================================================
+    // SCROLL METHOD
+    // =====================================================
+    public static void scroll(WebDriver driver, JavascriptExecutor js) throws Exception {
+
+        for (int i = 0; i < 2000; i += 300) {
+            js.executeScript("window.scrollBy(0,300)");
+            Thread.sleep(500);
         }
     }
 }

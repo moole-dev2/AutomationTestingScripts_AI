@@ -229,20 +229,54 @@ public class VulerabilityQueryPage {
                 Thread.sleep(3000);
             }
             
-         // ================= CLICK CVE =================
-            WebElement cve = wait.until(
-                    ExpectedConditions.elementToBeClickable(
-                            By.xpath("//span[contains(text(),'CVE-2026-2518')]")
-                    )
-            );
 
-            js.executeScript("arguments[0].scrollIntoView({block:'center'});", cve);
-            Thread.sleep(800);
+         // ================= SAFE CVE CLICK (DYNAMIC + PAGINATION SAFE) =================
 
-            js.executeScript("arguments[0].click();", cve);
+         boolean clicked = false;
 
-            System.out.println("Clicked CVE-2026-2518");
+         for (int page = 0; page < 5; page++) {
 
+             List<WebElement> cveList = driver.findElements(
+                     By.xpath("//a[contains(@href,'/vulnerability-database/CVE-')]")
+             );
+
+             if (!cveList.isEmpty()) {
+
+                 WebElement cve = cveList.get(0); // pick first available CVE
+
+                 js.executeScript("arguments[0].scrollIntoView({block:'center'});", cve);
+                 Thread.sleep(800);
+
+                 System.out.println("Clicking CVE: " + cve.getText());
+
+                 js.executeScript("arguments[0].click();", cve);
+
+                 clicked = true;
+                 break;
+             }
+
+             // go next page if no CVE found
+             try {
+                 WebElement nextBtn = wait.until(
+                         ExpectedConditions.elementToBeClickable(
+                                 By.xpath("//a[@aria-label='Next page']")
+                         )
+                 );
+
+                 js.executeScript("arguments[0].click();", nextBtn);
+                 Thread.sleep(2000);
+
+                 System.out.println("Moving to next page...");
+
+             } catch (Exception e) {
+                 System.out.println("No next page available");
+                 break;
+             }
+         }
+
+         if (!clicked) {
+             System.out.println("No CVE found in any page");
+         }
             // ================= WAIT FOR DETAIL PAGE =================
             Thread.sleep(3000);
 

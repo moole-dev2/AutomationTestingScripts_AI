@@ -37,7 +37,7 @@ public class ProductsNavigation {
                     {"SCA", "//a[normalize-space()='SCA']"},
                     {"Container Security", "//a[normalize-space()='Container Security']"},
                     {"SAST", "//a[normalize-space()='SAST']"},
-                    {"Vulnerability Database", "//a[normalize-space()='Vulnerability Database']"}
+                    {"Vulnerability Database",  "//a[contains(@href,'vulnerability-database')]"}
             };
 
             for (String[] product : products) {
@@ -68,12 +68,6 @@ public class ProductsNavigation {
                 }
                 System.out.println("Scrolled bottom of " + name);
 
-             /*   // Scroll back up
-                for (int i = 0; i < pageHeight; i += 300) {
-                    js.executeScript("window.scrollBy(0,-300)");
-                    Thread.sleep(500);
-                }
-                System.out.println("Scrolled top of " + name);*/
             }
 
             // ---------- Return to Home ----------
