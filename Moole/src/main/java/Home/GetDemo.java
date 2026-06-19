@@ -23,13 +23,17 @@ public class GetDemo {
            driver.get("https://moole.ai/");
             driver.manage().window().maximize();
             
-            // ---------------- Handle Privacy Popup ----------------
-
-            WebElement privacyOk = wait.until(ExpectedConditions.presenceOfElementLocated(
-                    By.xpath("//button[contains(@class,'rounded-sm bg-indigo') and text()='OK']")));
-            js.executeScript("arguments[0].click();", privacyOk);
-            System.out.println("Clicked Privacy OK button");
-            Thread.sleep(1000);
+            // =========================================================
+            // CLOSE POPUP (SAFE)
+            // =========================================================
+            try {
+                WebElement okBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                        By.xpath("//button[contains(text(),'OK')]")));
+                js.executeScript("arguments[0].click();", okBtn);
+                System.out.println("Popup closed");
+            } catch (Exception e) {
+                System.out.println("No popup found");
+            }
 
             //Click "Get a Demo"
             List<WebElement> demoButtons = wait.until(
@@ -77,18 +81,32 @@ public class GetDemo {
             // Fill Business Email (1st input)
             WebElement email = wait.until(
                     ExpectedConditions.visibilityOfElementLocated(
-                            By.xpath("(//input)[1]")
+                            By.xpath("//input[@type='email' or contains(@placeholder,'email') or contains(@name,'email')]")
                     )
             );
-            email.sendKeys("moole.dev.2@gmail.com");
 
+            email.sendKeys("moole.dev.2@gmail.com");
+            Thread.sleep(1000);
             // Fill First Name (2nd input)
-            WebElement firstName = driver.findElement(By.xpath("(//input)[2]"));
+            WebElement firstName = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//input[contains(@placeholder,'First') or contains(@name,'first')]")
+                    )
+            );
+
             firstName.sendKeys("John");
+            Thread.sleep(1000);
 
             //Fill Last Name (3rd input)
-            WebElement lastName = driver.findElement(By.xpath("(//input)[3]"));
+            WebElement lastName = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//input[contains(@placeholder,'Last') or contains(@name,'last')]")
+                    )
+            );
+
             lastName.sendKeys("Lee");
+            Thread.sleep(1000);
+
 
             System.out.println("Filled form fields");
             js.executeScript("window.scrollBy(0,300)");

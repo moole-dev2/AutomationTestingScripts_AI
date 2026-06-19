@@ -59,54 +59,53 @@ public class ExploreProducts {
             performPageScroll(driver);
 
             // =====================================================
-            // LEARN MORE 1 → 4
+            // EXPLORE MORE 1-4
+            // Each "Explore More" button is identified by its UNIQUE
+            // gradient color class (not by position), since position-based
+            // indexing ((//span[...])[1], [2], [3]) can point to the same
+            // element twice if the DOM order shifts after scroll/navigation.
             // =====================================================
 
-            clickElement(driver, js, wait,
-                    "(//button[contains(.,'Learn more')])[1]",
-                    "Learn More 1");
+            String[][] exploreButtons = {
+                    { "//span[contains(@class,'from-[#2282fa]') and .//span[normalize-space()='Explore More']]", "Explore More 1 (Blue)" },
+                    { "//span[contains(@class,'from-[#00b974]') and .//span[normalize-space()='Explore More']]", "Explore More 2 (Green)" },
+                    { "//span[contains(@class,'from-[#a643ff]') and .//span[normalize-space()='Explore More']]", "Explore More 3 (Purple)" },
+                    { "//span[contains(@class,'from-[#00b4aa]') and .//span[normalize-space()='Explore More']]", "Explore More 4 (Teal)" }
+            };
 
-            performPageScroll(driver);
-            driver.navigate().back();
-            Thread.sleep(3000);
+            for (String[] btn : exploreButtons) {
 
-            clickElement(driver, js, wait,
-                    "(//button[contains(.,'Learn more')])[2]",
-                    "Learn More 2");
+                String xpath = btn[0];
+                String name = btn[1];
 
-            performPageScroll(driver);
-            driver.navigate().back();
-            Thread.sleep(3000);
+                // 1. Click the Explore More button
+                clickElement(driver, js, wait, xpath, name);
 
-            clickElement(driver, js, wait,
-                    "(//button[contains(.,'Learn more')])[3]",
-                    "Learn More 3");
+                // 2. Scroll that page
+                performPageScroll(driver);
 
-            performPageScroll(driver);
-            driver.navigate().back();
-            Thread.sleep(3000);
+                // 3. Navigate back to Products page
+                driver.navigate().back();
+                Thread.sleep(3000);
+            }
 
-            clickElement(driver, js, wait,
-                    "(//button[contains(.,'Learn more')])[4]",
-                    "Learn More 4");
-
-            performPageScroll(driver);
+            System.out.println("Completed Explore More 1-4");
 
             // =====================================================
-            // AFTER LEARN 4 → BACK TO PRODUCTS PAGE
+            // AFTER EXPLORE MORE 1-4 → BACK TO PRODUCTS PAGE
             // =====================================================
 
             driver.get("https://moole.ai/products");
             Thread.sleep(4000);
 
-            System.out.println("Returned to Products Page after Learn 4");
+            System.out.println("Returned to Products Page after Explore More 1-4");
 
             // =====================================================
             // CLICK EXPLORE INTEGRATIONS
             // =====================================================
 
             clickElement(driver, js, wait,
-                    "//a[contains(text(),'Explore Integrations')]",
+                    "//button[@type='button' and contains(.,'Explore Integrations')]",
                     "Explore Integrations");
 
             // =====================================================
@@ -152,11 +151,10 @@ public class ExploreProducts {
     // =====================================================
 
     private static void highlight(WebDriver driver, WebElement okBtn) {
-		// TODO Auto-generated method stub
-		
-	}
+        // TODO Auto-generated method stub
+    }
 
-	public static void safeClick(WebDriver driver, JavascriptExecutor js, WebElement element) {
+    public static void safeClick(WebDriver driver, JavascriptExecutor js, WebElement element) {
 
         try {
             element.click();

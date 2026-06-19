@@ -1,17 +1,34 @@
 package Home;
+import java.time.Duration;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 public class SubscriptionEmail {
 
 	public static void main(String[] args) {
 
         WebDriver driver = new ChromeDriver();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
         try {
             // Open website
             driver.get("https://moole.ai/");
             driver.manage().window().maximize();
+            
+            // =========================
+            // POPUP HANDLING
+            // =========================
+            try {
+                WebElement ok = wait.until(ExpectedConditions.elementToBeClickable(
+                        By.xpath("//button[contains(text(),'OK')]")));
+                js.executeScript("arguments[0].click();", ok);
+            } catch (Exception ignored) {}
+
 
             // Locate email input field
             WebElement emailField = driver.findElement(By.xpath("//input[@id='email-address']"));
@@ -22,6 +39,19 @@ public class SubscriptionEmail {
             System.out.println("Email entered successfully");
 
             Thread.sleep(3000);
+            
+            WebElement subscribeBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[@type='submit' and text()='Subscribe']")
+                    )
+            );
+
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", subscribeBtn);
+
+            js.executeScript("arguments[0].click();", subscribeBtn);
+
+            System.out.println("Clicked Subscribe Button");
+            Thread.sleep(2000);
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
