@@ -1,7 +1,7 @@
+
 package Resources;
 
 import java.time.Duration;
-
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.*;
@@ -14,65 +14,157 @@ public class Newsroom {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
-       
+        try {
+
             // -------- Open Website --------
             driver.get("https://moole.ai/");
             driver.manage().window().maximize();
-           // Thread.sleep(2000);
 
-            // -------- Handle Privacy Popup --------
+            // =========================================================
+            // HANDLE POPUP
+            // =========================================================
             try {
-                WebElement privacyOk = wait.until(ExpectedConditions.presenceOfElementLocated(
-                        By.xpath("//button[contains(@class,'rounded-sm bg-indigo') and text()='OK']")));
-                js.executeScript("arguments[0].click();", privacyOk);
-                System.out.println("Clicked Privacy OK button");
+                WebElement ok = wait.until(ExpectedConditions.elementToBeClickable(
+                        By.xpath("//button[contains(text(),'OK')]")));
+
+                js.executeScript("arguments[0].click();", ok);
+                System.out.println("Popup closed");
             } catch (Exception e) {
-                System.out.println("Privacy popup not found");
+                System.out.println("No popup found");
             }
 
             // -------- Click Resources --------
             WebElement resources = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//span[normalize-space()='Resources']")));
+
             resources.click();
-            //Thread.sleep(2000);
+            Thread.sleep(1500);
 
-
-        try {
-            // -------- Open Website --------
+            // -------- Open Newsroom Page --------
             driver.get("https://moole.ai/resources/newsroom");
             driver.manage().window().maximize();
+            
 
-            // -------- Loop through Pages (2 → 8) --------
+            // =========================================================
+            // 🔥 READ MORE FLOW (FIXED)
+            // =========================================================
+            try {
+
+                System.out.println("Searching Read More...");
+
+                WebElement readMore = wait.until(
+                        ExpectedConditions.presenceOfElementLocated(
+                                By.xpath("//*[self::button or self::a][contains(.,'Read More')]")
+                        )
+                );
+
+                js.executeScript("arguments[0].scrollIntoView({block:'center'});", readMore);
+                Thread.sleep(1200);
+
+                js.executeScript("arguments[0].click();", readMore);
+
+                System.out.println("Clicked Read More");
+
+                Thread.sleep(3000);
+
+                // smooth human scroll
+                for (int i = 0; i < 6; i++) {
+                    js.executeScript("window.scrollBy(0, 200);");
+                    Thread.sleep(500);
+                }
+
+                driver.navigate().back();
+                Thread.sleep(3000);
+
+            } catch (Exception e) {
+                System.out.println("Read More not available, skipping...");
+            }
+            
+            // =========================================================
+            // 🔥 VIEW ALL FLOW (FIXED)
+            // =========================================================
+            try {
+
+                System.out.println("Searching View All...");
+
+                WebElement viewAll = wait.until(
+                        ExpectedConditions.presenceOfElementLocated(
+                                By.xpath("//*[self::button or self::a][contains(.,'View All')]")
+                        )
+                );
+
+                js.executeScript("arguments[0].scrollIntoView({block:'center'});", viewAll);
+                Thread.sleep(1200);
+
+                js.executeScript("arguments[0].click();", viewAll);
+
+                System.out.println("Clicked View All");
+
+                Thread.sleep(3000);
+
+                for (int i = 0; i < 6; i++) {
+                    js.executeScript("window.scrollBy(0, 200);");
+                    Thread.sleep(500);
+                }
+
+                driver.navigate().back();
+                Thread.sleep(3000);
+
+            } catch (Exception e) {
+                System.out.println("View All not available, skipping...");
+            }
+            
+	            
+
+            // =========================================================
+            // PAGINATION LOOP (VISUAL FIX)
+            // =========================================================
             for (int i = 2; i <= 9; i++) {
 
-                // Get fresh pagination
                 WebElement pagination = wait.until(ExpectedConditions.presenceOfElementLocated(
                         By.xpath("//div[contains(@class,'items-center gap-1')]")));
 
                 WebElement page = pagination.findElement(
-                        By.xpath(".//a[@aria-label='Page " + i + "']"));
+                        By.xpath(".//a[@aria-label='Page " + i + "']")
+                );
 
-                // Click page
+                // =========================================================
+                // SCROLL SLOWLY DOWN (YOU CAN SEE IT NOW)
+                // =========================================================
+                for (int s = 0; s < 5; s++) {
+                    js.executeScript("window.scrollBy(0, 150);");
+                    Thread.sleep(600); // slow visible movement
+                }
+
+                // bring pagination into view
+                js.executeScript("arguments[0].scrollIntoView({block:'center'});", page);
+                Thread.sleep(1200);
+
+                // highlight page number
+                js.executeScript("arguments[0].style.border='3px solid red';", page);
+                Thread.sleep(1000);
+
+                // click page
                 js.executeScript("arguments[0].click();", page);
 
-                // Wait for URL change
                 wait.until(ExpectedConditions.urlContains("page=" + i));
 
                 System.out.println("Navigated to Page " + i);
 
-                // -------- SCROLL LOGIC --------
+                // =========================================================
+                // SLOW SCROLL AFTER PAGE LOAD (VISIBLE CHANGE)
+                // =========================================================
+                for (int s = 0; s < 5; s++) {
+                    js.executeScript("window.scrollBy(0, 120);");
+                    Thread.sleep(600);
+                }
 
-                // Scroll to TOP
-                js.executeScript("window.scrollTo(0, 0)");
-
-                // Scroll to 70% of page
-                js.executeScript("window.scrollTo(0, document.body.scrollHeight * 0.5)");
-
-                // Small wait for visibility (optional but helps visually)
-                Thread.sleep(1500);
+                Thread.sleep(2000); // IMPORTANT: lets YOU see page change
             }
 
-         // -------- NEXT BUTTON (FAST - 5 SEC MAX) --------
+            // =========================================================
+            // NEXT BUTTON (VISIBLE MODE)
+            // =========================================================
             System.out.println("Testing Next button...");
 
             WebDriverWait fastWait = new WebDriverWait(driver, Duration.ofSeconds(5));
@@ -82,88 +174,93 @@ public class Newsroom {
                 try {
                     WebElement next = fastWait.until(
                             ExpectedConditions.presenceOfElementLocated(
-                                    By.xpath("//a[contains(@aria-label,'Next') or contains(text(),'Next') or contains(@aria-label,'next')]")
+                                    By.xpath("//a[contains(@aria-label,'Next') or contains(text(),'Next')]")
                             )
                     );
 
                     js.executeScript("arguments[0].scrollIntoView({block:'center'});", next);
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
+
+                    js.executeScript("arguments[0].style.border='3px solid green';", next);
+                    Thread.sleep(800);
 
                     js.executeScript("arguments[0].click();", next);
 
                     System.out.println("Clicked Next");
 
-                    Thread.sleep(1000); // small wait only
+                    Thread.sleep(2000);
+
+                    // slow scroll so you can SEE change
+                    for (int s = 0; s < 4; s++) {
+                        js.executeScript("window.scrollBy(0, 120);");
+                        Thread.sleep(500);
+                    }
 
                 } catch (Exception e) {
-                    System.out.println("Next button not found or disabled, stopping pagination");
+                    System.out.println("Next button not found or disabled");
                     break;
                 }
-
-                // quick scroll
-                js.executeScript("window.scrollTo(0, document.body.scrollHeight * 0.5)");
-                Thread.sleep(800);
             }
-         // =========================================================
-         // PREVIOUS BUTTON (ROBUST FIX)
-         // =========================================================
-         System.out.println("Testing Previous button...");
 
-         boolean prevClicked = false;
+            // =========================================================
+            // PREVIOUS BUTTON (VISIBLE MODE)
+            // =========================================================
+            System.out.println("Testing Previous button...");
 
-         By[] prevLocators = new By[] {
-             By.xpath("//a[contains(@aria-label,'Previous')]"),
-             By.xpath("//button[contains(@aria-label,'Previous')]"),
-             By.xpath("//a[contains(text(),'Previous')]"),
-             By.xpath("//button[contains(text(),'Previous')]")
-         };
+            boolean prevClicked = false;
 
-         for (By locator : prevLocators) {
+            By[] prevLocators = new By[] {
+                    By.xpath("//a[contains(@aria-label,'Previous')]"),
+                    By.xpath("//button[contains(@aria-label,'Previous')]"),
+                    By.xpath("//a[contains(text(),'Previous')]"),
+                    By.xpath("//button[contains(text(),'Previous')]")
+            };
 
-             try {
-                 WebElement prev = wait.until(
-                         ExpectedConditions.presenceOfElementLocated(locator)
-                 );
+            for (By locator : prevLocators) {
 
-                 js.executeScript("arguments[0].scrollIntoView({block:'center'});", prev);
-                 Thread.sleep(1000);
+                try {
+                    WebElement prev = wait.until(
+                            ExpectedConditions.presenceOfElementLocated(locator)
+                    );
 
-                 js.executeScript("arguments[0].click();", prev);
+                    js.executeScript("arguments[0].scrollIntoView({block:'center'});", prev);
+                    Thread.sleep(1000);
 
-                 System.out.println("Clicked Previous");
+                    js.executeScript("arguments[0].style.border='3px solid orange';", prev);
+                    Thread.sleep(800);
 
-                 Thread.sleep(2000);
+                    js.executeScript("arguments[0].click();", prev);
 
-                 prevClicked = true;
-                 break;
+                    System.out.println("Clicked Previous");
 
-             } catch (Exception ignored) {
-                 // try next locator
-             }
-         }
+                    Thread.sleep(2000);
 
-         if (!prevClicked) {
-             System.out.println("Previous button not found or disabled");
-         }
+                    prevClicked = true;
+                    break;
 
-         // scroll behavior
-         js.executeScript("window.scrollTo(0, 0)");
-         Thread.sleep(1000);
-         js.executeScript("window.scrollTo(0, document.body.scrollHeight * 0.5)");
-         Thread.sleep(1500);
+                } catch (Exception ignored) {}
+            }
 
-         // =========================================================
-         // BACK TO HOME
-         // =========================================================
-         driver.navigate().to("https://moole.ai/");
-         Thread.sleep(1000);
-         System.out.println("Returned to Home Page");
+            if (!prevClicked) {
+                System.out.println("Previous button not found or disabled");
+            }
+
+            // =========================================================
+            // FINAL VISUAL SCROLL
+            // =========================================================
+            for (int s = 0; s < 5; s++) {
+                js.executeScript("window.scrollBy(0, 150);");
+                Thread.sleep(600);
+            }
+				driver.navigate().back();
+				Thread.sleep(3000);
+            System.out.println("Returned to Home Page");
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             driver.quit();
             System.out.println("Browser closed");
         }
-        }
+    }
 }
-

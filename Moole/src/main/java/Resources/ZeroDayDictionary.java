@@ -62,8 +62,6 @@ public class ZeroDayDictionary {
 
                 clickLetter(driver, wait, js, String.valueOf(ch));
 
-                System.out.println("Clicked Letter: " + ch);
-
                 Thread.sleep(1800);
             }
 
@@ -112,55 +110,59 @@ public class ZeroDayDictionary {
         }
     }
 
-    // =====================================================
-    // CLICK LETTER METHOD (STABLE)
-    // =====================================================
-    public static void clickLetter(WebDriver driver,
-                                   WebDriverWait wait,
-                                   JavascriptExecutor js,
-                                   String letter) {
-
-        int retry = 0;
-
-        while (retry < 3) {
-
-            try {
-
-                By locator = By.xpath(
-                        "//div[contains(@class,'grid')]//a[normalize-space()='" + letter + "']"
-                );
-
-                WebElement element = wait.until(
-                        ExpectedConditions.elementToBeClickable(locator)
-                );
-
-                js.executeScript(
-                        "arguments[0].scrollIntoView({block:'center'});",
-                        element
-                );
-
-                Thread.sleep(1000);
-
-                js.executeScript("arguments[0].style.border='3px solid red';", element);
-
-                Thread.sleep(500);
-
-                js.executeScript("arguments[0].click();", element);
-
-                Thread.sleep(1200);
-
-                return;
-
-            } catch (StaleElementReferenceException e) {
-                retry++;
-                System.out.println("Retrying letter: " + letter);
-
-            } catch (Exception e) {
-                System.out.println("Failed letter " + letter + ": " + e.getMessage());
-                return;
-            }
-        }
-    }
+			    public static void clickLetter(WebDriver driver,
+			            WebDriverWait wait,
+			            JavascriptExecutor js,
+			            String letter) {
+			
+			int retry = 0;
+			
+			while (retry < 3) {
+			
+			try {
+			
+			//  UPDATED LOCATOR (NEW UI STRUCTURE)
+			By locator = By.cssSelector(
+			 "aside a[href='#section-" + letter + "']"
+			);
+			
+			WebElement element = wait.until(
+			 ExpectedConditions.presenceOfElementLocated(locator)
+			);
+			
+			// scroll into view (important because sticky header + horizontal scroll)
+			js.executeScript("arguments[0].scrollIntoView({block:'center'});", element);
+			
+			Thread.sleep(500);
+			
+			// highlight (debug)
+			js.executeScript("arguments[0].style.border='3px solid red';", element);
+			
+			Thread.sleep(300);
+			
+			// click using JS (more stable for sticky UI + flex layout)
+			js.executeScript("arguments[0].click();", element);
+			
+			Thread.sleep(1200);
+			
+			System.out.println("Clicked Letter: " + letter);
+			
+			return;
+			
+			} catch (StaleElementReferenceException e) {
+			retry++;
+			System.out.println("Retrying letter (stale): " + letter);
+			
+			} catch (TimeoutException e) {
+			System.out.println("Letter NOT FOUND in UI: " + letter);
+			return;
+			
+			} catch (Exception e) {
+			System.out.println("Failed letter " + letter + ": " + e.getMessage());
+			return;
+			}
+			}
+			}
 
     // =====================================================
     // EXPAND ACCORDION SECTIONS
@@ -185,9 +187,9 @@ public class ZeroDayDictionary {
 
             else if (letter.equals("R")) {
 
-                clickAccordion(wait, js,
-                        "//button[.//span[contains(text(),'Red Teaming')]]");
-
+            	clickAccordion(wait, js,
+            		    "//button[.//span[contains(normalize-space(),'Red') and contains(normalize-space(),'Team')]]"
+            		);
             }
 
             else if (letter.equals("A")) {

@@ -18,15 +18,13 @@ public class Briefing {
              driver.get("https://moole.ai/");
              driver.manage().window().maximize();
              Thread.sleep(2000);
-          // -------- Handle Privacy Popup --------
-             try {
-                 WebElement privacyOk = wait.until(ExpectedConditions.presenceOfElementLocated(
-                         By.xpath("//button[contains(@class,'rounded-sm bg-indigo') and text()='OK']")));
-                 js.executeScript("arguments[0].click();", privacyOk);
-                 System.out.println("Clicked Privacy OK button");
-             } catch (Exception e) {
-                 System.out.println("Privacy popup not found");
-             }
+             // -------- Handle Privacy Popup --------
+	            try {
+	                wait.until(ExpectedConditions.elementToBeClickable(
+	                        By.xpath("//button[text()='OK']"))).click();
+	            } catch (Exception e) {
+	                System.out.println("No popup");
+	            }
 
              // -------- Click Resources --------
              WebElement resources = wait.until(ExpectedConditions.elementToBeClickable(
