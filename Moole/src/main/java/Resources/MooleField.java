@@ -94,30 +94,101 @@ public class MooleField {
             js.executeScript("arguments[0].click();", scenario);
 
             Thread.sleep(2000);
+            
+            WebElement proposedSolutionBtn =
+                    wait.until(ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[.//span[text()='Proposed Solution']]")));
 
-            // =========================================================
-            // CLICK IMPACT
-            // =========================================================
-            WebElement impact = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//span[text()='Impact']")));
-
-            highlight(js, impact, "orange");
-            js.executeScript("arguments[0].click();", impact);
+            highlight(js, proposedSolutionBtn, "purple");
+            js.executeScript("arguments[0].click();", proposedSolutionBtn);
 
             Thread.sleep(2000);
 
-            // =========================================================
-            // CLICK CASE STUDY CARD
-            // =========================================================
-            WebElement caseStudy = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//a[.//h3[contains(.,'CV')]]")));
+            WebElement impactBtn =
+                    wait.until(ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[.//span[text()='Impact']]")
+                    ));
 
-            highlight(js, caseStudy, "red");
-            js.executeScript("arguments[0].click();", caseStudy);
+            // highlight BEFORE click
+            highlight(js, impactBtn, "orange");
 
-            Thread.sleep(4000);
+            // click using JS
+            js.executeScript("arguments[0].click();", impactBtn);
 
-            scroll(js);
+            Thread.sleep(2000);
+            
+
+         // =========================================================
+         // CLICK CASE STUDY 1 (CVE INTELLIGENCE)
+         // =========================================================
+
+         WebElement cveCard = wait.until(ExpectedConditions.elementToBeClickable(
+                 By.xpath("//h4[contains(text(),'Turning CVE Intelligence into Operational Security Decisions')]")
+         ));
+
+         js.executeScript("arguments[0].scrollIntoView({block:'center'});", cveCard);
+         Thread.sleep(1000);
+
+         highlight(js, cveCard, "purple");
+         js.executeScript("arguments[0].click();", cveCard);
+
+         System.out.println("Clicked CVE Case Study");
+
+         Thread.sleep(4000);
+
+         // scroll inside page
+         scroll(js);
+         Thread.sleep(2000);
+
+         // =========================================================
+         // CLICK PROPOSED SOLUTION
+         // =========================================================
+
+         WebElement proposedSolution =
+                 wait.until(ExpectedConditions.elementToBeClickable(
+                         By.xpath("//button[.//span[text()='Proposed Solution']]")
+                 ));
+
+         highlight(js, proposedSolution, "orange");
+         js.executeScript("arguments[0].click();", proposedSolution);
+
+         System.out.println("Clicked Proposed Solution");
+
+         Thread.sleep(2000);
+
+         // =========================================================
+         // CLICK CASE STUDY 2 (SUPPLY CHAIN)
+         // =========================================================
+
+         WebElement supplyChainCard = wait.until(ExpectedConditions.elementToBeClickable(
+                 By.xpath("//h4[contains(text(),'Preventing Supply-Chain Attacks in Containerized Infrastructure')]")
+         ));
+
+         js.executeScript("arguments[0].scrollIntoView({block:'center'});", supplyChainCard);
+         Thread.sleep(1000);
+
+         highlight(js, supplyChainCard, "red");
+         js.executeScript("arguments[0].click();", supplyChainCard);
+
+         System.out.println("Clicked Supply Chain Case Study");
+
+         Thread.sleep(4000);
+
+         // scroll page
+         scroll(js);
+         Thread.sleep(2000);
+
+         // =========================================================
+         // CLOSE / GO BACK
+         // =========================================================
+
+         driver.navigate().back();
+         Thread.sleep(2000);
+
+         driver.navigate().back();
+         Thread.sleep(2000);
+
+         System.out.println("Flow completed and returned back");
 
             // =========================================================
             // NAV BACK
