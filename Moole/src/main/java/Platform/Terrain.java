@@ -93,6 +93,7 @@ public class Terrain {
             for (int i = 0; i < 5; i++) {
                 js.executeScript("window.scrollBy(0,300)");
                 Thread.sleep(500);
+                
             }
 
             // =========================================================
