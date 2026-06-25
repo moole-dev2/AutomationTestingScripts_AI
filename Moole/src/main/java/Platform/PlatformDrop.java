@@ -186,7 +186,6 @@ public class PlatformDrop {
             Thread.sleep(2500);
 
             // Clear the search box before moving to the next category, so leftover
-            // text doesn't carry over and affect filtering on the next category panel.
             searchBox.sendKeys(Keys.CONTROL + "a");
             searchBox.sendKeys(Keys.BACK_SPACE);
 
