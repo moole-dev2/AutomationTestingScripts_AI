@@ -38,16 +38,26 @@ public class OperationsTheater {
 	            Thread.sleep(2000);
 
 	            // ---------------- Click Operations Theater by Span ----------------
+	         // ---------------- Click Operations Theater ----------------
 	            WebElement operationsTheater = wait.until(
-	                    ExpectedConditions.elementToBeClickable(
-	                            By.xpath("//span[text()='Adaptive Use Cases for the Frontline.']")
+	                    ExpectedConditions.presenceOfElementLocated(
+	                            By.xpath("//span[contains(text(),'Adaptive Use Cases')]")
 	                    )
 	            );
+
 	            js.executeScript("arguments[0].scrollIntoView({block:'center'});", operationsTheater);
-	            operationsTheater.click();
+	            Thread.sleep(1000);
+
+	            wait.until(ExpectedConditions.elementToBeClickable(operationsTheater));
+
+	            try {
+	                operationsTheater.click();
+	            } catch (Exception e) {
+	                js.executeScript("arguments[0].click();", operationsTheater);
+	            }
+
 	            System.out.println("Operations Theater clicked");
 	            Thread.sleep(3000);
-
 	            // ---------------- Scroll Slowly Like User ----------------
 	            long pageHeight = (long) js.executeScript("return document.body.scrollHeight");
 	            for (int i = 0; i < pageHeight; i += 300) {

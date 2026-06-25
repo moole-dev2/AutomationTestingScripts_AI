@@ -24,20 +24,24 @@ public class PlatformDrop {
             // =========================================================
             driver.get("https://moole.ai/");
             driver.manage().window().maximize();
-            Thread.sleep(3000);
-         // =========================================================
+            Thread.sleep(2000);
+
+            // =========================================================
             // HANDLE POPUP
             // =========================================================
             try {
-                WebElement ok = wait.until(ExpectedConditions.elementToBeClickable(
-                        By.xpath("//button[contains(text(),'OK')]")));
+                WebElement ok = wait.until(
+                        ExpectedConditions.elementToBeClickable(
+                                By.xpath("//button[contains(text(),'OK')]")
+                        )
+                );
                 js.executeScript("arguments[0].click();", ok);
                 System.out.println("Popup closed");
             } catch (Exception e) {
                 System.out.println("No popup found");
             }
 
-            Thread.sleep(2000);
+            Thread.sleep(1500);
 
             // =========================================================
             // PLATFORM HOVER
@@ -49,7 +53,7 @@ public class PlatformDrop {
             );
 
             actions.moveToElement(platform).perform();
-            Thread.sleep(1500);
+            Thread.sleep(1000);
 
             // =========================================================
             // CLICK SWITCHBOARD
@@ -63,121 +67,159 @@ public class PlatformDrop {
             js.executeScript("arguments[0].click();", switchboard);
             System.out.println("Switchboard clicked");
 
-            Thread.sleep(4000);
+            Thread.sleep(2500);
 
             // =========================================================
             // SCROLL PAGE
             // =========================================================
             scroll(js);
 
-            // =========================================================
-            // CATEGORY LIST
-            // =========================================================
-            List<WebElement> categories = driver.findElements(
-                    By.xpath("//ul/li/button")
-            );
+            /// ===================== MAIN LOOP =====================
+            int index = 0;
 
-            System.out.println("Total categories: " + categories.size());
+            while (true) {
 
-            for (int i = 0; i < categories.size(); i++) {
+                List<WebElement> categories =
+                        driver.findElements(By.xpath("//ul/li/button"));
 
-                categories = driver.findElements(By.xpath("//ul/li/button"));
-                WebElement cat = categories.get(i);
+                if (index >= categories.size()) break;
 
-                String name = cat.getText();
+                WebElement cat = categories.get(index);
+                String name = cat.getText().trim();
 
                 js.executeScript("arguments[0].scrollIntoView({block:'center'});", cat);
-                Thread.sleep(1000);
+                Thread.sleep(800);
 
                 js.executeScript("arguments[0].click();", cat);
+
                 System.out.println("Clicked Category: " + name);
 
-                Thread.sleep(2000);
+                Thread.sleep(2000); // wait UI refresh
 
-                // =========================================================
-                // SEARCH ACTIONS
-                // =========================================================
-                if (name.contains("Source Code Management")) {
+              // ===================== SEARCH LOGIC =====================
+                String searchValue = null;
 
-                    search(driver, wait, js, "gitlab");
+                if (name.toLowerCase().contains("source code management") ||
+                        name.toLowerCase().contains("nexus")) {
+                    searchValue = "Nexus";
 
-                } else if (name.contains("CI/CD Pipelines")) {
+                } else if (name.toLowerCase().contains("ci") ||
+                           name.toLowerCase().contains("jenkins")) {
+                    searchValue = "jenkins";
 
-                    search(driver, wait, js, "gitlab");
-
-                } else if (name.contains("Container Registries")) {
-
-                    search(driver, wait, js, "nexus");
-
-                } else {
-
-                    System.out.println("No search required for: " + name);
+                } else if (name.toLowerCase().contains("container") ||
+                           name.toLowerCase().contains("nexus")) {
+                    searchValue = "nexus";
                 }
 
-                Thread.sleep(2000);
+                if (searchValue != null) {
+                    search(driver, wait, js, searchValue);
+                } else {
+                    System.out.println("No search needed for: " + name);
+                }
+
+                Thread.sleep(1500);
+
+                index++;
             }
 
-            // =========================================================
-            // SCROLL FINAL
-            // =========================================================
-            scroll(js);
+            System.out.println("Completed all categories");
 
-            // =========================================================
-            // BACK TO HOME
-            // =========================================================
-            driver.get("https://moole.ai/");
-            Thread.sleep(3000);
-
+            // ---------------- Return to Home ----------------
+            driver.navigate().back();
             System.out.println("Returned to Home Page");
+            Thread.sleep(1000);
+
 
         } catch (Exception e) {
-            System.out.println("ERROR: " + e.getMessage());
+            e.printStackTrace();
         } finally {
             driver.quit();
             System.out.println("Browser closed");
         }
     }
-
     // =========================================================
-    // SEARCH FUNCTION
+    // SEARCH FUNCTION (FIXED + RELIABLE)
     // =========================================================
     public static void search(WebDriver driver, WebDriverWait wait,
-                              JavascriptExecutor js, String value) {
+            JavascriptExecutor js, String value) {
 
         try {
 
-            WebElement searchBox = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(
-                            By.xpath("//input[@type='text' or @placeholder='Search']")
-                    )
-            );
+            WebElement searchBox = wait.until(d -> {
+                List<WebElement> matches = d.findElements(
+                        By.xpath("//input[@placeholder='Search Integrations']"));
+                for (WebElement el : matches) {
+                    if (el.isDisplayed()) {
+                        return el;
+                    }
+                }
+                return null;
+            });
 
-            searchBox.clear();
-            searchBox.sendKeys(value);
+            // Scroll into view
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", searchBox);
+            Thread.sleep(800);
+
+            // IMPORTANT: click via JS (avoids overlay issue)
+            js.executeScript("arguments[0].click();", searchBox);
+            Thread.sleep(500);
+
+            // clear properly
+            searchBox.sendKeys(Keys.CONTROL + "a");
+            searchBox.sendKeys(Keys.BACK_SPACE);
+
+            Thread.sleep(500);
+
+            // type slowly (prevents React input issues)
+            for (char c : value.toCharArray()) {
+                searchBox.sendKeys(String.valueOf(c));
+                Thread.sleep(150);
+            }
+
+            Thread.sleep(800);
+
             searchBox.sendKeys(Keys.ENTER);
 
             System.out.println("Searched: " + value);
 
-            Thread.sleep(3000);
+            Thread.sleep(2500);
+
+            // Clear the search box before moving to the next category, so leftover
+            // text doesn't carry over and affect filtering on the next category panel.
+            searchBox.sendKeys(Keys.CONTROL + "a");
+            searchBox.sendKeys(Keys.BACK_SPACE);
+
+            String remaining = searchBox.getAttribute("value");
+            if (remaining != null && !remaining.isEmpty()) {
+                js.executeScript(
+                        "var el=arguments[0]; el.value=''; " +
+                        "el.dispatchEvent(new Event('input',{bubbles:true}));",
+                        searchBox);
+            }
+
+            System.out.println("Cleared search box after: " + value);
+
+            Thread.sleep(500);
 
         } catch (Exception e) {
             System.out.println("Search failed for: " + value);
+            System.out.println("Reason: " + e.getMessage());
         }
     }
-
     // =========================================================
-    // SCROLL FUNCTION
+    // SCROLL FUNCTION (OPTIMIZED)
     // =========================================================
     public static void scroll(JavascriptExecutor js) throws InterruptedException {
 
-        for (int i = 0; i <= 2000; i += 300) {
+        for (int i = 0; i <= 1500; i += 300) {
             js.executeScript("window.scrollBy(0,300)");
-            Thread.sleep(300);
+            Thread.sleep(200);
         }
 
-        for (int i = 0; i <= 2000; i += 300) {
+        for (int i = 0; i <= 1500; i += 300) {
             js.executeScript("window.scrollBy(0,-300)");
-            Thread.sleep(300);
+            Thread.sleep(200);
         }
 
         System.out.println("Scrolled page");

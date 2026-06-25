@@ -18,13 +18,14 @@ public class Individual {
             driver.get("https://moole.ai/");
             driver.manage().window().maximize();
             Thread.sleep(2000);
-
+            
             // ---------- Handle Popup ----------
             try {
                 WebElement okBtn = driver.findElement(By.xpath("//button[normalize-space()='OK']"));
                 js.executeScript("arguments[0].click();", okBtn);
                 Thread.sleep(1000);
             } catch (Exception e) {
+            
                 System.out.println("No popup");
             }
 

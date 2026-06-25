@@ -26,6 +26,7 @@ public class Enterprise {
                         By.xpath("//button[text()='OK']"))).click();
             } catch (Exception e) {
                 System.out.println("No popup");
+                
             }
 
             // -------- Click Pricing --------
@@ -34,16 +35,33 @@ public class Enterprise {
             pricing.click();
             Thread.sleep(2000);
 
-            // -------- Scroll Down --------
-            js.executeScript("window.scrollTo(0, document.body.scrollHeight * 0.6)");
-            Thread.sleep(2000);
+            // scroll DOWN slowly
+            for (int i = 0; i < 8; i++) {
+                js.executeScript("window.scrollBy(0,300)");
+                Thread.sleep(700);
+            }
 
+            // pause like user reading
+            Thread.sleep(1500);
+
+            // scroll UP slowly
+            for (int i = 0; i < 8; i++) {
+                js.executeScript("window.scrollBy(0,-300)");
+                Thread.sleep(700);
+            }
             // -------- Click Label[2] --------
             WebElement label = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("(//label)[2]")));
             js.executeScript("arguments[0].scrollIntoView({block:'center'});", label);
             js.executeScript("arguments[0].click();", label);
             Thread.sleep(2000);
+            
+
+            // scroll DOWN slowly
+            for (int i = 0; i < 2; i++) {
+                js.executeScript("window.scrollBy(0,300)");
+                Thread.sleep(700);
+            }
 
             // -------- Click Contact Sales --------
             WebElement contactSales = wait.until(ExpectedConditions.elementToBeClickable(
@@ -51,21 +69,34 @@ public class Enterprise {
             js.executeScript("arguments[0].click();", contactSales);
             Thread.sleep(3000);
 
-            // -------- Fill Form Fields --------
-
-            // Email
-            WebElement email = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("(//input[contains(@class,'col-start-1')])[1]")));
+           
+         // Email 
+            WebElement email = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("//input[@type='email' or contains(@placeholder,'Email')]")
+            ));
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", email);
+            wait.until(ExpectedConditions.elementToBeClickable(email));
+            email.clear();
             email.sendKeys("tayas18348@algarr.com");
 
-            // First Name
-            WebElement firstName = driver.findElement(
-                    By.xpath("(//input[contains(@class,'col-start-1')])[2]"));
+         // First Name
+            WebElement firstName = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("//input[@name='firstName' or @placeholder='First Name' or contains(@placeholder,'First')]")
+            ));
+
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", firstName);
+            wait.until(ExpectedConditions.elementToBeClickable(firstName));
+            firstName.clear();
             firstName.sendKeys("john");
 
-            // Last Name
-            WebElement lastName = driver.findElement(
-                    By.xpath("(//input[contains(@class,'col-start-1')])[3]"));
+            // Last Name 
+            WebElement lastName = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("//input[@name='lastName' or @placeholder='Last Name' or contains(@placeholder,'Last')]")
+            ));
+
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", lastName);
+            wait.until(ExpectedConditions.elementToBeClickable(lastName));
+            lastName.clear();
             lastName.sendKeys("lee");
 
             System.out.println("Entered form details");

@@ -23,16 +23,14 @@ public class TrustCenter {
             driver.manage().window().maximize();
             Thread.sleep(2000);
 
+            // -------- Handle Privacy Popup --------
             try {
-                WebElement privacyOk = wait.until(ExpectedConditions.presenceOfElementLocated(
-                        By.xpath("//button[contains(@class,'rounded-sm bg-indigo') and text()='OK']")));
-                js.executeScript("arguments[0].click();", privacyOk);
-                System.out.println("Clicked Privacy OK button");
-                Thread.sleep(1000);
+                wait.until(ExpectedConditions.elementToBeClickable(
+                        By.xpath("//button[text()='OK']"))).click();
             } catch (Exception e) {
-                System.out.println("Privacy popup not found, continuing...");
+                System.out.println("No popup");
             }
-          
+
             // ---------- Click Company (hover sometimes required) ----------
             WebElement companyMenu = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.xpath("//button[.//span[text()='Company']]")
@@ -52,27 +50,39 @@ public class TrustCenter {
             js.executeScript("arguments[0].click();", trustCenter);
             System.out.println("Opened Trust Center");
 
-            Thread.sleep(3000);
+            Thread.sleep(3000);        
          // ---------- Click SVG Icon at Start ----------
-        
-                WebElement svgElement = wait.until(ExpectedConditions.presenceOfElementLocated(
-                    By.xpath("//*[name()='svg' and @viewBox='0 0 256 256' and contains(@class,'text-indigo')]")
-                ));
+            try {
+
+                WebElement svgElement = wait.until(
+                        ExpectedConditions.presenceOfElementLocated(
+                                By.xpath("(//*[name()='svg'])[1]")
+                        )
+                );
 
                 WebElement parent = svgElement.findElement(
-                    By.xpath("ancestor::*[self::button or self::div][1]")
+                        By.xpath("ancestor::*[self::button or self::a or self::div][1]")
                 );
 
-                ((JavascriptExecutor) driver).executeScript(
-                    "arguments[0].scrollIntoView({behavior:'smooth', block:'center'});", parent
+                js.executeScript(
+                        "arguments[0].scrollIntoView({block:'center'});",
+                        parent
                 );
 
-                Thread.sleep(800);
+                Thread.sleep(1000);
 
-                scrollDown();
-                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", parent);
+                try {
+                    parent.click();
+                } catch (Exception e) {
+                    js.executeScript("arguments[0].click();", parent);
+                }
+
                 System.out.println("SVG clicked at start");
                 Thread.sleep(2000);
+
+            } catch (Exception e) {
+                System.out.println("SVG icon not found. Continuing execution...");
+            }                
                
             // ---------- Our Security Principles ----------
             clickSidebar("Our Security Principles");
