@@ -28,6 +28,8 @@ public class BitBucketSignUp {
 	            Thread.sleep(5000);
 	        } catch (InterruptedException e) {
 	            e.printStackTrace();
+                System.out.println("Clicked on Sign Up Button");
+
 	        }
 	       
 	       // ----------- Sign up with Bitbucket -----------
@@ -36,7 +38,10 @@ public class BitBucketSignUp {
 	           Thread.sleep(5000);
 	        } catch (InterruptedException e) {
 	            e.printStackTrace();
+                System.out.println("Opened Bitbucket Website");
+
 	        }
+	       
 	       
 	       // Close browser at the end
 	       driver.quit();
