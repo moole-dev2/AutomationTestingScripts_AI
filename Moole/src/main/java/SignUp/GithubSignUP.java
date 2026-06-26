@@ -32,7 +32,7 @@ public class GithubSignUP {
 	       driver.findElement(By.xpath("//button[@aria-label='Sign up with GitHub']")).click();
 	       driver.get("https://moole.ai/auth/signin");
 	       
-	      // driver.quit();
+	       driver.quit();
 	}
 
 }

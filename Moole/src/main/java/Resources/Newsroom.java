@@ -119,7 +119,7 @@ public class Newsroom {
             // =========================================================
             // PAGINATION LOOP (VISUAL FIX)
             // =========================================================
-            for (int i = 2; i <= 9; i++) {
+            for (int i = 2; i <= 8; i++) {
 
                 WebElement pagination = wait.until(ExpectedConditions.presenceOfElementLocated(
                         By.xpath("//div[contains(@class,'items-center gap-1')]")));

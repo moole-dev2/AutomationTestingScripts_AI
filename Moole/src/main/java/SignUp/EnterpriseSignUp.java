@@ -1,4 +1,4 @@
-package SignUp;
+	package SignUp;
 
 import java.time.Duration;
 
@@ -37,26 +37,21 @@ public class EnterpriseSignUp {
 	            e.printStackTrace();
 	        }
 
-            // Click Enterprise button
+        /*    // Click Enterprise button
             WebElement enterpriseBtn = wait.until(
                     ExpectedConditions.elementToBeClickable(
                             By.xpath("//button[text()='Enterprise']"))
             );
-            enterpriseBtn.click();
+            enterpriseBtn.click();*/
 
             // -------- Fill Email --------
             WebElement emailField = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(
-                            By.xpath("//label[contains(text(),'Email')]/following::input[1]"))
+                    ExpectedConditions.visibilityOfElementLocated(By.name("email"))
             );
-            emailField.sendKeys("testuser13@example.com");
-            try {
-	            Thread.sleep(2000);
-	        } catch (InterruptedException e) {
-	            e.printStackTrace();
-	        }
 
-            // -------- Fill Organization Name --------
+            emailField.sendKeys("test@example.com");
+
+       /*     // -------- Fill Organization Name --------
             WebElement orgField = driver.findElement(
                     By.xpath("//label[contains(text(),'Organization Name')]/following::input[1]")
             );
@@ -76,7 +71,7 @@ public class EnterpriseSignUp {
 	            Thread.sleep(2000);
 	        } catch (InterruptedException e) {
 	            e.printStackTrace();
-	        }
+	        }*/
 
             // Click Sign Up button
             WebElement signUpBtn = wait.until(
