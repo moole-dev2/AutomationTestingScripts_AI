@@ -1,13 +1,8 @@
 package SignIn;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
 import java.util.List;
@@ -18,565 +13,261 @@ public class BillingN {
     public static void main(String[] args) {
 
         WebDriver driver = new ChromeDriver();
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(40));
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
         try {
 
-            // -------------------------------------------------
-            // OPEN WEBSITE
-            // -------------------------------------------------
-
-            driver.get("https://moole.ai/");
-
             driver.manage().window().maximize();
 
+            // ---------------- LOGIN ----------------
             driver.get("https://moole.ai/auth/signin");
+            Thread.sleep(4000);
 
-            Thread.sleep(5000);
-
-            // -------------------------------------------------
-            // LOGIN EMAIL
-            // -------------------------------------------------
-
-            WebElement emailField = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(
-                            By.xpath("//input[@type='email']")
-                    )
+            WebElement email = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='email']"))
             );
+            email.sendKeys("moole.dev.2@gmail.com");
 
-            emailField.sendKeys("moole.dev.2@gmail.com");
+            driver.findElement(By.xpath("//button[contains(text(),'Continue')]")).click();
 
-            WebElement continueBtn = wait.until(
-                    ExpectedConditions.elementToBeClickable(
-                            By.xpath("//button[contains(text(),'Continue')]")
-                    )
-            );
-
-            continueBtn.click();
-
-            // -------------------------------------------------
-            // OTP MANUAL ENTRY
-            // -------------------------------------------------
-
-            System.out.println("Enter OTP manually then press ENTER...");
-
-            Scanner scanner = new Scanner(System.in);
-
-            scanner.nextLine();
+            System.out.println("Enter OTP and press ENTER...");
+            new Scanner(System.in).nextLine();
 
             Thread.sleep(3000);
 
-            // -------------------------------------------------
-            // OPEN BILLING PAGE
-            // -------------------------------------------------
-
+            // ---------------- BILLING PAGE ----------------
             driver.get("https://moole.ai/app/settings/project/integrations");
+            Thread.sleep(4000);
 
-            Thread.sleep(3000);
-
-            WebElement activePlan = driver.findElement(
-                    By.xpath("//a[contains(@href,'plan-details')]")
+            WebElement activePlan = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//a[contains(@href,'plan-details')]")
+                    )
             );
-
             activePlan.click();
 
             System.out.println("Clicked Active Plan");
 
-            Thread.sleep(2000);
+            Thread.sleep(3000);
 
-            // -------------------------------------------------
-            // HUMAN SCROLL
-            // -------------------------------------------------
+            js.executeScript("window.scrollTo(0, document.body.scrollHeight/2)");
 
-            for (int i = 0; i < 30; i++) {
-
-                js.executeScript("window.scrollBy(0,100)");
-
-                Thread.sleep(150);
-            }
-
-            // -------------------------------------------------
-            // BILLING ACTIVITY
-            // -------------------------------------------------
-
+            // ---------------- BILLING ACTIVITY ----------------
             WebElement billingActivity = wait.until(
                     ExpectedConditions.elementToBeClickable(
                             By.xpath("//button[.//span[text()='Billing Activity']]")
                     )
             );
-
             js.executeScript("arguments[0].click();", billingActivity);
 
-            Thread.sleep(2000);
+            Thread.sleep(3000);
 
-            // -------------------------------------------------
-            // ADD CARD
-            // -------------------------------------------------
+            // =====================================================
+            // ✅ FIXED ADD CARD (ROBUST + RETRY + SCROLL)
+            // =====================================================
 
-            WebElement addCard = wait.until(
-                    ExpectedConditions.elementToBeClickable(
-                            By.xpath("//button[.//span[contains(.,'Add Card')]]")
-                    )
-            );
+            WebElement addCard = null;
+
+            for (int i = 0; i < 10; i++) {
+
+                List<WebElement> btns = driver.findElements(
+                        By.xpath("//button[contains(.,'Add Card') or .//span[contains(.,'Add Card')]]")
+                );
+
+                if (!btns.isEmpty()) {
+                    addCard = btns.get(0);
+                    break;
+                }
+
+                js.executeScript("window.scrollBy(0,200)");
+                Thread.sleep(1000);
+            }
+
+            if (addCard == null) {
+                throw new RuntimeException("Add Card button NOT found after retries");
+            }
+
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", addCard);
+            Thread.sleep(1000);
 
             js.executeScript("arguments[0].click();", addCard);
 
             System.out.println("Clicked Add Card");
 
-            Thread.sleep(5000);
-
-            // -------------------------------------------------
-            // CARD DETAILS
-            // -------------------------------------------------
-
-            List<WebElement> frames = driver.findElements(By.tagName("iframe"));
-
-            boolean cardEntered = false;
-
-            for (int i = 0; i < frames.size(); i++) {
-
-                try {
-
-                    driver.switchTo().defaultContent();
-
-                    driver.switchTo().frame(i);
-
-                    WebElement cardNumber = wait.until(
-                            ExpectedConditions.visibilityOfElementLocated(
-                                    By.name("number")
-                            )
-                    );
-
-                    cardNumber.sendKeys("5555555555554444");
-
-                    WebElement expiry = driver.findElement(By.name("expiry"));
-
-                    expiry.sendKeys("07/31");
-
-                    WebElement cvc = driver.findElement(By.name("cvc"));
-
-                    cvc.sendKeys("270");
-
-                    System.out.println("Card Entered");
-
-                    cardEntered = true;
-
-                    break;
-
-                } catch (Exception e) {
-
-                    System.out.println("Frame " + i + " skipped");
-                }
-            }
-
-            driver.switchTo().defaultContent();
-
-            if (!cardEntered) {
-
-                System.out.println("Card Fields Not Found");
-
-                return;
-            }
-
             Thread.sleep(4000);
 
-            // -------------------------------------------------
-            // EMAIL FIELD
-            // -------------------------------------------------
-
-            List<WebElement> billingFrames = driver.findElements(By.tagName("iframe"));
-
-            for (int i = 0; i < billingFrames.size(); i++) {
-
-                try {
-
-                    driver.switchTo().defaultContent();
-
-                    driver.switchTo().frame(i);
-
-                    List<WebElement> emails = driver.findElements(
-                            By.xpath("//input[contains(@autocomplete,'email') or @type='email']")
-                    );
-
-                    if (!emails.isEmpty()) {
-
-                        WebElement email = emails.get(0);
-
-                        email.sendKeys("moole@testing.com");
-
-                        System.out.println("Billing Email Entered");
-
-                        break;
-                    }
-
-                } catch (Exception e) {
-
-                    System.out.println("Email frame skipped");
-                }
-            }
-
-            // -------------------------------------------------
-            // PHONE NUMBER
-            // -------------------------------------------------
-
-            driver.switchTo().defaultContent();
-
-            List<WebElement> phoneFrames = driver.findElements(By.tagName("iframe"));
-
-            for (int i = 0; i < phoneFrames.size(); i++) {
-
-                try {
-
-                    driver.switchTo().defaultContent();
-
-                    driver.switchTo().frame(i);
-
-                    List<WebElement> phones = driver.findElements(
-                            By.xpath("//input[@name='linkMobilePhone']")
-                    );
-
-                    if (!phones.isEmpty()) {
-
-                        WebElement phone = phones.get(0);
-
-                        phone.sendKeys("2015550123");
-
-                        System.out.println("Phone Entered");
-
-                        break;
-                    }
-
-                } catch (Exception e) {
-
-                    System.out.println("Phone frame skipped");
-                }
-            }
-
-            // -------------------------------------------------
-            // FULL NAME
-            // -------------------------------------------------
-
-            driver.switchTo().defaultContent();
-
-            List<WebElement> nameFrames = driver.findElements(By.tagName("iframe"));
-
-            for (int i = 0; i < nameFrames.size(); i++) {
-
-                try {
-
-                    driver.switchTo().defaultContent();
-
-                    driver.switchTo().frame(i);
-
-                    List<WebElement> names = driver.findElements(
-                            By.xpath("//input[contains(@autocomplete,'billing name') or @name='name']")
-                    );
-
-                    if (!names.isEmpty()) {
-
-                        WebElement fullName = names.get(0);
-
-                        fullName.sendKeys("John Cena");
-
-                        System.out.println("Full Name Entered");
-
-                        break;
-                    }
-
-                } catch (Exception e) {
-
-                    System.out.println("Name frame skipped");
-                }
-            }
-
-            // -------------------------------------------------
-            // ADDRESS
-            // -------------------------------------------------
-
-            driver.switchTo().defaultContent();
-
-            List<WebElement> addressFrames = driver.findElements(By.tagName("iframe"));
-
-            for (int i = 0; i < addressFrames.size(); i++) {
-
-                try {
-
-                    driver.switchTo().defaultContent();
-
-                    driver.switchTo().frame(i);
-
-                    List<WebElement> addresses = driver.findElements(
-                            By.xpath("//input[contains(@autocomplete,'address-line1')]")
-                    );
-
-                    if (!addresses.isEmpty()) {
-
-                        WebElement address = addresses.get(0);
-
-                        address.sendKeys("1125 Miller Lane");
-
-                        System.out.println("Address Entered");
-
-                        break;
-                    }
-
-                } catch (Exception e) {
-
-                    System.out.println("Address frame skipped");
-                }
-            }
-
-         // -------------------------------------------------
-         // CITY FIELD (LOCALITY INPUT)
-         // -------------------------------------------------
-
-         try {
-
-             WebElement cityField = wait.until(
-                     ExpectedConditions.visibilityOfElementLocated(
-                             By.xpath("//input[@id='billingAddress-localityInput' or @name='locality']")
-                     )
-             );
-
-             js.executeScript(
-                     "arguments[0].scrollIntoView({block:'center'});",
-                     cityField
-             );
-
-             Thread.sleep(1000);
-
-             js.executeScript("arguments[0].click();", cityField);
-
-             cityField.clear();
-
-             cityField.sendKeys("Buffalo Grove");
-
-             // Trigger JS events (important for Stripe-style forms)
-             js.executeScript(
-                     "arguments[0].value='Highwood';" +
-                     "arguments[0].dispatchEvent(new Event('input',{bubbles:true}));" +
-                     "arguments[0].dispatchEvent(new Event('change',{bubbles:true}));",
-                     cityField
-             );
-
-             System.out.println("City Entered Successfully");
-
-         } catch (Exception e) {
-
-             System.out.println("City field not found");
-
-             e.printStackTrace();
-         }
-
-            // -------------------------------------------------
-            // STATE
-            // -------------------------------------------------
-
-            driver.switchTo().defaultContent();
-
-            List<WebElement> stateFrames = driver.findElements(By.tagName("iframe"));
-
-            for (int i = 0; i < stateFrames.size(); i++) {
-
-                try {
-
-                    driver.switchTo().defaultContent();
-
-                    driver.switchTo().frame(i);
-
-                    List<WebElement> states = driver.findElements(
-                            By.xpath("//select[@id='billingAddress-administrativeAreaInput']")
-                    );
-
-                    if (!states.isEmpty()) {
-
-                        Select select = new Select(states.get(0));
-
-                        select.selectByVisibleText("Illinois");
-
-                        System.out.println("Illinois Selected");
-
-                        break;
-                    }
-
-                } catch (Exception e) {
-
-                    System.out.println("State frame skipped");
-                }
-            }
-
-            // -------------------------------------------------
-            // ZIP CODE
-            // -------------------------------------------------
-
-            driver.switchTo().defaultContent();
-
-            List<WebElement> zipFrames = driver.findElements(By.tagName("iframe"));
-
-            for (int i = 0; i < zipFrames.size(); i++) {
-
-                try {
-
-                    driver.switchTo().defaultContent();
-
-                    driver.switchTo().frame(i);
-
-                    List<WebElement> zips = driver.findElements(
-                            By.xpath("//input[@id='billingAddress-postalCodeInput']")
-                    );
-
-                    if (!zips.isEmpty()) {
-
-                        WebElement zip = zips.get(0);
-
-                        zip.clear();
-
-                        zip.sendKeys("60089");
-
-                        System.out.println("ZIP Entered");
-
-                        break;
-                    }
-                    
-                 // -------------------------------------------------
-                 // BILLING PHONE (AFTER ZIP)
-                 // -------------------------------------------------
-
-                 driver.switchTo().defaultContent();
-
-                 Thread.sleep(2000);
-
-                 List<WebElement> phoneFrames1 = driver.findElements(By.tagName("iframe"));
-
-                 boolean phoneEntered = false;
-
-                 for (int i1 = 0; i1 < phoneFrames1.size(); i1++) {
-
-                     try {
-
-                         driver.switchTo().defaultContent();
-                         driver.switchTo().frame(i1);
-
-                         List<WebElement> phones = driver.findElements(
-                                 By.xpath("//input[@id='billingAddress-phoneInput' or @name='phone']")
-                         );
-
-                         if (!phones.isEmpty()) {
-
-                             WebElement phone = phones.get(0);
-
-                             js.executeScript(
-                                     "arguments[0].scrollIntoView({block:'center'});",
-                                     phone
-                             );
-
-                             Thread.sleep(1000);
-
-                             js.executeScript("arguments[0].click();", phone);
-
-                             phone.clear();
-
-                             phone.sendKeys("2015550123");
-
-                             // fallback trigger (Stripe-like forms need this)
-                             js.executeScript(
-                                     "arguments[0].value='2015550123';" +
-                                     "arguments[0].dispatchEvent(new Event('input',{bubbles:true}));" +
-                                     "arguments[0].dispatchEvent(new Event('change',{bubbles:true}));",
-                                     phone
-                             );
-
-                             System.out.println("Billing Phone Entered");
-
-                             phoneEntered = true;
-
-                             break;
-                         }
-
-                     } catch (Exception e) {
-
-                         System.out.println("Phone frame " + i1 + " skipped");
-                     }
-                 }
-
-                 driver.switchTo().defaultContent();
-
-                 if (!phoneEntered) {
-                     System.out.println("Billing phone NOT FOUND");
-                 }
-
-                } catch (Exception e) {
-
-                    System.out.println("ZIP frame skipped");
-                }
-            }
-
-            // -------------------------------------------------
-            // SAVE BUTTON
-            // -------------------------------------------------
-
-            driver.switchTo().defaultContent();
-
-            Thread.sleep(3000);
-
-            WebElement saveButton = wait.until(
+            // =====================================================
+            // CARD DETAILS (SAFE STRIPE HANDLING)
+            // =====================================================
+
+            fillCard(driver, "number", "5555555555554444");
+            fillCard(driver, "expiry", "07/31");
+            fillCard(driver, "cvc", "270");
+
+            System.out.println("Card Entered");
+
+            // ---------------- EMAIL ----------------
+            fill(driver, wait,
+                    "//input[contains(@autocomplete,'email') or @type='email']",
+                    "moole@testing.com",
+                    "Email Entered"
+            );
+
+            // ---------------- PHONE ----------------
+            fill(driver, wait,
+                    "//input[@name='linkMobilePhone']",
+                    "2015550123",
+                    "Phone Entered"
+            );
+
+            // ---------------- NAME ----------------
+            fill(driver, wait,
+                    "//input[contains(@autocomplete,'name') or @name='name']",
+                    "John Cena",
+                    "Name Entered"
+            );
+
+            // ---------------- ADDRESS ----------------
+            fill(driver, wait,
+                    "//input[contains(@autocomplete,'address-line1')]",
+                    "1125 Miller Lane",
+                    "Address Entered"
+            );
+
+            // ---------------- CITY ----------------
+            WebElement city = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//input[contains(@id,'locality') or @name='locality']")
+                    )
+            );
+
+            js.executeScript("arguments[0].scrollIntoView(true);", city);
+            city.click();
+            city.clear();
+            city.sendKeys("Buffalo Grove");
+
+            js.executeScript("arguments[0].dispatchEvent(new Event('input',{bubbles:true}));", city);
+
+            System.out.println("City Entered");
+
+            // ---------------- STATE ----------------
+            Select state = new Select(
+                    wait.until(ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//select[contains(@id,'administrativeArea')]")
+                    ))
+            );
+
+            state.selectByVisibleText("Illinois");
+            System.out.println("State Selected");
+
+            // ---------------- ZIP ----------------
+            fill(driver, wait,
+                    "//input[contains(@id,'postalCode')]",
+                    "60089",
+                    "ZIP Entered"
+            );
+
+            // ---------------- SAVE ----------------
+            WebElement save = wait.until(
                     ExpectedConditions.elementToBeClickable(
                             By.xpath("//button[contains(.,'Save')]")
                     )
             );
 
-            js.executeScript("arguments[0].click();", saveButton);
-
-            System.out.println("Save Button Clicked");
+            js.executeScript("arguments[0].click();", save);
+            System.out.println("Save Clicked");
 
             Thread.sleep(5000);
-            
-            WebElement transactionActivity = wait.until(ExpectedConditions
-					.elementToBeClickable(By.xpath("//button[.//span[contains(text(),'Transaction Activity')]]")));
-			transactionActivity.click();
-			System.out.println("Clicked Transaction Activity");
-			Thread.sleep(2000);
 
-			
-			  WebElement downloadInvoice = driver.findElement(
-			  By.xpath("//a[@aria-label='Download Invoice']") );
-			  
-			  ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
-			  downloadInvoice);
-			 
-			  System.out.println("Clicked Download Invoice"); Thread.sleep(2000);
-			 
+            // ---------------- TRANSACTION ----------------
+            WebElement transaction = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[.//span[contains(text(),'Transaction Activity')]]")
+                    )
+            );
 
-			
-			  WebElement downloadReceipt = driver.findElement(
-			  By.xpath("//a[@aria-label='Download Receipt']") );
-			  
-			  downloadReceipt.click(); System.out.println("Clicked Download Receipt");
-			  Thread.sleep(2000);
-			 
+            transaction.click();
+            System.out.println("Transaction Activity Clicked");
 
-			WebElement billingActivity1 = wait.until(ExpectedConditions
-					.presenceOfElementLocated(By.xpath("//button[.//span[text()='Billing Activity']]")));
+            Thread.sleep(2000);
 
-			js.executeScript("arguments[0].click();", billingActivity1);
-			Thread.sleep(2000);
+            driver.findElement(By.xpath("//a[@aria-label='Download Invoice']")).click();
+            System.out.println("Invoice Downloaded");
+
+            Thread.sleep(2000);
+
+            driver.findElement(By.xpath("//a[@aria-label='Download Receipt']")).click();
+            System.out.println("Receipt Downloaded");
 
             System.out.println("Automation Completed Successfully");
 
         } catch (Exception e) {
-
             System.out.println("ERROR: " + e.getMessage());
-
             e.printStackTrace();
-
         } finally {
-
-           // driver.quit();
-
             System.out.println("Browser Closed");
+            // driver.quit();
+        }
+    }
+
+    // =====================================================
+    // CARD FIELD HANDLER (STRIPE SAFE)
+    // =====================================================
+    public static void fillCard(WebDriver driver, String field, String value) {
+
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        List<WebElement> frames = driver.findElements(By.tagName("iframe"));
+
+        for (WebElement frame : frames) {
+            try {
+
+                driver.switchTo().defaultContent();
+                driver.switchTo().frame(frame);
+
+                List<WebElement> el = driver.findElements(By.name(field));
+
+                if (!el.isEmpty()) {
+
+                    WebElement input = el.get(0);
+
+                    js.executeScript("arguments[0].scrollIntoView(true);", input);
+                    input.click();
+                    input.clear();
+                    input.sendKeys(value);
+
+                    driver.switchTo().defaultContent();
+                    System.out.println(field + " Entered");
+                    return;
+                }
+
+            } catch (Exception ignored) {
+                driver.switchTo().defaultContent();
+            }
+        }
+
+        driver.switchTo().defaultContent();
+        System.out.println(field + " NOT FOUND");
+    }
+
+    // =====================================================
+    // GENERIC INPUT HANDLER
+    // =====================================================
+    public static void fill(WebDriver driver, WebDriverWait wait,
+                            String xpath, String value, String log) {
+
+        try {
+            WebElement el = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath))
+            );
+
+            el.clear();
+            el.sendKeys(value);
+
+            System.out.println(log);
+
+        } catch (Exception e) {
+            System.out.println("Not found: " + xpath);
         }
     }
 }

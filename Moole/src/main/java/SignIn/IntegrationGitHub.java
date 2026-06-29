@@ -50,7 +50,7 @@ public class IntegrationGitHub {
             // --- Step 4: Navigate directly to Integrations page ---
             driver.get("https://moole.ai/app/settings/project/integrations");
 
-            // --- Step 5: Click GitHub Integration ---
+     /*       // --- Step 5: Click GitHub Integration ---
             WebElement githubBtn = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//img[@alt='GitHub']")));
             githubBtn.click();
@@ -69,7 +69,7 @@ public class IntegrationGitHub {
             // --- Step 8: Enter GitHub Token ---
             WebElement githubToken = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.xpath("//input[@class='col-start-1 row-start-1 w-full pl-10 pr-10 py-4 text-base font-medium rounded-sm transition-all bg-bg duration-200 focus:outline-none focus:ring-2']")));
-             githubToken.sendKeys("ghp_YOUR_GITHUB_PERSONAL_ACCESS_TOKEN");
+             githubToken.sendKeys("ghp_YOUR_GITHUB_PERSONAL_ACCESS_TOKEN");*/
              
              
              // ================= CLICK REPOSITORIES =================
@@ -89,9 +89,16 @@ public class IntegrationGitHub {
              ((JavascriptExecutor) driver).executeScript("arguments[0].click();", repoMenu);
 
              System.out.println("Repositories clicked");
+             
+             // --- Step  Click "ADD Repositories" ---
+             WebElement addRepository = wait.until(
+                     ExpectedConditions.elementToBeClickable(
+                             By.xpath("//button[@type='button' and .//span[text()='Add Repository']]")));
+
+             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addRepository);
 
 
-            // --- Step 10b: Click "Import Repositories" ---
+       /*     // --- Step 10b: Click "Import Repositories" ---
             WebElement importRepo = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//p[text()='Import Repositories']")
             ));
@@ -112,22 +119,51 @@ public class IntegrationGitHub {
                     By.xpath("//span[text()='moole-dev-2']")
             ));
             githubUser.click();
-            System.out.println("GitHub user 'moole-dev-2' clicked!");
+            System.out.println("GitHub user 'moole-dev-2' clicked!");*/
+             
+             By repoSearch = By.id("repo-filter");
 
-            // --- Step 10e: Click repository "node-test" ---
-            WebElement nodeTestRepo = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//span[text()='node-test']")
-            ));
-            nodeTestRepo.click();
-            System.out.println("Repository 'node-test' clicked!");
+             WebElement searchBox = wait.until(
+                     ExpectedConditions.visibilityOfElementLocated(repoSearch));
+
+             searchBox.clear();
+             searchBox.sendKeys("node-test");
+
+             System.out.println("Repository name entered: node-test");
+             
+             By repoCheckbox = By.xpath(
+            	        "//div[contains(@class,'cursor-pointer')][.//span[contains(.,'node-test')]]");
+
+            	WebElement repo = wait.until(
+            	        ExpectedConditions.elementToBeClickable(repoCheckbox));
+
+            	((JavascriptExecutor) driver).executeScript(
+            	        "arguments[0].scrollIntoView({block:'center'});", repo);
+
+            	((JavascriptExecutor) driver).executeScript(
+            	        "arguments[0].click();", repo);
+
+            	System.out.println("Repository selected: node-test");
+            	Thread.sleep(1000);
+
 
             // --- Step 10f: Click "Import & Scan" button ---
-            WebElement importScanBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[contains(.,'Import & Scan')]")
-            ));
-            Thread.sleep(5000);
-            importScanBtn.click();
-            System.out.println("'Import & Scan' button clicked!");
+            
+            	By importRepository = By.xpath(
+            	        "//button[contains(normalize-space(.),'Import') and contains(normalize-space(.),'repository')]");
+
+            	WebElement importBtn = wait.until(
+            	        ExpectedConditions.elementToBeClickable(importRepository));
+
+            	((JavascriptExecutor) driver).executeScript(
+            	        "arguments[0].scrollIntoView({block:'center'});", importBtn);
+
+            	((JavascriptExecutor) driver).executeScript(
+            	        "arguments[0].click();", importBtn);
+
+            	System.out.println("Import Repository button clicked successfully.");
+            	Thread.sleep(1000);
+
 
         } catch (Exception e) {
             e.printStackTrace();

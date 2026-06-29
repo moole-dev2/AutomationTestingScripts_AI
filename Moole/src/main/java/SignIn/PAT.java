@@ -23,6 +23,8 @@ public class PAT {
 
         WebDriver driver = new ChromeDriver();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
 
         try {
             // --- Step 1: Open Moole.ai and click Sign In ---
@@ -49,11 +51,22 @@ public class PAT {
 
             // --- Step 4: Navigate directly to Integrations page ---
             driver.get("https://moole.ai/app/settings/project/integrations");
+            
             // --- Step 5: Click on PAT menu ---
-            WebElement patMenu = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//a[contains(@href,'developer/pat')]//span[text()='PAT']")));
-            patMenu.click();
+            
+            By patMenu = By.xpath("//a[@href='/app/settings/developer/pat' and .//p[normalize-space()='PAT']]");
 
+            WebElement pat = wait.until(
+                    ExpectedConditions.elementToBeClickable(patMenu)
+            );
+
+            // scroll into view
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", pat);
+
+            // click safely
+            js.executeScript("arguments[0].click();", pat);
+
+            System.out.println("PAT page clicked successfully");
             // --- Step 6: Enter Token Name ---
             WebElement tokenInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.xpath("//input[@name='tokenName']")));
@@ -79,11 +92,48 @@ public class PAT {
             Thread.sleep(2000);
 
             System.out.println("PAT Token generation flow completed.");
+            
+            // Done
+            By doneBtn = By.xpath("//button[normalize-space()='Done']");
+
+            WebElement done = wait.until(
+                    ExpectedConditions.elementToBeClickable(doneBtn)
+            );
+
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", done);
+
+            System.out.println("Clicked Done button");
+            
+            // Action Menu
+            
+            By actionsMenuBtn = By.xpath("//button[@aria-label='Open actions menu']");
+
+            WebElement actionsMenu = wait.until(
+                    ExpectedConditions.elementToBeClickable(actionsMenuBtn)
+            );
+
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", actionsMenu);
+
+            System.out.println("Actions menu clicked");
+            
          // --- Step 10: Click Regenerate Token icon ---
-            WebElement regenerateIcon = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[@aria-label='Regenerate Token']")));
-            regenerateIcon.click();
-            Thread.sleep(2000);
+            By regenerateTokenBtn = By.xpath("//button[@role='menuitem' and .//span[normalize-space()='Regenerate Token']]");
+
+            WebElement regenBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(regenerateTokenBtn)
+            );
+
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({block:'center'});",
+                    regenBtn
+            );
+
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].click();",
+                    regenBtn
+            );
+
+            System.out.println("Regenerate Token clicked");
 
             // --- Step 11: Click Regenerate confirmation button ---
             WebElement regenerateConfirm = wait.until(ExpectedConditions.elementToBeClickable(
@@ -94,90 +144,121 @@ public class PAT {
 
             // --- Step 12: Wait for 20 seconds (as requested) ---
             Thread.sleep(2000);
+            By actionsMenuBtn1 = By.xpath("//button[@aria-label='Open actions menu']");
+
+         // ================= ACTION MENU (REFRESH SAFE) =================
+            By actionsMenuBtn11 = By.xpath("//button[@aria-label='Open actions menu']");
+
+            for (int i = 0; i < 3; i++) {
+                try {
+                    WebElement actionsMenu1 = wait.until(
+                            ExpectedConditions.elementToBeClickable(actionsMenuBtn11));
+
+                    js.executeScript("arguments[0].scrollIntoView({block:'center'});", actionsMenu1);
+                    js.executeScript("arguments[0].click();", actionsMenu1);
+
+                    System.out.println("Actions menu clicked");
+                    break;
+
+                } catch (org.openqa.selenium.StaleElementReferenceException e) {
+                    System.out.println("Retrying Actions menu click...");
+                }
+            }
+
+            Thread.sleep(1500);
+
+         // ================= DELETE TOKEN =================
+         // ================= DELETE TOKEN =================
+            By deleteToken = By.xpath("//button[@role='menuitem' and .//span[normalize-space()='Delete Token']]");
+
+            WebElement deleteBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(deleteToken)
+            );
+
+            // scroll into view (important for menu items)
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", deleteBtn);
+
+            // click using JS to avoid overlay/stale issues
+            js.executeScript("arguments[0].click();", deleteBtn);
+            Thread.sleep(1000);
+            System.out.println("Clicked Delete Token successfully");
+
+            // ================= REMOVE BUTTON =================
+         // ================= CLICK REMOVE BUTTON =================
+            By removeBtn = By.xpath("//button[@type='submit' and .//span[normalize-space()='Remove']]");
+
+            WebElement remove = wait.until(
+                    ExpectedConditions.elementToBeClickable(removeBtn)
+            );
+
+            // optional: scroll into view (helps in modals)
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", remove);
+
+            // click safely using JS (avoids overlay/stale issues)
+            js.executeScript("arguments[0].click();", remove);
+            Thread.sleep(1000);
+
+            System.out.println("Clicked Remove button successfully");
             
+            //Action
             
+            By actionsMenuBtn111 = By.xpath("//button[@aria-label='Open actions menu']");
 
-            By deleteIcon = By.xpath("//button[@aria-label='Delete Token']");
-            By removeBtn = By.xpath("//button[@type='submit']//span[text()='Remove']");
+            for (int i = 0; i < 3; i++) {
+                try {
+                    WebElement actionsMenu1 = wait.until(
+                            ExpectedConditions.elementToBeClickable(actionsMenuBtn111));
 
-		// ==========================
-		// SAFE CLICK METHOD
-		// ==========================
-		for (int i = 0; i < 3; i++) {
-		    try {
-		        WebElement del = wait.until(ExpectedConditions.elementToBeClickable(deleteIcon));
-		        del.click();
-		        System.out.println("Clicked Delete Token");
-		        break;
-		    } catch (org.openqa.selenium.StaleElementReferenceException e) {
-		        System.out.println("Retrying Delete click due to stale element...");
-		    }
-		}
-		
-		Thread.sleep(1500); // allow modal to appear
-		
-		// ==========================
-		// CLICK REMOVE SAFELY
-		// ==========================
-		for (int i = 0; i < 3; i++) {
-		    try {
-		        WebElement rm = wait.until(ExpectedConditions.elementToBeClickable(removeBtn));
-		        rm.click();
-		        System.out.println("Clicked Remove");
-		        break;
-		    } catch (org.openqa.selenium.StaleElementReferenceException e) {
-		        System.out.println("Retrying Remove click due to stale element...");
-		    }
-		}
+                    js.executeScript("arguments[0].scrollIntoView({block:'center'});", actionsMenu1);
+                    js.executeScript("arguments[0].click();", actionsMenu1);
 
-		System.out.println("Token deleted successfully.");
-		Thread.sleep(2000);
-		
-		// =====================================================
-		// FINAL FLOW: DELETE AGAIN + CANCEL
-		// =====================================================
+                    System.out.println("Actions menu clicked");
+                    break;
 
-		try {
+                } catch (org.openqa.selenium.StaleElementReferenceException e) {
+                    System.out.println("Retrying Actions menu click...");
+                }
+            }
 
-		    // Click Delete Token again
-		    for (int i = 0; i < 3; i++) {
-		        try {
-		            WebElement deleteAgain = wait.until(
-		                    ExpectedConditions.elementToBeClickable(
-		                            By.xpath("//button[@aria-label='Delete Token']")
-		                    )
-		            );
+            Thread.sleep(1500);
 
-		            deleteAgain.click();
-		            System.out.println("Clicked Delete Token (Again)");
-		            break;
+         // ================= DELETE TOKEN =================
+         // ================= DELETE TOKEN =================
+            By deleteToken1 = By.xpath("//button[@role='menuitem' and .//span[normalize-space()='Delete Token']]");
 
-		        } catch (org.openqa.selenium.StaleElementReferenceException e) {
-		            System.out.println("Retrying Delete click due to stale element...");
-		        }
-		    }
+            WebElement deleteBtn1 = wait.until(
+                    ExpectedConditions.elementToBeClickable(deleteToken1)
+            );
 
-		    Thread.sleep(1500); // wait for modal to open
+            // scroll into view (important for menu items)
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", deleteBtn1);
 
-		    // Click Cancel button (your provided path)
-		    WebElement cancelBtn = wait.until(
-		            ExpectedConditions.elementToBeClickable(
-		                    By.xpath("//button[normalize-space()='Cancel' or contains(.,'Cancel')]")
-		            )
-		    );
+            // click using JS to avoid overlay/stale issues
+            js.executeScript("arguments[0].click();", deleteBtn1);
+            Thread.sleep(1000);
 
-		    cancelBtn.click();
+            System.out.println("Clicked Delete Token successfully");
+            
+         // ================= CLICK CANCEL BUTTON =================
+            By cancelBtn = By.xpath("//button[normalize-space()='Cancel']");
 
-		    System.out.println("Clicked Cancel Button Successfully");
+            WebElement cancel = wait.until(
+                    ExpectedConditions.elementToBeClickable(cancelBtn)
+            );
 
-		    Thread.sleep(2000);
+            // scroll into view (important for modal dialogs)
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", cancel);
+
+            // click safely using JS (handles overlays + styling issues)
+            js.executeScript("arguments[0].click();", cancel);
+            Thread.sleep(1000);
+            System.out.println("Clicked Cancel button successfully");
+            
 
 		} catch (Exception e) {
 		    System.out.println("Cancel Flow Failed: " + e.getMessage());
 		}
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
+         finally {
             // Optional: keep browser open for verification
              driver.quit();
         }

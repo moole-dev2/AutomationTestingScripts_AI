@@ -54,6 +54,7 @@ public class NotificationsProj {
             System.out.println("Notifications page opened");
 
             // ================= TOGGLE =================
+            
             WebElement notificationToggle = wait.until(
             	    ExpectedConditions.presenceOfElementLocated(
             	        By.xpath("//button[@role='switch' and @aria-label='Enable notifications']")
@@ -71,23 +72,35 @@ public class NotificationsProj {
             	    "arguments[0].click();",
             	    notificationToggle
             	);
-             
+            	
+            	// Find dropdown
+            	WebElement dropdown = wait.until(
+            	        ExpectedConditions.presenceOfElementLocated(
+            	                By.xpath("//button[contains(@aria-label,'Sort by')]")));
+
+            	js.executeScript("arguments[0].scrollIntoView({block:'center'});", dropdown);
+            	Thread.sleep(1000);
+
+            	// Highlight (optional)
+            	js.executeScript("arguments[0].style.border='3px solid red';", dropdown);
+
+            	// Click using JavaScript
+            	js.executeScript("arguments[0].click();", dropdown);
+
+            	Thread.sleep(3000);
+
+            	// Now locate Critical
+            	WebElement critical = wait.until(
+            	        ExpectedConditions.presenceOfElementLocated(
+            	                By.xpath("//p[text()='Critical']")));
+
+            	js.executeScript("arguments[0].scrollIntoView({block:'center'});", critical);
+
+            	Thread.sleep(1000);
+
+            	js.executeScript("arguments[0].click();", critical);
             
-
-         // ================= OPEN DROPDOWN =================
-         WebElement allDropdown = wait.until(
-                 ExpectedConditions.elementToBeClickable(
-                         By.xpath("//button[.//span[normalize-space()='All']]")));
-
-         js.executeScript("arguments[0].click();", allDropdown);
-         Thread.sleep(1000);
-
-         WebElement medium = wait.until(
-        	        ExpectedConditions.elementToBeClickable(
-        	                By.xpath("//*[normalize-space()='Medium']")));
-
-        	medium.click();
-        	Thread.sleep(2000);
+            	
         	
          // ================= RE-FETCH UPDATE BUTTON =================
          WebElement updateBtn = wait.until(
@@ -100,7 +113,7 @@ public class NotificationsProj {
 
          System.out.println("Update clicked successfully");
 
-            // ================= EDIT EMAIL =================
+      /*      // ================= EDIT EMAIL =================
             WebElement editBtn = wait.until(
                     ExpectedConditions.elementToBeClickable(
                             By.xpath("//button[@aria-label='Edit configured emails']")));
@@ -127,7 +140,91 @@ public class NotificationsProj {
 
             js.executeScript("arguments[0].click();", createBtn);
 
-            System.out.println("Email channel created successfully");
+            System.out.println("Email channel created successfully");*/
+         
+      // Open Actions Menu
+     	WebElement actionsMenu = wait.until(
+     	        ExpectedConditions.elementToBeClickable(
+     	                By.xpath("//button[@aria-label='Open actions menu']")));
+
+
+     	js.executeScript("arguments[0].scrollIntoView({block:'center'});", actionsMenu);
+     	Thread.sleep(1000);
+
+     	// Click
+     	js.executeScript("arguments[0].click();", actionsMenu);
+
+     	Thread.sleep(2000);
+
+     	System.out.println("Actions menu opened successfully.");
+     
+     	WebElement editEmailChannels = wait.until(
+     	        ExpectedConditions.elementToBeClickable(
+     	                By.xpath("//button[@role='menuitem' and .//span[text()='Edit Email channels']]")));
+
+     	((JavascriptExecutor) driver).executeScript("arguments[0].click();", editEmailChannels);
+
+     	Thread.sleep(2000);
+
+     
+     WebElement ccInput = wait.until(
+             ExpectedConditions.visibilityOfElementLocated(
+                     By.id("ncc-cc")));
+
+     ccInput.clear();
+     ccInput.sendKeys("moole.dev@gmail.com",",","moole.dev.@gmail.com");
+     Thread.sleep(2000);
+
+     
+     WebElement saveBtn = wait.until(
+             ExpectedConditions.elementToBeClickable(
+                     By.xpath("//button[.//span[normalize-space()='Save']]")));
+
+     saveBtn.click();
+
+     System.out.println("Email updated and saved successfully.");
+     Thread.sleep(2000);
+     
+  // Open Actions Menu
+ 	WebElement actionsMenu1 = wait.until(
+ 	        ExpectedConditions.elementToBeClickable(
+ 	                By.xpath("//button[@aria-label='Open actions menu']")));
+
+
+ 	js.executeScript("arguments[0].scrollIntoView({block:'center'});", actionsMenu1);
+ 	Thread.sleep(1000);
+
+ 	// Click
+ 	js.executeScript("arguments[0].click();", actionsMenu1);
+
+ 	Thread.sleep(2000);
+
+ 	System.out.println("Actions menu opened successfully.");
+ 
+ 	WebElement editEmailChannels1 = wait.until(
+ 	        ExpectedConditions.elementToBeClickable(
+ 	                By.xpath("//button[@role='menuitem' and .//span[text()='Edit Email channels']]")));
+
+ 	((JavascriptExecutor) driver).executeScript("arguments[0].click();", editEmailChannels1);
+
+ 	Thread.sleep(2000);
+     
+  // Click Cancel button
+     WebElement cancelBtn = wait.until(
+             ExpectedConditions.elementToBeClickable(
+                     By.xpath("//button[normalize-space()='Cancel']")));
+     js.executeScript("arguments[0].scrollIntoView({block:'center'});", cancelBtn);
+     Thread.sleep(1000);
+
+     // Highlight (optional)
+     js.executeScript("arguments[0].style.border='3px solid red';", cancelBtn);
+
+     // Click using JavaScript
+     js.executeScript("arguments[0].click();", cancelBtn);
+
+     Thread.sleep(2000);
+
+     System.out.println("Cancel button clicked successfully.");
 
         } catch (Exception e) {
             e.printStackTrace();

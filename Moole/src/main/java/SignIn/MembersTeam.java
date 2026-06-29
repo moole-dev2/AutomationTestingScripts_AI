@@ -64,15 +64,18 @@ public class MembersTeam {
 
                 Thread.sleep(2000);
 
-             // ================= CLICK INVITE MEMBER =================
+             // ================= CLICK INVITE MEMBER ================
+                By inviteMemberBtn = By.xpath("//button[.//span[normalize-space()='Invite Member']]");
+                WebElement inviteMember = wait.until(
+                        ExpectedConditions.elementToBeClickable(inviteMemberBtn));
 
-             By inviteIcon = By.xpath("//span[@aria-label='Invite Team Member']");
+                ((JavascriptExecutor) driver).executeScript(
+                        "arguments[0].scrollIntoView({block:'center'});", inviteMember);
 
-             WebElement invite = wait.until(
-                     ExpectedConditions.elementToBeClickable(inviteIcon));
-             invite.click();
-             System.out.println("Invite Team Member clicked");
-             Thread.sleep(2000);
+                ((JavascriptExecutor) driver).executeScript(
+                        "arguments[0].click();", inviteMember);
+
+                System.out.println("Clicked Invite Member");
                 // ================= ENTER EMAIL =================
                 WebElement emailInput = wait.until(
                         ExpectedConditions.visibilityOfElementLocated(
@@ -93,14 +96,20 @@ public class MembersTeam {
                 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", selectRoleDropdown);
                 System.out.println("Select Role dropdown opened");
                 
-                WebElement developer = wait.until(
-                        ExpectedConditions.elementToBeClickable(
-                                By.xpath("//p[normalize-space()='Developer']")
-                        )
+                By developerOption = By.xpath(
+                        "//div[@role='option' and .//span[normalize-space()='Developer']]"
                 );
 
-                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", developer);
-                System.out.println("Developer selected");
+                WebElement dev = wait.until(
+                        ExpectedConditions.visibilityOfElementLocated(developerOption));
+
+                ((JavascriptExecutor) driver).executeScript(
+                        "arguments[0].scrollIntoView({block:'center'});", dev);
+
+                ((JavascriptExecutor) driver).executeScript(
+                        "arguments[0].click();", dev);
+
+                System.out.println("Developer option selected");
 
            
                 // ================= CLICK INVITE USER BUTTON =================
@@ -164,20 +173,20 @@ public class MembersTeam {
 
             // Target the actual checkbox input inside the Developer row
             By developerCheckbox = By.xpath(
-                    "//div[.//p[normalize-space()='Developer']]//input[@type='checkbox']");
+                    "//div[.//p[normalize-space()='API User']]//input[@type='checkbox']");
 
             // ================= CHECK =================
             WebElement checkboxToCheck = wait.until(
                     ExpectedConditions.presenceOfElementLocated(developerCheckbox));
             // Use JavaScript click to bypass overlay/visibility issues
             js.executeScript("arguments[0].click();", checkboxToCheck);
-            System.out.println("Developer CHECKED | isSelected: " + checkboxToCheck.isSelected());
+            System.out.println("API User CHECKED | isSelected: " + checkboxToCheck.isSelected());
             Thread.sleep(2000);
 
             // ================= UNCHECK =================
             WebElement checkboxToUncheck = driver.findElement(developerCheckbox); // re-fetch
             js.executeScript("arguments[0].click();", checkboxToUncheck);
-            System.out.println("Developer UNCHECKED | isSelected: " + checkboxToUncheck.isSelected());
+            System.out.println("API User UNCHECKED | isSelected: " + checkboxToUncheck.isSelected());
             Thread.sleep(2000);
             // Close dropdown
             roleDropdown.click();
@@ -185,62 +194,59 @@ public class MembersTeam {
             
             // ================= SEARCH BAR OPERATIONS =================
 
-            By searchInput = By.xpath("//input[@id='searchQuery']");
+            By searchInput = By.xpath("//input[contains(@placeholder,'Search by team')]");
 
-            // --- Search 1: Sirisha ---
-            WebElement search1 = wait.until(ExpectedConditions.elementToBeClickable(searchInput));
-            search1.clear();
-            search1.sendKeys("Sirisha");
-            System.out.println("Searched: Sirisha");
-            Thread.sleep(2000);
+         // --- Search 1 ---
+         WebElement search = wait.until(
+                 ExpectedConditions.visibilityOfElementLocated(searchInput)
+         );
 
-            // Clear
-            search1.clear();
-            // or use: search1.sendKeys(Keys.CONTROL + "a", Keys.DELETE);
-            System.out.println("Cleared search");
-            Thread.sleep(1000);
+         search.clear();
+         search.sendKeys("Sirisha");
+         System.out.println("Searched: Sirisha");
+         Thread.sleep(2000);
 
-            // --- Search 2: Shree ---
-            WebElement search2 = driver.findElement(searchInput);
-            search2.clear();
-            search2.sendKeys("Shree");
-            System.out.println("Searched: Shree");
-            Thread.sleep(2000);
+         search.clear();
+         System.out.println("Cleared search");
+         Thread.sleep(1000);
 
-            // Clear
-            search2.clear();
-            System.out.println("Cleared search");
-            Thread.sleep(1000);
+         // --- Search 2 ---
+         search = wait.until(ExpectedConditions.visibilityOfElementLocated(searchInput));
+         search.clear();
+         search.sendKeys("Shree");
+         System.out.println("Searched: Shree");
+         Thread.sleep(2000);
 
-            // --- Search 3: moole.dev.2@gmail.com ---
-            WebElement search3 = driver.findElement(searchInput);
-            search3.clear();
-            search3.sendKeys("moole.dev.2@gmail.com");
-            System.out.println("Searched: moole.dev.2@gmail.com");
-            Thread.sleep(2000);
+         search.clear();
+         System.out.println("Cleared search");
+         Thread.sleep(1000);
 
-            // Clear
-            search3.clear();
-            System.out.println("Cleared search");
-            Thread.sleep(1000);
+         // --- Search 3 ---
+         search = wait.until(ExpectedConditions.visibilityOfElementLocated(searchInput));
+         search.clear();
+         search.sendKeys("moole.dev.2@gmail.com");
+         System.out.println("Searched email 1");
+         Thread.sleep(2000);
 
-            // --- Search 4: moole.dev.3@gmail.com ---
-            WebElement search4 = driver.findElement(searchInput);
-            search4.clear();
-            search4.sendKeys("moole.dev.3@gmail.com");
-            System.out.println("Searched: moole.dev.3@gmail.com");
-            Thread.sleep(2000);
+         search.clear();
+         System.out.println("Cleared search");
+         Thread.sleep(1000);
 
-            // Clear
-            search4.clear();
-            System.out.println("Cleared search");
-            Thread.sleep(1000);
+         // --- Search 4 ---
+         search = wait.until(ExpectedConditions.visibilityOfElementLocated(searchInput));
+         search.clear();
+         search.sendKeys("moole.dev.3@gmail.com");
+         System.out.println("Searched email 2");
+         Thread.sleep(2000);
 
-            // --- Close / Exit search (press Escape or click outside) ---
-            search4.sendKeys(Keys.ESCAPE);
-            System.out.println("Search closed");
-            Thread.sleep(1000);
+         search.clear();
+         System.out.println("Cleared search");
+         Thread.sleep(1000);
 
+         // --- Exit search ---
+         search.sendKeys(Keys.ESCAPE);
+         System.out.println("Search closed");
+         Thread.sleep(1000);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

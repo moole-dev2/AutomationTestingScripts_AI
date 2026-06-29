@@ -66,25 +66,29 @@ public class MembersProj {
       // ================= MEMBERS → INVITE USER FLOW =================
 
       // Step 1: Click on "Members"
-      WebElement membersTab = wait.until(ExpectedConditions.elementToBeClickable(
-              By.xpath("//span[normalize-space()='Members']")
-      ));
-      membersTab.click();
+         By membersMenu = By.cssSelector("a[href='/app/settings/project/members']");
 
-      System.out.println("Clicked Members tab");
+         WebElement members = wait.until(
+             ExpectedConditions.elementToBeClickable(membersMenu));
+
+         ((JavascriptExecutor) driver).executeScript(
+             "arguments[0].click();", members);
+
+         System.out.println("Clicked Members");
       
    // Step 2: Click on Invite Member (Share button)
-      WebElement inviteMemberBtn = wait.until(ExpectedConditions.elementToBeClickable(
-              By.xpath("//span[@aria-label='Invite Member']")
-      ));
+         By inviteMemberBtn = By.xpath("//button[.//span[normalize-space()='Invite Member']]");
 
-      try {
-          inviteMemberBtn.click();
-      } catch (Exception e) {
-          ((JavascriptExecutor) driver).executeScript("arguments[0].click();", inviteMemberBtn);
-      }
-      Thread.sleep(1000);
-      System.out.println("Clicked Invite Member button");
+         WebElement inviteMember = wait.until(
+                 ExpectedConditions.elementToBeClickable(inviteMemberBtn));
+
+         ((JavascriptExecutor) driver).executeScript(
+                 "arguments[0].scrollIntoView({block:'center'});", inviteMember);
+
+         ((JavascriptExecutor) driver).executeScript(
+                 "arguments[0].click();", inviteMember);
+
+         System.out.println("Clicked Invite Member");
    // Step 3: Enter Email
       WebElement emailInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
               By.xpath("//input[@type='email' and @placeholder='Enter Your Email']")
@@ -95,30 +99,37 @@ public class MembersProj {
       System.out.println("Entered email");
 
       // Step 4: Click dropdown arrow (SVG inside span)
-      WebElement dropdownArrow = wait.until(ExpectedConditions.elementToBeClickable(
-              By.xpath("//button[@type='button']//span[contains(@class,'flex items-center')]//*[name()='svg']")
-      ));
+     
+      By selectRoleDropdown = By.xpath(
+    	        "//button[@aria-haspopup='listbox' and .//span[normalize-space()='Select Role']]"
+    	);
 
-      try {
-          dropdownArrow.click();
-      } catch (Exception e) {
-          ((JavascriptExecutor) driver).executeScript("arguments[0].click();", dropdownArrow);
-      }
-      Thread.sleep(3000);
-      System.out.println("Clicked dropdown arrow");
+    	WebElement dropdown = wait.until(
+    	        ExpectedConditions.elementToBeClickable(selectRoleDropdown)
+    	);
 
-      // Step 5: Select "Tester"
-      WebElement testerOption = wait.until(ExpectedConditions.elementToBeClickable(
-              By.xpath("//div[contains(@class,'cursor-pointer')]//p[text()='Tester']")
-      ));
+    	((JavascriptExecutor) driver).executeScript(
+    	        "arguments[0].scrollIntoView({block:'center'});", dropdown);
 
-      try {
-          testerOption.click();
-      } catch (Exception e) {
-          ((JavascriptExecutor) driver).executeScript("arguments[0].click();", testerOption);
-      }
-      Thread.sleep(1000);
-      System.out.println("Selected Tester role");
+    	((JavascriptExecutor) driver).executeScript(
+    	        "arguments[0].click();", dropdown);
+
+    	System.out.println("Select Role dropdown clicked");
+      
+      //---tester Option
+    	
+    	By testerOption = By.xpath("//div[@role='option' and .//span[normalize-space()='Tester']]");
+
+    	WebElement option = wait.until(
+    	        ExpectedConditions.elementToBeClickable(testerOption));
+
+    	((JavascriptExecutor) driver).executeScript(
+    	        "arguments[0].scrollIntoView({block:'center'});", option);
+
+    	((JavascriptExecutor) driver).executeScript(
+    	        "arguments[0].click();", option);
+
+    	System.out.println("Tester role selected");
 
       // Step 6: Click "Invite User" button
       WebElement inviteUserBtn = wait.until(ExpectedConditions.elementToBeClickable(
@@ -194,10 +205,10 @@ public class MembersProj {
       
       
    // Open dropdown
-      WebElement roleDropdown = wait.until(
+      WebElement roleDropdown1 = wait.until(
               ExpectedConditions.elementToBeClickable(
                       By.xpath("//button[@aria-label='Sort by Select Role']")));
-      roleDropdown.click();
+      roleDropdown1.click();
       Thread.sleep(1500);
 
       // Target the actual checkbox input inside the Developer row
@@ -218,68 +229,72 @@ public class MembersProj {
       System.out.println("Developer UNCHECKED | isSelected: " + checkboxToUncheck.isSelected());
       Thread.sleep(2000);
       // Close dropdown
-      roleDropdown.click();
+      roleDropdown1.click();
       System.out.println("Dropdown closed");
       
       
    // ================= SEARCH BAR OPERATIONS =================
 
-      By searchInput = By.xpath("//input[@id='searchQuery']");
+      By searchInput = By.xpath("//input[@placeholder='Search by name or email']");
 
-      // --- Search 1: Sirisha ---
-      WebElement search1 = wait.until(ExpectedConditions.elementToBeClickable(searchInput));
-      search1.clear();
-      search1.sendKeys("Sirisha");
-      System.out.println("Searched: Sirisha");
-      Thread.sleep(2000);
+   // --- Search: Sirisha ---
+   WebElement search1 = wait.until(
+           ExpectedConditions.visibilityOfElementLocated(searchInput));
+   search1.clear();
+   search1.sendKeys("Sirisha");
+   System.out.println("Searched: Sirisha");
 
-      // Clear
-      search1.clear();
-      // or use: search1.sendKeys(Keys.CONTROL + "a", Keys.DELETE);
-      System.out.println("Cleared search");
-      Thread.sleep(1000);
+   Thread.sleep(1500);
+   search1.clear();
+   System.out.println("Cleared: Sirisha");
 
-      // --- Search 2: Shree ---
-      WebElement search2 = driver.findElement(searchInput);
-      search2.clear();
-      search2.sendKeys("Shree");
-      System.out.println("Searched: Shree");
-      Thread.sleep(2000);
+   Thread.sleep(800);
 
-      // Clear
-      search2.clear();
-      System.out.println("Cleared search");
-      Thread.sleep(1000);
+   // --- Search: Shree ---
+   WebElement search2 = wait.until(
+           ExpectedConditions.visibilityOfElementLocated(searchInput));
+   search2.clear();
+   search2.sendKeys("Shree");
+   System.out.println("Searched: Shree");
 
-      // --- Search 3: moole.dev.2@gmail.com ---
-      WebElement search3 = driver.findElement(searchInput);
-      search3.clear();
-      search3.sendKeys("moole.dev.2@gmail.com");
-      System.out.println("Searched: moole.dev.2@gmail.com");
-      Thread.sleep(2000);
+   Thread.sleep(1500);
+   search2.clear();
+   System.out.println("Cleared: Shree");
 
-      // Clear
-      search3.clear();
-      System.out.println("Cleared search");
-      Thread.sleep(1000);
+   Thread.sleep(800);
 
-      // --- Search 4: moole.dev.3@gmail.com ---
-      WebElement search4 = driver.findElement(searchInput);
-      search4.clear();
-      search4.sendKeys("moole.dev.3@gmail.com");
-      System.out.println("Searched: moole.dev.3@gmail.com");
-      Thread.sleep(2000);
+   // --- Search: email 1 ---
+   WebElement search3 = wait.until(
+           ExpectedConditions.visibilityOfElementLocated(searchInput));
+   search3.clear();
+   search3.sendKeys("moole.dev.2@gmail.com");
+   System.out.println("Searched: email 1");
 
-      // Clear
-      search4.clear();
-      System.out.println("Cleared search");
-      Thread.sleep(1000);
+   Thread.sleep(1500);
+   search3.clear();
+   System.out.println("Cleared: email 1");
 
-      // --- Close / Exit search (press Escape or click outside) ---
-      search4.sendKeys(Keys.ESCAPE);
-      System.out.println("Search closed");
-      Thread.sleep(1000);
+   Thread.sleep(800);
 
+   // --- Search: email 2 ---
+   WebElement search4 = wait.until(
+           ExpectedConditions.visibilityOfElementLocated(searchInput));
+   search4.clear();
+   search4.sendKeys("moole.dev.3@gmail.com");
+   System.out.println("Searched: email 2");
+
+   Thread.sleep(1500);
+   search4.clear();
+   System.out.println("Cleared: email 2");
+
+   Thread.sleep(800);
+
+   // --- Close search ---
+   WebElement searchFinal = wait.until(
+           ExpectedConditions.elementToBeClickable(searchInput));
+   searchFinal.sendKeys(Keys.ESCAPE);
+
+   System.out.println("Search closed");
       
       
         } catch (Exception e) {

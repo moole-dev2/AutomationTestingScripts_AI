@@ -23,6 +23,9 @@ public class IntegrationGL {
 
         WebDriver driver = new ChromeDriver();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        
 
         try {
             // --- Step 1: Open Moole.ai and click Sign In ---
@@ -78,7 +81,7 @@ public class IntegrationGL {
  gitlabToken.sendKeys("glpat-8kDQ37D5CdcoQb9BYUe0u2M6MQpvOjEKdTpsMmlmdg8.01.1713cfbrl");
  			
 			//--- Click Save Button ---
-			WebElement saveBtn = wait.until(
+		/*	WebElement saveBtn = wait.until(
 			      ExpectedConditions.elementToBeClickable(
 			              By.xpath("//button[@type='submit' and contains(.,'Save')]")
 			      )
@@ -88,7 +91,15 @@ public class IntegrationGL {
 			
 			System.out.println("Clicked Save Button");
 			
-			Thread.sleep(3000);
+			Thread.sleep(3000);*/
+			 
+			 WebElement updateBtn = wait.until(
+			         ExpectedConditions.elementToBeClickable(
+			                 By.xpath("//button[contains(.,'Update')]")));
+			
+			 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", updateBtn);
+			// ================= WAIT AFTER UPDATE =================
+			 Thread.sleep(5000);
 			 // ================= CLICK REPOSITORIES =================
             WebElement repoMenu = wait.until(driver1 -> {
                 try {
@@ -106,22 +117,31 @@ public class IntegrationGL {
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", repoMenu);
 
             System.out.println("Repositories clicked");
+            
+            // --- Step 10b: Click "ADD Repositories" ---
+            WebElement addRepository = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[@type='button' and .//span[text()='Add Repository']]")));
 
-            // --- Step 10b: Click "Import Repositories" ---
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addRepository);
+            
+
+    /*        // --- Step 10b: Click "Import Repositories" ---
             WebElement importRepo = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//p[text()='Import Repositories']")
             ));
             importRepo.click();
-            System.out.println("Import Repositories page opened!");
+            System.out.println("Import Repositories page opened!");*/
 
-            WebElement gitlabBtn2 = wait.until(
-            	    ExpectedConditions.elementToBeClickable(
-            	        By.xpath("//button[.//text()[contains(.,'GitLab')] or contains(.,'GitLab')]")
-            	    )
-            	);
-            	gitlabBtn2.click();
-                System.out.println("GitLab repository option clicked!");
+            WebElement gitLab = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[.//span[normalize-space()='GitLab']]")));
 
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", gitLab);
+            js.executeScript("arguments[0].click();", gitLab);
+            System.out.println("GitLab button clicked.");
+            
+            
             // --- Step 10d: Click user "moole-dev-2" inside GitLab repositories ---
             WebElement gitlabUser = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//span[text()='moole-dev-2']")
