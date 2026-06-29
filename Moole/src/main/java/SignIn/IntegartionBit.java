@@ -72,26 +72,44 @@ public class IntegartionBit {
             // --- Step 7: Enter Bitbucket Email ---
             WebElement bbEmail = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.xpath("//input[@type='email']")));
-            bbEmail.sendKeys(" ");
+            bbEmail.sendKeys("");
 
             // --- Step 8: Enter API Token ---
             WebElement tokenField = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.xpath("//input[@type='password']")));
 
-            tokenField.sendKeys("ATATT3xFfGF0NQe_BmhVoHFA0UObX3O2OOmTzC_YPcVN24CkAGa8ZznWKZtzmJrJ-HhbdzyTpL0uuEHdcYr0y8lksRIX5rWBhpNIrM0WpO5CoNHEgFQNw6vM1jewL6DsYWELv4M5vgFnWlO5uTtu7vbc5Bios4pLK2-B3wJr9KQOL1n84onh46I=9FAE8D37");  // replace with your token
-            tokenField.sendKeys("");  // replace with your token
+            tokenField.sendKeys("ATATT3xFfGF0gxrUF8NF_uA0ZfNCSHlfCHCSvK2hlq2SUZzz8QOgOw85LMHTp9NlAiFcpYy0GheF3NiG1liOCjM8LLduZP8oTXMRX0Ia02HKpuVRGDqOYnjzqo5zxkFWtLmwwSzUvpHNvxFygYhbsk-td36jedTgPf87-orvz6EUD8BQGZNTq4I=991D4EED");  // replace with your token
+          //  tokenField.sendKeys("");  // replace with your token
 //>>>>>>> branch 'main' of https://github.com/moole-dev2/Moole.AI_AutomationTesting.git
 
-            // --- Step 9: Save Integration ---
-            WebElement updateBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[contains(text(),'Update')]")));
-            updateBtn.click();
-            try {
-	            Thread.sleep(5000);
-	        } catch (InterruptedException e) {
-	            e.printStackTrace();
-	        }
-         
+     /*       // --- Step 9: Save Integration ---
+      * 
+         // Click Save button
+         // Click Save button
+            WebElement saveButton = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[.//span[normalize-space()='Save']]")));
+
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", saveButton);
+            Thread.sleep(1000);
+
+            // Highlight (Optional)
+            js.executeScript("arguments[0].style.border='3px solid red';", saveButton);
+
+            // Click
+            js.executeScript("arguments[0].click();", saveButton);
+
+            Thread.sleep(2000);
+
+            System.out.println("Save button clicked successfully.");*/
+            
+            WebElement updateBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[contains(.,'Update')]")));
+
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", updateBtn);
          // ================= WAIT AFTER UPDATE =================
             Thread.sleep(5000);
 
@@ -118,59 +136,41 @@ public class IntegartionBit {
 
             System.out.println("Repositories clicked");
             
-            // --- Step 10b: Click "Import Repositories" ---
-            WebElement importRepo = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//p[text()='Import Repositories']")
-                    
-            ));
-            importRepo.click();
-            try {
-	            Thread.sleep(5000);
-	        } catch (InterruptedException e) {
-	            e.printStackTrace();
-	        }
-            System.out.println("Import Repositories page opened!");
+            // --- Step 10b: Click "ADD Repositories" ---
+            WebElement addRepository = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[@type='button' and .//span[text()='Add Repository']]")));
 
-            // --- Step 10c: Click Bitbucket inside Import Repositories ---
-            WebElement bitbucketRepo = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//span[text()='Bitbucket']")
-            ));
-            bitbucketRepo.click();
-            try {
-	            Thread.sleep(5000);
-	        } catch (InterruptedException e) {
-	            e.printStackTrace();
-	        }
-            Thread.sleep(500);
-            System.out.println("Bitbucket repository option clicked!");
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addRepository);
+            
+            WebElement repoSearch = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//input[@placeholder='Search your repositories']")));
 
-         // --- Wait for and click the user "moole-dev-2" ---
-            WebElement userElement = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//div[.//span[text()='moole-dev-2']]")
-            ));
-            userElement.click();
-            System.out.println("User 'moole-dev-2' clicked!");
+            repoSearch.clear();
+            repoSearch.sendKeys("node-test");
+            
+            WebElement repoRow = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//span[contains(text(),'node-test')]/ancestor::div[contains(@class,'cursor-pointer')]")));
 
-            // --- Wait for and click the repository "node-test" ---
-            WebElement repoElement = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//div[.//span[text()='node-test']]")
-            ));
-            repoElement.click();
-            System.out.println("Repository 'node-test' clicked!");
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", repoRow);
+            
+            WebElement importRepoBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[contains(.,'Import') and contains(.,'repository')]")));
 
-            // --- Wait for "Import & Scan" button and click ---
-            WebElement importScanBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[contains(.,'Import & Scan')]")
-            ));
-            Thread.sleep(5000); // optional pause to visualize the step
-            importScanBtn.click();
-            System.out.println("'Import & Scan' clicked!");
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", importRepoBtn);
+            Thread.sleep(3000);
 
+            
+            
+      
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             // Optional: close driver
-           //driver.quit();
+           driver.quit();
         }
     }
 }
