@@ -9,6 +9,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.*;
 
+import Utils.ConfigReader;
+
 public class ZeroDayDictionary {
 
     public static void main(String[] args) {
@@ -22,7 +24,7 @@ public class ZeroDayDictionary {
             // =====================================================
             // STEP 1: OPEN HOME PAGE
             // =====================================================
-            driver.get("https://moole.ai/");
+        	driver.get(ConfigReader.getProperty("baseUrl"));
             driver.manage().window().maximize();
             System.out.println("Home page opened");
 

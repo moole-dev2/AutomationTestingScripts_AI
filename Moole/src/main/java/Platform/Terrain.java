@@ -6,6 +6,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
 
+import Utils.ConfigReader;
+
 public class Terrain {
 
     public static void main(String[] args) {
@@ -19,7 +21,7 @@ public class Terrain {
             // =========================================================
             // OPEN WEBSITE
             // =========================================================
-            driver.get("https://moole.ai/");
+        	driver.get(ConfigReader.getProperty("baseUrl"));
             driver.manage().window().maximize();
             // HANDLE POPUP
             // =========================================================

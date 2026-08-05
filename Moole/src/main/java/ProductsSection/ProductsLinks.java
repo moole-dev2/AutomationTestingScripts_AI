@@ -6,6 +6,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import Utils.ConfigReader;
+
 public class ProductsLinks {
 
     public static void main(String[] args) throws Exception {
@@ -19,7 +21,7 @@ public class ProductsLinks {
             // =====================================================
             // STEP 1: OPEN WEBSITE
             // =====================================================
-            driver.get("https://moole.ai/");
+        	driver.get(ConfigReader.getProperty("baseUrl"));
             driver.manage().window().maximize();
             Thread.sleep(3000);
 

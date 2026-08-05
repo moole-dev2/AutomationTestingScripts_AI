@@ -7,6 +7,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import Utils.ConfigReader;
+
 import java.time.Duration;
 import java.util.Scanner;
 
@@ -24,7 +26,7 @@ public class LicensePage {
 
         try {
         	
-        	driver.get("https://moole.ai/");
+        	driver.get(ConfigReader.getProperty("baseUrl"));
             driver.manage().window().maximize();
             Thread.sleep(2000);
             System.out.println("Opened the Webiste");
@@ -47,11 +49,15 @@ public class LicensePage {
             wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.xpath("//input[@type='email']")))
                     .sendKeys("moole.dev.2@gmail.com");
+            WebElement signIn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[@data-tour='signup-submit']")
+                    )
+            );
 
-            wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[contains(.,'Continue')]")))
-                    .click();
+            signIn.click();
 
+            System.out.println("Sign in button clicked");
             System.out.println("Complete OTP and press ENTER");
             new Scanner(System.in).nextLine();
 

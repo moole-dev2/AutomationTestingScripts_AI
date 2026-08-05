@@ -8,6 +8,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
 
+import Utils.ConfigReader;
+
 public class PlatformDrop {
 
     public static void main(String[] args) {
@@ -22,7 +24,7 @@ public class PlatformDrop {
             // =========================================================
             // OPEN WEBSITE
             // =========================================================
-            driver.get("https://moole.ai/");
+        	driver.get(ConfigReader.getProperty("baseUrl"));
             driver.manage().window().maximize();
             Thread.sleep(2000);
 

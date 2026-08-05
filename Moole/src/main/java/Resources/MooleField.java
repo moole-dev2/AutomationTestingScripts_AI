@@ -8,6 +8,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import Utils.ConfigReader;
+
 public class MooleField {
 
     public static void main(String[] args) {
@@ -22,7 +24,7 @@ public class MooleField {
             // =========================================================
             // OPEN WEBSITE
             // =========================================================
-            driver.get("https://moole.ai/");
+        	driver.get(ConfigReader.getProperty("baseUrl"));
             driver.manage().window().maximize();
             Thread.sleep(3000);
 

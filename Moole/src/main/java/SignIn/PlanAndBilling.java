@@ -6,6 +6,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import Utils.ConfigReader;
+
 import java.time.Duration;
 import java.util.Scanner;
 
@@ -22,6 +24,7 @@ public class PlanAndBilling {
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
         try {
+        	driver.get(ConfigReader.getProperty("baseUrl"));
 
             // =========================
             // LOGIN PAGE
@@ -38,12 +41,15 @@ public class PlanAndBilling {
 
             slowMotion(2);
 
-            WebElement continueBtn = wait.until(
-                    ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(.,'Continue')]"))
+            WebElement signIn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[@data-tour='signup-submit']")
+                    )
             );
 
-            visibleClick(driver, continueBtn);
+            signIn.click();
 
+            System.out.println("Sign in button clicked");
             // =========================
             // OTP FLOW
             // =========================

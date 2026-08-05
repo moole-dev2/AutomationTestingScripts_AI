@@ -6,12 +6,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import Utils.ConfigReader;
+
 public class TryProduct {
 
 	public static void main(String[] args) {
 		WebDriver driver = new ChromeDriver();
         try {
-            driver.get("https://moole.ai/");
+        	driver.get(ConfigReader.getProperty("baseUrl"));
             driver.manage().window().maximize();
 
             Thread.sleep(2000);

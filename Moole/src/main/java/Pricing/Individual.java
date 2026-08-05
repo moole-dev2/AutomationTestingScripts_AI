@@ -8,6 +8,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.*;
 
+import Utils.ConfigReader;
+
 public class Individual {
 
     public static void main(String[] args) throws InterruptedException {
@@ -18,7 +20,7 @@ public class Individual {
 
         try {
             // ---------- Open Website ----------
-            driver.get("https://moole.ai/");
+        	driver.get(ConfigReader.getProperty("baseUrl"));
             driver.manage().window().maximize();
             Thread.sleep(2000);
 

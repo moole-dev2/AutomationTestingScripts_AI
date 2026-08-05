@@ -8,6 +8,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import Utils.ConfigReader;
+
 public class FooterLinksTest {
 
     public static void main(String[] args) throws Exception {
@@ -21,7 +23,7 @@ public class FooterLinksTest {
             // =========================================================
             // OPEN HOME PAGE
             // =========================================================
-            driver.get("https://moole.ai/");
+        	driver.get(ConfigReader.getProperty("baseUrl"));
             driver.manage().window().maximize();
 
             Thread.sleep(4000);

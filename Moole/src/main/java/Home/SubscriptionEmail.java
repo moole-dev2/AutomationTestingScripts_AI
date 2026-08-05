@@ -8,6 +8,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import Utils.ConfigReader;
 public class SubscriptionEmail {
 
 	public static void main(String[] args) {
@@ -17,7 +19,7 @@ public class SubscriptionEmail {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         try {
             // Open website
-            driver.get("https://moole.ai/");
+        	driver.get(ConfigReader.getProperty("baseUrl"));
             driver.manage().window().maximize();
             
             // =========================

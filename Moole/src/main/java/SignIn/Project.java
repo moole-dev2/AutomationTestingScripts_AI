@@ -9,6 +9,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import Utils.ConfigReader;
+
 import java.time.Duration;
 import java.util.Scanner;
 
@@ -25,6 +27,7 @@ public class Project {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
         try {
+        	driver.get(ConfigReader.getProperty("baseUrl"));
             // --- Step 1: Open Moole.ai and Sign In ---
             driver.get("https://moole.ai/auth/signin");
             driver.manage().window().maximize();
@@ -33,10 +36,15 @@ public class Project {
                     By.xpath("//input[@type='email']")));
             emailField.sendKeys("moole.dev.2@gmail.com");
 
-            WebElement continueBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[contains(text(),'Continue')]")));
-            continueBtn.click();
+            WebElement signIn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[@data-tour='signup-submit']")
+                    )
+            );
 
+            signIn.click();
+
+            System.out.println("Sign in button clicked");
             // --- Step 2: Wait for OTP manually ---
             System.out.println("Enter OTP manually in the browser, then press Enter here...");
             @SuppressWarnings("resource")
