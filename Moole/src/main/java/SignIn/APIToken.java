@@ -5,6 +5,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import Utils.ConfigReader;
+
 import java.time.Duration;
 import java.util.List;
 import java.util.Scanner;
@@ -18,6 +20,8 @@ public class APIToken {
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
         try {
+        	driver.get(ConfigReader.getProperty("baseUrl"));
+            driver.manage().window().maximize();
 
             // ---------------- LOGIN ----------------
             driver.get("https://moole.ai/auth/signin");
@@ -29,10 +33,15 @@ public class APIToken {
             );
             emailField.sendKeys("moole.dev.2@gmail.com");
 
-            WebElement continueBtn = wait.until(
-                    ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(),'Continue')]"))
+            WebElement signIn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[@data-tour='signup-submit']")
+                    )
             );
-            continueBtn.click();
+
+            signIn.click();
+
+            System.out.println("Sign in button clicked");
 
             System.out.println("Enter OTP manually...");
             new Scanner(System.in).nextLine();

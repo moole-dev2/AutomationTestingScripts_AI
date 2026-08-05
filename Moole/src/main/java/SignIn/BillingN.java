@@ -4,6 +4,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.*;
 
+import Utils.ConfigReader;
+
 import java.time.Duration;
 import java.util.List;
 import java.util.Scanner;
@@ -17,6 +19,8 @@ public class BillingN {
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
         try {
+        	driver.get(ConfigReader.getProperty("baseUrl"));
+            driver.manage().window().maximize();
 
             driver.manage().window().maximize();
 
@@ -28,10 +32,17 @@ public class BillingN {
                     ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='email']"))
             );
             email.sendKeys("moole.dev.2@gmail.com");
+            WebElement signIn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[@data-tour='signup-submit']")
+                    )
+            );
 
-            driver.findElement(By.xpath("//button[contains(text(),'Continue')]")).click();
+            signIn.click();
 
-            System.out.println("Enter OTP and press ENTER...");
+            System.out.println("Sign in button clicked");
+
+            System.out.println("Enter OTP manually...");
             new Scanner(System.in).nextLine();
 
             Thread.sleep(3000);

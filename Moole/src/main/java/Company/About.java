@@ -5,6 +5,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import Utils.ConfigReader;
 
 public class About {
 
@@ -18,8 +19,8 @@ public class About {
 	
 	        try {
 	            // ---------------- Open Home Page ----------------
-	            driver.get("https://moole.ai/");
-	            driver.manage().window().maximize();
+	        	driver.get(ConfigReader.getProperty("baseUrl"));
+	        	driver.manage().window().maximize();
 	            Thread.sleep(2000);
 
 	            // -------- Handle Privacy Popup --------

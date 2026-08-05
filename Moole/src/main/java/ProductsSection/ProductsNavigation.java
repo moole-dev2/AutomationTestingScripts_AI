@@ -5,6 +5,9 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import Utils.ConfigReader;
+
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ProductsNavigation {
@@ -18,7 +21,7 @@ public class ProductsNavigation {
 
         try {
             // ---------- Open Home Page ----------
-            driver.get("https://moole.ai/");
+        	driver.get(ConfigReader.getProperty("baseUrl"));
             driver.manage().window().maximize();
             Thread.sleep(2000);
 

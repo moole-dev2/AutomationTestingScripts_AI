@@ -7,6 +7,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.*;
 
+import Utils.ConfigReader;
+
 public class Contact {
 
     public static void main(String[] args) throws InterruptedException {
@@ -16,7 +18,7 @@ public class Contact {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         
             // -------- Open Website --------
-            driver.get("https://moole.ai/");
+    	driver.get(ConfigReader.getProperty("baseUrl"));
             driver.manage().window().maximize();
             Thread.sleep(2000);
 

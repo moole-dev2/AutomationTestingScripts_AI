@@ -9,6 +9,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import Utils.ConfigReader;
+
 public class SignIn {
 
     public static void main(String[] args) {
@@ -16,7 +18,7 @@ public class SignIn {
         WebDriver driver = new ChromeDriver();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 
-        driver.get("https://moole.ai/");
+    	driver.get(ConfigReader.getProperty("baseUrl"));
         driver.manage().window().maximize();
 
         driver.get("https://moole.ai/auth/signin"); 
@@ -35,12 +37,15 @@ public class SignIn {
         emailField.sendKeys("moole.dev.2@gmail.com");
         
         // -------- Click Continue --------
-        WebElement continueBtn = wait.until(
+        WebElement signIn = wait.until(
                 ExpectedConditions.elementToBeClickable(
-                        By.xpath("//button[contains(text(),'Continue')]")
+                        By.xpath("//button[@data-tour='signup-submit']")
                 )
         );
-        continueBtn.click();
+
+        signIn.click();
+
+        System.out.println("Sign in button clicked");
         //driver.quit();
     }
 }
