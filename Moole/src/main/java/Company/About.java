@@ -6,10 +6,13 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import Utils.ConfigReader;
+import org.testng.annotations.Test;
+
 
 public class About {
 
-	public static void main(String[] args) {
+	  @Test
+	    public void verifyAboutPage() {
 
 
 	WebDriver driver = new ChromeDriver();
