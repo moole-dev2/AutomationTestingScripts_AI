@@ -1,4 +1,4 @@
-package Home;
+package tests;
 
 import java.time.Duration;
 import java.util.List;
