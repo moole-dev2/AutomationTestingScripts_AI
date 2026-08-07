@@ -2,12 +2,12 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2026-08-05T20:05:21 CDT" name="Default suite" finished-at="2026-08-05T20:05:57 CDT" duration-ms="36362">
+  <suite started-at="2026-08-05T20:14:15 CDT" name="Default suite" finished-at="2026-08-05T20:14:25 CDT" duration-ms="10796">
     <groups>
     </groups>
-    <test started-at="2026-08-05T20:05:21 CDT" name="Default test" finished-at="2026-08-05T20:05:57 CDT" duration-ms="36362">
+    <test started-at="2026-08-05T20:14:15 CDT" name="Default test" finished-at="2026-08-05T20:14:25 CDT" duration-ms="10796">
       <class name="Company.About">
-        <test-method signature="verifyAboutPage()[pri:0, instance:Company.About@7f3b84b8]" started-at="2026-08-05T20:05:21 CDT" name="verifyAboutPage" finished-at="2026-08-05T20:05:57 CDT" duration-ms="36310" status="PASS">
+        <test-method signature="verifyAboutPage()[pri:0, instance:Company.About@7f3b84b8]" started-at="2026-08-05T20:14:15 CDT" name="verifyAboutPage" finished-at="2026-08-05T20:14:25 CDT" duration-ms="10760" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- verifyAboutPage -->
