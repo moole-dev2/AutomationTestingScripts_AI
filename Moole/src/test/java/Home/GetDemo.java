@@ -9,14 +9,16 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import Utils.ConfigReader;
-
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.annotations.Test;
+
+
 
 public class GetDemo {
 
-	public static void main(String[] args) {
+    @Test
+    public void GetDemoTest() throws InterruptedException {
 		WebDriver driver = new ChromeDriver();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         JavascriptExecutor js = (JavascriptExecutor) driver;

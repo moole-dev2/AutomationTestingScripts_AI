@@ -6,14 +6,15 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
 import Utils.ConfigReader;
+import org.testng.annotations.Test;
+
 
 public class TrustCenter {
 
     static WebDriver driver;
     static WebDriverWait wait;
     static JavascriptExecutor js;
-
-    public static void main(String[] args) {
+    @Test public void trustCenterTest() throws InterruptedException {
 
         driver = new ChromeDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));

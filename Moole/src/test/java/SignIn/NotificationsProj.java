@@ -7,16 +7,17 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import Utils.ConfigReader;
-
 import java.time.Duration;
 import java.util.Scanner;
+import org.testng.annotations.Test;
+
+
 
 public class NotificationsProj {
 
-    public static void main(String[] args) {
-
+    @Test
+    public void NotoficationsProjTest() throws InterruptedException {
         WebDriver driver = new ChromeDriver();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         JavascriptExecutor js = (JavascriptExecutor) driver;
