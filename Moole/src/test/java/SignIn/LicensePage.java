@@ -6,15 +6,17 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import Utils.ConfigReader;
-
 import java.time.Duration;
 import java.util.Scanner;
+import org.testng.annotations.Test;
+
+
 
 public class LicensePage {
 
-    public static void main(String[] args) {
+    @Test
+    public void LicensePageTest() throws InterruptedException {
 
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");

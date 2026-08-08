@@ -8,15 +8,17 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import Utils.ConfigReader;
-
 import java.time.Duration;
 import java.util.Scanner;
+import org.testng.annotations.Test;
+
+
 
 public class IntegartionBit {
 
-    public static void main(String[] args) {
+    @Test
+    public void IntegrationBitTest() throws InterruptedException {
 
         // ChromeOptions to use existing profile (so cookies/OTP sessions persist if needed) ---
         ChromeOptions options = new ChromeOptions();

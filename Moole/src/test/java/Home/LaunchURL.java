@@ -2,12 +2,16 @@ package Home;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-
 import Utils.ConfigReader;
+import org.testng.annotations.Test;
+
+
 
 public class LaunchURL {
 
-	public static void main(String[] args) {
+    @Test
+    public void LaunchURLTest() throws InterruptedException {
+
 		//System.setProperty("webdriver.chrome.driver","C:\\Selenium WebDriver\\ChromeDriver\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
     	driver.get(ConfigReader.getProperty("baseUrl"));

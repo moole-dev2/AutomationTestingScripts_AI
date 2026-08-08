@@ -5,12 +5,16 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-
 import Utils.ConfigReader;
+import org.testng.annotations.Test;
+
+
 
 public class TryProduct {
 
-	public static void main(String[] args) {
+    @Test
+    public void TryProductTest() throws InterruptedException {
+
 		WebDriver driver = new ChromeDriver();
         try {
         	driver.get(ConfigReader.getProperty("baseUrl"));

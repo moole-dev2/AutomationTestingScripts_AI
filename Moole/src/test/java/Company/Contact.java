@@ -9,9 +9,14 @@ import org.openqa.selenium.support.ui.*;
 
 import Utils.ConfigReader;
 
+import org.testng.annotations.Test;
+
+
+
 public class Contact {
 
-    public static void main(String[] args) throws InterruptedException {
+    @Test
+    public void contactTest() throws InterruptedException {
 
         WebDriver driver = new ChromeDriver();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));

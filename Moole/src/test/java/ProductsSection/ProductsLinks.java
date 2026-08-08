@@ -5,12 +5,15 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import Utils.ConfigReader;
+import org.testng.annotations.Test;
+
+
 
 public class ProductsLinks {
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void ProductLinksTest() throws InterruptedException {
 
         WebDriver driver = new ChromeDriver();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));

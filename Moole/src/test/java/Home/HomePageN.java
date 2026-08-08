@@ -9,8 +9,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import Utils.ConfigReader;
+import org.testng.annotations.Test;
 
 public class HomePageN {
 
@@ -41,7 +41,7 @@ public class HomePageN {
         }
     }
 
-    public static void main(String[] args) {
+    @Test public void homePageTest() throws InterruptedException {
 
         WebDriver driver = new ChromeDriver();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));

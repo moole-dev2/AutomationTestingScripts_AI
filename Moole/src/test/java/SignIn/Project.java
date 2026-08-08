@@ -13,10 +13,14 @@ import Utils.ConfigReader;
 
 import java.time.Duration;
 import java.util.Scanner;
+import org.testng.annotations.Test;
+
+
 
 public class Project {
 
-    public static void main(String[] args) throws InterruptedException {
+    @Test
+    public void ProjectTest() throws InterruptedException {
 
         // --- ChromeOptions to use existing profile ---
         ChromeOptions options = new ChromeOptions();

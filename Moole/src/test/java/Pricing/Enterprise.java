@@ -5,12 +5,15 @@ import java.time.Duration;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.*;
-
 import Utils.ConfigReader;
+import org.testng.annotations.Test;
+
+
 
 public class Enterprise {
 
-    public static void main(String[] args) throws InterruptedException {
+    @Test
+    public void EnterpriseTest() throws InterruptedException {
 
         WebDriver driver = new ChromeDriver();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));

@@ -6,16 +6,17 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import Utils.ConfigReader;
-
 import java.time.Duration;
 import java.util.Scanner;
+import org.testng.annotations.Test;
+
+
 
 public class DashboardPage {
 
-    public static void main(String[] args) {
-
+    @Test
+    public void DashboardPageTest() throws InterruptedException {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("user-data-dir=C:\\Users\\psiri\\AppData\\Local\\Google\\Chrome\\User Data");
         options.addArguments("profile-directory=Profile 1");
