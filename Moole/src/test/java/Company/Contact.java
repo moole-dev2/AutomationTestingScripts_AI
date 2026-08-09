@@ -3,15 +3,16 @@ package Company;
 import java.time.Duration;
 import java.util.Set;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.*;
-
-import Utils.ConfigReader;
-
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 
-
+import Utils.ConfigReader;
 
 public class Contact {
 
@@ -19,33 +20,73 @@ public class Contact {
     public void contactTest() throws InterruptedException {
 
         WebDriver driver = new ChromeDriver();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        WebDriverWait wait = new WebDriverWait(
+                driver, Duration.ofSeconds(20));
+
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        
+
+        try {
+
             // -------- Open Website --------
-    	driver.get(ConfigReader.getProperty("baseUrl"));
+            driver.get(ConfigReader.getProperty("baseUrl"));
+
             driver.manage().window().maximize();
+
             Thread.sleep(2000);
 
             // -------- Handle Privacy Popup --------
             try {
-                wait.until(ExpectedConditions.elementToBeClickable(
-                        By.xpath("//button[text()='OK']"))).click();
-            } catch (Exception e) {
-                System.out.println("No popup");
-            }
 
-        try {
-            // -------- Open Contact Us Page --------
-            driver.get("https://moole.ai/company/contact-us");
-            driver.manage().window().maximize();
+                WebElement okButton = wait.until(
+                        ExpectedConditions.elementToBeClickable(
+                                By.xpath("//button[normalize-space()='OK']")));
+
+                okButton.click();
+
+                System.out.println("Privacy popup closed");
+
+            } catch (Exception e) {
+
+                System.out.println("No privacy popup found");
+
+            }
+            
+         // ---------------- Click Company ----------------
+            WebElement companyBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[.//span[text()='Company']]")
+                    )
+            );
+            companyBtn.click();
+            System.out.println("Company menu clicked");
+            Thread.sleep(2000);
+
+            // -------- Click Contact Us --------
+            WebElement contactUs = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//span[normalize-space()='Contact Us']")));
+
+            js.executeScript(
+                    "arguments[0].scrollIntoView({block:'center'});",
+                    contactUs);
+
+            Thread.sleep(1000);
+
+            contactUs.click();
+
+            System.out.println("Clicked Contact Us");
+
             Thread.sleep(2000);
 
             // -------- Scroll Down Slowly --------
-            long height = (long) js.executeScript("return document.body.scrollHeight");
+            long height = (long) js.executeScript(
+                    "return document.body.scrollHeight");
 
             for (int i = 0; i < height; i += 400) {
+
                 js.executeScript("window.scrollBy(0,400)");
+
                 Thread.sleep(500);
             }
 
@@ -53,31 +94,39 @@ public class Contact {
 
             // -------- Scroll Up --------
             for (int i = 0; i < height; i += 400) {
+
                 js.executeScript("window.scrollBy(0,-400)");
+
                 Thread.sleep(500);
             }
 
             System.out.println("Scrolled back to top");
 
+            // -------- Locate Google Maps iframe --------
+            WebElement mapFrame = wait.until(
+                    ExpectedConditions.presenceOfElementLocated(
+                            By.xpath("//iframe[contains(@src,'google.com/maps')]")));
 
-            // -------- Scroll to Map --------
-            WebElement mapFrame = wait.until(ExpectedConditions.presenceOfElementLocated(
-                    By.xpath("//iframe[contains(@src,'google.com/maps')]")));
+            js.executeScript(
+                    "arguments[0].scrollIntoView({block:'center'});",
+                    mapFrame);
 
-            js.executeScript("arguments[0].scrollIntoView({block:'center'});", mapFrame);
             Thread.sleep(2000);
 
-            // -------- Switch to iframe --------
-            driver.switchTo().frame(mapFrame);
-
-            System.out.println("Inside map iframe");
+            System.out.println("Google Maps iframe found");
 
             // -------- Capture Parent Window --------
             String parentWindow = driver.getWindowHandle();
 
-            // -------- Click Map Link (opens new tab) --------
-            WebElement mapLink = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//a"))); // generic anchor inside map
+            // -------- Switch to Map iframe --------
+            driver.switchTo().frame(mapFrame);
+
+            System.out.println("Inside Google Maps iframe");
+
+            // -------- Find Map Link --------
+            WebElement mapLink = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//a")));
 
             mapLink.click();
 
@@ -85,47 +134,68 @@ public class Contact {
 
             Thread.sleep(3000);
 
-            // -------- Switch to New Tab --------
+            // -------- Get All Windows --------
             Set<String> allWindows = driver.getWindowHandles();
 
+            // -------- Switch to New Tab --------
             for (String window : allWindows) {
+
                 if (!window.equals(parentWindow)) {
+
                     driver.switchTo().window(window);
+
                     break;
                 }
             }
 
             System.out.println("Switched to new tab");
 
-            // -------- Validate Google Maps Opened --------
-            Thread.sleep(3000); // allow tab to fully load first
+            Thread.sleep(3000);
 
+            // -------- Validate Google Maps --------
             String currentUrl = driver.getCurrentUrl();
 
+            System.out.println("Current URL: " + currentUrl);
+
             if (currentUrl.contains("google.com/maps")) {
-                System.out.println("Google Maps opened successfully");
+
+                System.out.println(
+                        "Google Maps opened successfully");
+
             } else {
-                System.out.println("Current URL: " + currentUrl);
-                System.out.println("Google Maps validation skipped (tab still loading)");
+
+                System.out.println(
+                        "Google Maps URL not detected");
+
             }
-            Thread.sleep(3000);
+
+            Thread.sleep(2000);
 
             // -------- Close New Tab --------
             driver.close();
 
+            System.out.println("New tab closed");
+
             // -------- Switch Back to Parent --------
             driver.switchTo().window(parentWindow);
 
-            // Switch back from iframe as well
+            // -------- Exit iframe --------
             driver.switchTo().defaultContent();
 
-            System.out.println("Returned to Contact Us page");
-
+            System.out.println(
+                    "Returned to Contact Us page");
 
         } catch (Exception e) {
+
+            System.out.println(
+                    "Contact test failed: " + e.getMessage());
+
             e.printStackTrace();
+
         } finally {
+
             driver.quit();
+
             System.out.println("Browser closed");
         }
     }
