@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 
 
 
-public class Enterprise {
+public class PricingN {
 
     @Test
     public void EnterpriseTest() throws InterruptedException {
@@ -129,7 +129,7 @@ public class Enterprise {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-           // driver.quit();
+            driver.quit();
             System.out.println("Browser closed");
         }
     }

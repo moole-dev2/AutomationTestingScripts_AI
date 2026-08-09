@@ -479,22 +479,65 @@ public class VulerabilityQueryPage {
             }
 
             // ================= VALIDATE RESULT =================
+         // ================= VALIDATE RESULT =================
 
             List<WebElement> cveResults = driver.findElements(
-                    By.xpath("//*[contains(text(),'CVE-2026-22810')]")
+                    By.xpath("//div[normalize-space()='CVE-2026-22810']")
             );
 
             if (cveResults.size() > 0) {
 
                 System.out.println("CVE-2026-22810 FOUND successfully");
 
+                // ================= CLICK CVE-2026-22810 =================
+
+                WebElement cveLink = wait.until(
+                        ExpectedConditions.elementToBeClickable(
+                                By.xpath("//div[normalize-space()='CVE-2026-22810']")
+                        )
+                );
+
+                js.executeScript(
+                        "arguments[0].scrollIntoView({block:'center'});",
+                        cveLink
+                );
+
+                Thread.sleep(1000);
+
+                js.executeScript(
+                        "arguments[0].click();",
+                        cveLink
+                );
+
+                System.out.println("Clicked CVE-2026-22810");
+
+                Thread.sleep(5000);
+
             } else {
 
                 System.out.println("CVE-2026-22810 NOT FOUND");
 
             }
+            
+            // ================= SCROLL DETAIL PAGE =================
+            for (int i = 0; i < 8; i++) {
+                js.executeScript("window.scrollBy(0, 300);");
+                Thread.sleep(500);
+            }
+
+            System.out.println("Scrolled CVE detail page");
+            
+
+            // ================= GO BACK =================
+            driver.navigate().back();
+
+            wait.until(ExpectedConditions.urlContains("/vulnerability-database/query"));
 
             Thread.sleep(3000);
+
+            System.out.println("Returned to query page");
+            
+            
             
          // ================= CLEAR SEARCH BUTTON =================
 

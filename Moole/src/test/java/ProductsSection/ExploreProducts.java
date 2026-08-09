@@ -109,10 +109,25 @@ public class ExploreProducts {
             // CLICK EXPLORE INTEGRATIONS
             // =====================================================
 
-            clickElement(driver, js, wait,
-                    "//button[@type='button' and contains(.,'Explore Integrations')]",
-                    "Explore Integrations");
+            WebElement exploreIntegrations = wait.until(
+            	    ExpectedConditions.elementToBeClickable(
+            	        By.xpath("//a[normalize-space()='Explore Integrations']")
+            	    )
+            	);
 
+            	js.executeScript(
+            	    "arguments[0].scrollIntoView({block:'center'});",
+            	    exploreIntegrations
+            	);
+
+            	Thread.sleep(1000);
+
+            	js.executeScript(
+            	    "arguments[0].click();",
+            	    exploreIntegrations
+            	);
+
+            	System.out.println("Clicked Explore Integrations");
             // =====================================================
             // SCROLL INTEGRATIONS PAGE
             // =====================================================
