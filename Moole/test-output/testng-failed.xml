@@ -3,11 +3,11 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="Company.Contact">
+      <class name="Resources.MooleField">
         <methods>
-          <include name="contactTest"/>
+          <include name="MooleFieldTest"/>
         </methods>
-      </class> <!-- Company.Contact -->
+      </class> <!-- Resources.MooleField -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
