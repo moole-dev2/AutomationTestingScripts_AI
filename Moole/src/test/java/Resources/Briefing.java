@@ -45,18 +45,58 @@ public class Briefing {
             Thread.sleep(2000);
 
             // -------- 5. FAQ 1: "How do you map Dev/Test/Staging/Prod?" --------
-            WebElement devTestFAQ = wait.until(ExpectedConditions.presenceOfElementLocated(
-                    By.xpath("//h3[text()='How do you map Dev/Test/Staging/Prod?']/ancestor::button")));
-            clickVisible(driver, js, devTestFAQ);
-            System.out.println("Clicked FAQ: Dev/Test/Staging/Prod");
-            Thread.sleep(1000);
+         // =========================================================
+         // FAQ: How do you map Dev/Test/Staging/Prod?
+         // =========================================================
+
+         System.out.println("Looking for Dev/Test/Staging/Prod FAQ...");
+
+         WebElement devTestFAQ = wait.until(
+                 ExpectedConditions.presenceOfElementLocated(
+                         By.xpath("//button[contains(., 'How do you map Dev/Test/Staging/Prod')]")
+                 )
+         );
+
+         System.out.println("Found Dev/Test/Staging/Prod FAQ");
+
+         scrollToElementWithOffset(js, devTestFAQ, -100);
+
+         Thread.sleep(1000);
+
+         js.executeScript(
+                 "arguments[0].click();",
+                 devTestFAQ
+         );
+
+         System.out.println("Clicked FAQ: Dev/Test/Staging/Prod");
+
+         Thread.sleep(1500);
 
             // -------- 6. FAQ 2: "How quickly can we onboard..." --------
-            WebElement onboardingFAQ = wait.until(ExpectedConditions.presenceOfElementLocated(
-                    By.xpath("//h3[contains(text(),'How quickly can we onboard')]/ancestor::button")));
-            clickVisible(driver, js, onboardingFAQ);
-            System.out.println("Clicked FAQ: How quickly can we onboard");
-            Thread.sleep(1000);
+         // =========================================================
+         // FAQ: What about permissions and data security?
+         // =========================================================
+
+         WebElement dataSecurityFAQ = wait.until(
+                 ExpectedConditions.presenceOfElementLocated(
+                         By.xpath("//button[contains(., 'What about permissions and data security?')]")
+                 )
+         );
+
+         System.out.println("Found Data Security FAQ");
+
+         scrollToElementWithOffset(js, dataSecurityFAQ, -100);
+
+         Thread.sleep(1000);
+
+         js.executeScript(
+                 "arguments[0].click();",
+                 dataSecurityFAQ
+         );
+
+         System.out.println("Clicked FAQ: What about permissions and data security?");
+
+         Thread.sleep(1500);
 
             // -------- 7. Static Application Security Testing --------
             WebElement staticSAST = wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -66,11 +106,19 @@ public class Briefing {
             Thread.sleep(1000);
 
             // -------- 8. FAQ under SAST --------
-            WebElement sastFAQ = wait.until(ExpectedConditions.presenceOfElementLocated(
-                    By.xpath("//h3[contains(text(),'Will Moole SAST slow down our CI/CD pipelines')]/ancestor::button")));
-            clickVisible(driver, js, sastFAQ);
-            System.out.println("Clicked FAQ: Will Moole SAST slow down CI/CD");
-            Thread.sleep(1000);
+            WebElement sastFAQ = wait.until(
+            	    ExpectedConditions.elementToBeClickable(
+            	        By.xpath("//button[.//h6[contains(normalize-space(), 'Will Moole SAST slow down our CI/CD pipelines?')]]")
+            	    )
+            	);
+
+            	scrollToElementWithOffset(js, sastFAQ, -100);
+
+            	Thread.sleep(1000);
+
+            	js.executeScript("arguments[0].click();", sastFAQ);
+
+            	System.out.println("Clicked FAQ: Will Moole SAST slow down our CI/CD pipelines?");
 
             // -------- 9. Container Security --------
             WebElement containerSec = wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -89,11 +137,7 @@ public class Briefing {
             // -------- 11. Navigate back to Resources --------
             driver.navigate().back();
             Thread.sleep(2000);
-
-            // -------- 12. Navigate back to Home --------
-            driver.navigate().back();
-            Thread.sleep(2000);
-
+          
             System.out.println("Returned to Home Page");
 
         } catch (Exception e) {

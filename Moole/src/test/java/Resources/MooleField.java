@@ -79,15 +79,27 @@ public class MooleField {
             // =========================================================
             // CLICK READ MORE
             // =========================================================
-            WebElement readMore = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("(//button[contains(.,'Read More')])[1]")));
+            WebElement supplyChainReadMore = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//a[@href='/resources/case-studies/supply-chain-national-platform']")
+                    )
+            );
 
-            highlight(js, readMore, "blue");
-            js.executeScript("arguments[0].click();", readMore);
+            js.executeScript(
+                    "arguments[0].scrollIntoView({block:'center'});",
+                    supplyChainReadMore
+            );
 
-            Thread.sleep(3000);
+            Thread.sleep(1000);
 
-            scroll(js);
+            highlight(js, supplyChainReadMore, "red");
+
+            js.executeScript(
+                    "arguments[0].click();",
+                    supplyChainReadMore
+            );
+
+            System.out.println("Clicked Supply Chain - Read More");
 
             // =========================================================
             // CLICK SCENARIO
