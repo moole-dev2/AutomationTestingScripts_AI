@@ -59,7 +59,7 @@ public class SubscriptionEmail {
             js.executeScript("arguments[0].click();", subscribeBtn);
 
             System.out.println("Clicked Subscribe Button");
-            Thread.sleep(2000);
+            Thread.sleep(5000);
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
