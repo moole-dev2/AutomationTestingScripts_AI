@@ -3,11 +3,11 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="Resources.MooleField">
+      <class name="SignUp.BitBucketSignUp">
         <methods>
-          <include name="MooleFieldTest"/>
+          <include name="BitBucketSignUpTest"/>
         </methods>
-      </class> <!-- Resources.MooleField -->
+      </class> <!-- SignUp.BitBucketSignUp -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

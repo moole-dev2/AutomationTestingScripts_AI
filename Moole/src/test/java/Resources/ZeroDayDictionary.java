@@ -47,15 +47,47 @@ public class ZeroDayDictionary {
             } catch (Exception e) {
                 System.out.println("No Popup Found");
             }
+            
+         // =========================================================
+            // CLICK RESOURCES
+            // =========================================================
+
+            WebElement resources =
+                    wait.until(
+                            ExpectedConditions.elementToBeClickable(
+                                    By.xpath(
+                                            "//span[normalize-space()='Resources']"
+                                    )
+                            )
+                    );
+
+            resources.click();
+
+            System.out.println("Clicked Resources");
+
 
             // =====================================================
             // STEP 3: OPEN GLOSSARY PAGE
             // =====================================================
-            driver.get("https://moole.ai/resources/glossary");
-            driver.manage().window().maximize();
-            System.out.println("Glossary page opened");
+            WebElement zeroDayDictionary = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//span[normalize-space()='The Zero Day Dictionary']")
+                    )
+            );
 
-            Thread.sleep(3000);
+            js.executeScript(
+                    "arguments[0].scrollIntoView({block:'center'});",
+                    zeroDayDictionary
+            );
+
+            Thread.sleep(800);
+
+            js.executeScript(
+                    "arguments[0].click();",
+                    zeroDayDictionary
+            );
+
+            System.out.println("Clicked The Zero Day Dictionary");
 
             // =====================================================
             // STEP 4: CLICK A-Z SEQUENTIALLY

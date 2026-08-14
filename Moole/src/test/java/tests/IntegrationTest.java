@@ -25,6 +25,7 @@ public class IntegrationTest extends BaseTest {
         login.login("moole.dev.2@gmail.com");
 
         System.out.println("Complete OTP manually...");
+        
         new java.util.Scanner(System.in).nextLine();
 
         driver.get("https://moole.ai/app/settings/project/integrations");

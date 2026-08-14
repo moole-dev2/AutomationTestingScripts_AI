@@ -8,14 +8,17 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Test;
 
 import Utils.ConfigReader;
 
 import org.openqa.selenium.JavascriptExecutor;
 
+
 public class ResourcesLinksTest {
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void ResourcesLinksTestTest() throws InterruptedException {
 
         WebDriver driver = new ChromeDriver();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
@@ -43,13 +46,25 @@ public class ResourcesLinksTest {
             // STEP 1: The Signal
             js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
             Thread.sleep(2000);
-            WebElement theSignal = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//footer//a[normalize-space(text())='The Signal']")
-            ));
-            js.executeScript("arguments[0].scrollIntoView({behavior:'smooth', block:'center'});", theSignal);
-            Thread.sleep(1000);
-            js.executeScript("arguments[0].click();", theSignal);
-            System.out.println("Clicked 'The Signal' link");
+            WebElement mooleBlog = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//a[normalize-space()='The Moole Blog']")
+                    )
+            );
+
+            js.executeScript(
+                    "arguments[0].scrollIntoView({block:'center'});",
+                    mooleBlog
+            );
+
+            Thread.sleep(800);
+
+            js.executeScript(
+                    "arguments[0].click();",
+                    mooleBlog
+            );
+
+            System.out.println("Clicked The Moole Blog");
 
             // Scroll page
             for (int i = 0; i <= 2000; i += 100) {
@@ -77,7 +92,7 @@ public class ResourcesLinksTest {
             }
 
             // ================================
-            // STEP 3: The Moole Runbook
+    /*        // STEP 3: The Moole Runbook
             // ================================
             js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
             Thread.sleep(2000);
@@ -94,7 +109,7 @@ public class ResourcesLinksTest {
                 Thread.sleep(500);
             }
 
-            Thread.sleep(500);
+            Thread.sleep(500);*/
 
             // ================================
             // STEP 4: FAQs
