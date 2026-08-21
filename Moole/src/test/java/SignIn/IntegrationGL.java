@@ -91,8 +91,8 @@ public class IntegrationGL {
                     By.id("personalAccessToken")
             ));
             gitlabToken.clear();
- gitlabToken.sendKeys("glpat-UrziHv3jNAQWGVoWw8PbsWM6MQpvOjEKdTpsMmlmdg8.01.171gi7li2\r\n"
- 		);
+ //gitlabToken.sendKeys("glpat-UrziHv3jNAQWGVoWw8PbsWM6MQpvOjEKdTpsMmlmdg8.01.171gi7li2\r\n"
+ 	//	);
  			
 			//--- Click Save Button ---
 		/*	WebElement saveBtn = wait.until(
