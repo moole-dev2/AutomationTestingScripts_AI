@@ -50,6 +50,6 @@ public class SignIn {
         signIn.click();
 
         System.out.println("Sign in button clicked");
-        //driver.quit();
+        driver.quit();
     }
 }

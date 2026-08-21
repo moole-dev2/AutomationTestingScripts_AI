@@ -111,60 +111,144 @@ public class MembersProj {
 
       // Step 4: Click dropdown arrow (SVG inside span)
      
+      // Locate Select Role ONLY inside the Invite Member box
       By selectRoleDropdown = By.xpath(
-    	        "//button[@aria-haspopup='listbox' and .//span[normalize-space()='Select Role']]"
-    	);
+              "//div[.//h3[contains(normalize-space(),'Invite Member to')]" +
+              " and .//input[@name='email']" +
+              " and .//input[@name='role']]" +
+              "//button[@aria-label='Select Role']"
+      );
 
-    	WebElement dropdown = wait.until(
-    	        ExpectedConditions.elementToBeClickable(selectRoleDropdown)
-    	);
+      WebElement dropdown = wait.until(
+              ExpectedConditions.elementToBeClickable(selectRoleDropdown)
+      );
 
-    	((JavascriptExecutor) driver).executeScript(
-    	        "arguments[0].scrollIntoView({block:'center'});", dropdown);
+      js.executeScript(
+              "arguments[0].scrollIntoView({block:'center'});",
+              dropdown
+      );
 
-    	((JavascriptExecutor) driver).executeScript(
-    	        "arguments[0].click();", dropdown);
+      Thread.sleep(500);
 
-    	System.out.println("Select Role dropdown clicked");
-      
+      // Highlight the correct Select Role
+      js.executeScript(
+              "arguments[0].style.border='3px solid red';",
+              dropdown
+      );
+
+      Thread.sleep(500);
+
+      // Click the correct Select Role
+      js.executeScript(
+              "arguments[0].click();",
+              dropdown
+      );
+
+      System.out.println("Correct Select Role dropdown clicked");
       //---tester Option
     	
-    	By testerOption = By.xpath("//div[@role='option' and .//span[normalize-space()='Tester']]");
+      By testerOption = By.xpath(
+    	        "//div[contains(@class,'cursor-pointer') and " +
+    	        ".//span[normalize-space()='Tester']]"
+    	);
 
-    	WebElement option = wait.until(
-    	        ExpectedConditions.elementToBeClickable(testerOption));
+    	WebElement tester = wait.until(
+    	        ExpectedConditions.elementToBeClickable(testerOption)
+    	);
 
-    	((JavascriptExecutor) driver).executeScript(
-    	        "arguments[0].scrollIntoView({block:'center'});", option);
+    	js.executeScript(
+    	        "arguments[0].scrollIntoView({block:'center'});",
+    	        tester
+    	);
 
-    	((JavascriptExecutor) driver).executeScript(
-    	        "arguments[0].click();", option);
+    	Thread.sleep(500);
 
-    	System.out.println("Tester role selected");
+    	// Highlight Tester
+    	js.executeScript(
+    	        "arguments[0].style.border='3px solid red';",
+    	        tester
+    	);
+
+    	Thread.sleep(500);
+
+    	// Click Tester
+    	js.executeScript(
+    	        "arguments[0].click();",
+    	        tester
+    	);
+
+    	System.out.println("Tester role selected successfully");
 
       // Step 6: Click "Invite User" button
-      WebElement inviteUserBtn = wait.until(ExpectedConditions.elementToBeClickable(
-              By.xpath("//button[@type='submit' and .//span[normalize-space()='Invite User']]")
-      ));
+    	// ================= SEND INVITE =================
 
-      try {
-          inviteUserBtn.click();
-      } catch (Exception e) {
-          ((JavascriptExecutor) driver).executeScript("arguments[0].click();", inviteUserBtn);
-      }
-      Thread.sleep(2000);
-      System.out.println("USER INVITED SUCCESSFULLY!");
+    	By sendInviteBtn = By.xpath(
+    	        "//button[@type='submit' and .//span[normalize-space()='Send invite']]"
+    	);
+
+    	WebElement sendInvite = wait.until(
+    	        ExpectedConditions.elementToBeClickable(sendInviteBtn)
+    	);
+
+    	js.executeScript(
+    	        "arguments[0].scrollIntoView({block:'center'});",
+    	        sendInvite
+    	);
+
+    	Thread.sleep(500);
+
+    	// Highlight button
+    	js.executeScript(
+    	        "arguments[0].style.border='3px solid red';",
+    	        sendInvite
+    	);
+
+    	Thread.sleep(500);
+
+    	// Click Send invite
+    	js.executeScript(
+    	        "arguments[0].click();",
+    	        sendInvite
+    	);
+
+    	System.out.println("Send invite button clicked successfully");
     
       
    // Open Status dropdown only once
-      WebElement statusDropdown = wait.until(
-              ExpectedConditions.presenceOfElementLocated(
-                      By.xpath("//button[@aria-label='Sort by Status']")));
+    	// ================= STATUS DROPDOWN =================
 
-      js.executeScript("arguments[0].click();", statusDropdown);
+    	By statusDropdown = By.xpath(
+    	        "//button[@type='button' and @aria-haspopup='listbox' and @aria-label='Status']"
+    	);
 
-      Thread.sleep(2000);
+    	WebElement status = wait.until(
+    	        ExpectedConditions.elementToBeClickable(statusDropdown)
+    	);
 
+    	js.executeScript(
+    	        "arguments[0].scrollIntoView({block:'center'});",
+    	        status
+    	);
+
+    	Thread.sleep(500);
+
+    	// Highlight Status dropdown
+    	js.executeScript(
+    	        "arguments[0].style.border='3px solid red';",
+    	        status
+    	);
+
+    	Thread.sleep(500);
+
+    	// Click Status dropdown
+    	js.executeScript(
+    	        "arguments[0].click();",
+    	        status
+    	);
+
+    	System.out.println("Status dropdown clicked successfully");
+
+    	Thread.sleep(1500);
       // Locate Accepted
       WebElement accepted = wait.until(
               ExpectedConditions.presenceOfElementLocated(
@@ -212,14 +296,53 @@ public class MembersProj {
       Thread.sleep(2000);
 
       // Close dropdown at the end
-      js.executeScript("arguments[0].click();", statusDropdown);
-      
+      WebElement statusDropdown1 = wait.until(
+    	        ExpectedConditions.elementToBeClickable(
+    	                By.xpath("//button[@aria-label='Status']")
+    	        )
+    	);
+
+    	statusDropdown1.click();
+
+    	System.out.println("Status dropdown closed.");      
       
    // Open dropdown
-      WebElement roleDropdown1 = wait.until(
-              ExpectedConditions.elementToBeClickable(
-                      By.xpath("//button[@aria-label='Sort by Select Role']")));
-      roleDropdown1.click();
+   // ================= SELECT ROLE DROPDOWN =================
+
+      By selectRoleDropdown1 = By.xpath(
+              "//button[@type='button' " +
+              "and @aria-haspopup='listbox' " +
+              "and @aria-label='Select Role' " +
+              "and .//span[normalize-space()='Select Role']]"
+      );
+
+      WebElement roleDropdown = wait.until(
+              ExpectedConditions.elementToBeClickable(selectRoleDropdown1)
+      );
+
+      js.executeScript(
+              "arguments[0].scrollIntoView({block:'center'});",
+              roleDropdown
+      );
+
+      Thread.sleep(500);
+
+      // Highlight dropdown
+      js.executeScript(
+              "arguments[0].style.border='3px solid red';",
+              roleDropdown
+      );
+
+      Thread.sleep(500);
+
+      // Click dropdown
+      js.executeScript(
+              "arguments[0].click();",
+              roleDropdown
+      );
+
+      System.out.println("Select Role dropdown clicked successfully");
+
       Thread.sleep(1500);
 
       // Target the actual checkbox input inside the Developer row
@@ -240,7 +363,8 @@ public class MembersProj {
       System.out.println("Developer UNCHECKED | isSelected: " + checkboxToUncheck.isSelected());
       Thread.sleep(2000);
       // Close dropdown
-      roleDropdown1.click();
+      
+      js.executeScript("arguments[0].click();", roleDropdown);
       System.out.println("Dropdown closed");
       
       

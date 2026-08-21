@@ -38,11 +38,15 @@ public class NotificationProCreateEmail {
 
             emailField.sendKeys("moole.dev.2@gmail.com");
 
-            WebElement continueBtn = wait.until(
+            WebElement signIn = wait.until(
                     ExpectedConditions.elementToBeClickable(
-                            By.xpath("//button[contains(text(),'Continue')]")));
+                            By.xpath("//button[@data-tour='signup-submit']")
+                    )
+            );
 
-            continueBtn.click();
+            signIn.click();
+
+            System.out.println("Sign in button clicked");
 
             System.out.println("Enter OTP manually and press Enter...");
             new Scanner(System.in).nextLine();
@@ -105,19 +109,43 @@ public class NotificationProCreateEmail {
             
             // Dropdown ---
             
-            By allDropdown = By.xpath("//button[@aria-label='Sort by All']");
+         // ================= ALL DROPDOWN =================
 
-            WebElement dropdown = wait.until(
+            By allDropdown = By.xpath(
+                    "//button[@type='button' " +
+                    "and @aria-haspopup='listbox' " +
+                    "and @aria-label='All' " +
+                    "and .//span[normalize-space()='All']]"
+            );
+
+            WebElement allDropdownElement = wait.until(
                     ExpectedConditions.elementToBeClickable(allDropdown)
             );
 
-            ((JavascriptExecutor) driver).executeScript(
-                    "arguments[0].scrollIntoView({block:'center'});", dropdown);
+            js.executeScript(
+                    "arguments[0].scrollIntoView({block:'center'});",
+                    allDropdownElement
+            );
 
-            ((JavascriptExecutor) driver).executeScript(
-                    "arguments[0].click();", dropdown);
+            Thread.sleep(500);
+
+            // Highlight dropdown
+            js.executeScript(
+                    "arguments[0].style.border='3px solid red';",
+                    allDropdownElement
+            );
+
+            Thread.sleep(500);
+
+            // Click dropdown
+            js.executeScript(
+                    "arguments[0].click();",
+                    allDropdownElement
+            );
+
+            System.out.println("All dropdown clicked successfully");
+
             Thread.sleep(1000);
-            System.out.println("Clicked: All dropdown");
             
             // Select Low 
             

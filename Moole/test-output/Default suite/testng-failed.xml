@@ -3,11 +3,11 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="SignUp.BitBucketSignUp">
+      <class name="SignIn.Project">
         <methods>
-          <include name="BitBucketSignUpTest"/>
+          <include name="ProjectTest"/>
         </methods>
-      </class> <!-- SignUp.BitBucketSignUp -->
+      </class> <!-- SignIn.Project -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

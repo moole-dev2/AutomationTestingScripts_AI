@@ -113,7 +113,7 @@ public class PAT {
 
             System.out.println("Clicked Done button");
             
-            // Action Menu
+      /*      // Action Menu
             
             By actionsMenuBtn = By.xpath("//button[@aria-label='Open actions menu']");
 
@@ -123,7 +123,38 @@ public class PAT {
 
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", actionsMenu);
 
-            System.out.println("Actions menu clicked");
+            System.out.println("Actions menu clicked");*/
+            
+         // Action Menu - slide table horizontally to show Actions column
+
+            WebElement tableContainer = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//div[contains(@class,'overflow-auto') and .//table]")
+                    )
+            );
+
+            // Slide horizontally to the right
+            js.executeScript(
+                    "arguments[0].scrollLeft = arguments[0].scrollWidth;",
+                    tableContainer
+            );
+
+            Thread.sleep(1000);
+
+            By actionsMenuBtn = By.xpath("//button[@aria-label='Open actions menu']");
+
+            WebElement actionsMenu = wait.until(
+                    ExpectedConditions.elementToBeClickable(actionsMenuBtn)
+            );
+
+            js.executeScript(
+                    "arguments[0].scrollIntoView({block:'center', inline:'center'});",
+                    actionsMenu
+            );
+
+            js.executeScript("arguments[0].click();", actionsMenu);
+
+            System.out.println("Actions menu clicked after sliding table to the right");
             
          // --- Step 10: Click Regenerate Token icon ---
             By regenerateTokenBtn = By.xpath("//button[@role='menuitem' and .//span[normalize-space()='Regenerate Token']]");
@@ -155,7 +186,7 @@ public class PAT {
             Thread.sleep(2000);
             By actionsMenuBtn1 = By.xpath("//button[@aria-label='Open actions menu']");
 
-         // ================= ACTION MENU (REFRESH SAFE) =================
+  /*       // ================= ACTION MENU (REFRESH SAFE) =================
             By actionsMenuBtn11 = By.xpath("//button[@aria-label='Open actions menu']");
 
             for (int i = 0; i < 3; i++) {
@@ -173,7 +204,46 @@ public class PAT {
                     System.out.println("Retrying Actions menu click...");
                 }
             }
+*/
+         // ================= ACTION MENU AFTER REGENERATE =================
 
+            WebElement tableContainer1 = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//div[contains(@class,'overflow-auto') and .//table]")
+                    )
+            );
+
+            // Slide horizontally to the right again
+            js.executeScript(
+                    "arguments[0].scrollLeft = arguments[0].scrollWidth;",
+                    tableContainer1
+            );
+
+            Thread.sleep(1000);
+
+            By actionsMenuBtn11 = By.xpath("//button[@aria-label='Open actions menu']");
+
+            for (int i = 0; i < 3; i++) {
+                try {
+
+                    WebElement actionsMenu1 = wait.until(
+                            ExpectedConditions.elementToBeClickable(actionsMenuBtn11)
+                    );
+
+                    js.executeScript(
+                            "arguments[0].scrollIntoView({block:'center', inline:'center'});",
+                            actionsMenu1
+                    );
+
+                    js.executeScript("arguments[0].click();", actionsMenu1);
+
+                    System.out.println("Actions menu clicked after sliding table");
+                    break;
+
+                } catch (org.openqa.selenium.StaleElementReferenceException e) {
+                    System.out.println("Retrying Actions menu click...");
+                }
+            }
             Thread.sleep(1500);
 
          // ================= DELETE TOKEN =================
@@ -192,7 +262,7 @@ public class PAT {
             Thread.sleep(1000);
             System.out.println("Clicked Delete Token successfully");
 
-            // ================= REMOVE BUTTON =================
+    /*        // ================= REMOVE BUTTON =================
          // ================= CLICK REMOVE BUTTON =================
             By removeBtn = By.xpath("//button[@type='submit' and .//span[normalize-space()='Remove']]");
 
@@ -207,7 +277,31 @@ public class PAT {
             js.executeScript("arguments[0].click();", remove);
             Thread.sleep(1000);
 
-            System.out.println("Clicked Remove button successfully");
+            System.out.println("Clicked Remove button successfully");*/
+            
+         // ================= DELETE BUTTON =================
+
+            By deleteConfirmBtn = By.xpath(
+                    "//button[@type='submit' and .//span[normalize-space()='Delete']]"
+            );
+
+            WebElement deleteConfirm = wait.until(
+                    ExpectedConditions.elementToBeClickable(deleteConfirmBtn)
+            );
+
+            js.executeScript(
+                    "arguments[0].scrollIntoView({block:'center'});",
+                    deleteConfirm
+            );
+
+            js.executeScript(
+                    "arguments[0].click();",
+                    deleteConfirm
+            );
+
+            Thread.sleep(1000);
+
+            System.out.println("Clicked Delete button successfully");
             
             //Action
             
@@ -253,6 +347,11 @@ public class PAT {
 
             WebElement cancel = wait.until(
                     ExpectedConditions.elementToBeClickable(cancelBtn)
+            );
+         // Highlight Cancel button
+            js.executeScript(
+                    "arguments[0].style.border='3px solid red';",
+                    cancel
             );
 
             // scroll into view (important for modal dialogs)
