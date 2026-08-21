@@ -101,7 +101,8 @@ public class NotificationsOrg {
 
             critical.click();
             Thread.sleep(2000);*/
-            	// Click the "Sort by" dropdown
+            	
+         /*   	// Click the "Sort by" dropdown
             	
 
             	// Find dropdown
@@ -129,18 +130,87 @@ public class NotificationsOrg {
 
             	Thread.sleep(1000);
 
-            	js.executeScript("arguments[0].click();", critical);
-            
-            	WebElement updateBtn = wait.until(
+            	js.executeScript("arguments[0].click();", critical);*/
+            	
+            	// Click Severity dropdown
+            	WebElement severityDropdown = wait.until(
             	        ExpectedConditions.elementToBeClickable(
-            	                By.xpath("//button[normalize-space()='Update']")));
+            	                By.xpath("//button[@aria-label='Severity']")));
 
-            	((JavascriptExecutor) driver).executeScript(
-            	        "arguments[0].scrollIntoView({block:'center'});", updateBtn);
+            	js.executeScript(
+            	        "arguments[0].scrollIntoView({block:'center'});",
+            	        severityDropdown);
 
             	Thread.sleep(1000);
 
-            	((JavascriptExecutor) driver).executeScript("arguments[0].click();", updateBtn);
+            	// Highlight Severity dropdown
+            	js.executeScript(
+            	        "arguments[0].style.border='3px solid red';",
+            	        severityDropdown);
+
+            	// Click Severity dropdown
+            	js.executeScript(
+            	        "arguments[0].click();",
+            	        severityDropdown);
+
+            	Thread.sleep(2000);
+
+            	WebElement critical = wait.until(
+            	        ExpectedConditions.elementToBeClickable(
+            	                By.xpath("//div[contains(@class,'cursor-pointer') and .//span[normalize-space()='Critical']]")
+            	        )
+            	);
+
+            	js.executeScript(
+            	        "arguments[0].scrollIntoView({block:'center'});",
+            	        critical
+            	);
+
+            	Thread.sleep(1000);
+
+            	// Highlight Critical
+            	js.executeScript(
+            	        "arguments[0].style.border='3px solid red';",
+            	        critical
+            	);
+
+            	// Click Critical
+            	js.executeScript(
+            	        "arguments[0].click();",
+            	        critical
+            	);
+
+            	Thread.sleep(2000);
+
+            	System.out.println("Critical selected successfully.");
+            	
+            
+            	// ================= UPDATE BUTTON =================
+
+            	WebElement updateBtn = wait.until(
+            	        ExpectedConditions.elementToBeClickable(
+            	                By.xpath("//button[@type='button' and normalize-space()='Update']")
+            	        )
+            	);
+
+            	js.executeScript(
+            	        "arguments[0].scrollIntoView({block:'center'});",
+            	        updateBtn
+            	);
+
+            	Thread.sleep(1000);
+
+            	// Highlight Update button
+            	js.executeScript(
+            	        "arguments[0].style.border='3px solid red';",
+            	        updateBtn
+            	);
+
+            	// Click Update
+            	js.executeScript(
+            	        "arguments[0].click();",
+            	        updateBtn
+            	);
 
             	Thread.sleep(2000);
 

@@ -87,153 +87,225 @@ public class OrganizationPage {
         		orgBtn.click();
         		System.out.println("Organizations clicked");
         		// Wait for organization button (robust)
-        		WebElement orgButton = wait.until(driver1 -> {
-        		    try {
-        		        WebElement el = driver1.findElement(
-        		                By.xpath("//button[contains(normalize-space(),'Milky Way-Barnards Star')]")
-        		        );
-        		        return el.isDisplayed() ? el : null;
-        		    } catch (Exception e) {
-        		        return null;
-        		    }
-        		});
+        		WebElement button = wait.until(
+        		        ExpectedConditions.elementToBeClickable(
+        		                By.xpath("//button[@type='submit' and contains(normalize-space(), 'Messier 83-Ross 24816')]")
+        		        )
+        		);
 
-        		// Scroll + click safely
-        		((JavascriptExecutor) driver)
-        		        .executeScript("arguments[0].scrollIntoView({block:'center'});", orgButton);
-
-        		Thread.sleep(1000);
-
-        		try {
-        		    orgButton.click();
-        		} catch (Exception e) {
-        		    ((JavascriptExecutor) driver)
-        		            .executeScript("arguments[0].click();", orgButton);
-        		}
+        		button.click();
 
         		System.out.println("Organization clicked successfully");
 
          // Step 2: Click "Create Project" button
-         WebElement createProjectBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                 By.xpath("//button[contains(@class,'flex items-center cursor-pointer') and .//text()[contains(.,'Create Project')]]")
-         ));
+        		WebElement createProjectBtn = wait.until(ExpectedConditions.elementToBeClickable(
 
-         try {
-             createProjectBtn.click();
-         } catch (Exception e) {
-             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", createProjectBtn);
-         }
-         Thread.sleep(1000);
+        		        By.xpath("//button[@type='button' and .//span[normalize-space()='Create Project']]")
 
-         System.out.println("Clicked Create Project");
+        		));
+
+        		try {
+
+        		    createProjectBtn.click();
+
+        		} catch (Exception e) {
+
+        		    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", createProjectBtn);
+
+        		}
+
+        		Thread.sleep(1000);
+
+        		System.out.println("Clicked Create Project");
 
          // Step 3: Enter Project Name
-         WebElement projectNameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                 By.xpath("//input[@placeholder='Project name' and @name='resourceName']")
-         ));
-         projectNameInput.clear();
-         projectNameInput.sendKeys("Moole");
+        		WebElement projectNameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
+
+        		        By.xpath("//input[@name='resourceName' and @placeholder='Enter Project name']")
+
+        		));
+
+        		projectNameInput.clear();
+
+        		projectNameInput.sendKeys("Moole");
+
+        		Thread.sleep(1000);
+
+        		System.out.println("Entered Project Name: Moole");
          Thread.sleep(1000);
 
          System.out.println("Entered Project Name: Moole");
 
          // Step 4: Click "Browse"
          WebElement browseBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                 By.xpath("//span[text()='Browse']")
-         ));
 
-         try {
-             browseBtn.click();
-         } catch (Exception e) {
-             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", browseBtn);
-         }
-         Thread.sleep(1000);
+        	        By.xpath("//div[.//span[normalize-space()='Choose Location *']]//span[normalize-space()='Browse']")
+
+        	));
+
+        	try {
+
+        	    browseBtn.click();
+
+        	} catch (Exception e) {
+
+        	    ((JavascriptExecutor) driver).executeScript(
+        	            "arguments[0].click();",
+        	            browseBtn
+        	    );
+
+        	}
+
+        	Thread.sleep(1000);
+
 
          System.out.println("Clicked Browse");
          
-       
-         JavascriptExecutor js = (JavascriptExecutor) driver;
+         WebElement locationOption = wait.until(ExpectedConditions.elementToBeClickable(
 
-         WebElement arrowBtn = wait.until(ExpectedConditions.elementToBeClickable(
-        	        By.xpath("//button[contains(@class,'w-8 h-8') and contains(@class,'rounded-full') and contains(@class,'shrink-0')]")));
+        	        By.xpath("//span[normalize-space()='Messier 83-Ross 248-domain16']")
 
-        	js.executeScript("arguments[0].scrollIntoView({block:'center'});", arrowBtn);
+        	));
+
+        	try {
+
+        	    locationOption.click();
+
+        	} catch (Exception e) {
+
+        	    ((JavascriptExecutor) driver).executeScript(
+        	            "arguments[0].click();",
+        	            locationOption
+        	    );
+
+        	}
+
         	Thread.sleep(1000);
-        	js.executeScript("arguments[0].click();", arrowBtn);
-        	System.out.println("Arrow button clicked!");
+
+        	System.out.println("Selected location: Messier 83-Ross 248-domain16");
+        	
+        	WebElement selectBtn = wait.until(ExpectedConditions.elementToBeClickable(
+
+        	        By.xpath("//button[@type='button' and normalize-space()='Select']")
+
+        	));
+
+        	try {
+
+        	    selectBtn.click();
+
+        	} catch (Exception e) {
+
+        	    ((JavascriptExecutor) driver).executeScript(
+        	            "arguments[0].click();",
+        	            selectBtn
+        	    );
+
+        	}
+
         	Thread.sleep(1000);
 
-      // 2. Wait for "Testing" to appear
-      WebElement testing = wait.until(ExpectedConditions.visibilityOfElementLocated(
-              By.xpath("//span[normalize-space()='Testing']")
-      ));
+        	System.out.println("Clicked Select successfully");
+        	WebElement createBtn = wait.until(ExpectedConditions.elementToBeClickable(
 
-      // 3. Click Testing
-      js.executeScript("arguments[0].click();", testing);
-      Thread.sleep(1000);
+        	        By.xpath("//button[@type='submit' and normalize-space()='Create']")
 
-      // 4. Click Select button
-      WebElement selectBtn = wait.until(ExpectedConditions.elementToBeClickable(
-              By.xpath("//button[normalize-space()='Select']")
-      ));
+        	));
 
-      js.executeScript("arguments[0].click();", selectBtn);
-      Thread.sleep(1000);
-      System.out.println("SUCCESS: Testing selected and clicked Select");
+        	try {
 
-      // Step 7: Click the "Create" button to finalize project creation
-        WebElement createBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                 By.xpath("//button[@type='submit' and contains(@class,'bg-indigo') and text()='Create']")
-         ));
+        	    createBtn.click();
 
-         try {
-             createBtn.click();
-         } catch (Exception e) {
-             // JS fallback click for React UI
-             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", createBtn);
-         }
+        	} catch (Exception e) {
 
-         System.out.println("Clicked Create button, project created successfully!");
+        	    ((JavascriptExecutor) driver).executeScript(
+        	            "arguments[0].click();",
+        	            createBtn
+        	    );
+
+        	}
+
+        	Thread.sleep(1000);
+
+        	System.out.println("Clicked Create button successfully");
+        	
+        	// ================= CLICK PROJECT ARROW =================
+
+        	WebElement arrowBtn = wait.until(
+        	        ExpectedConditions.elementToBeClickable(
+        	                By.xpath("//span[normalize-space()='Messier 83-Ross 24816']/preceding-sibling::button")
+        	        )
+        	);
+
+        	arrowBtn.click();
+
+        	Thread.sleep(1500);
+
+        	System.out.println("Project arrow clicked successfully");
          
-      // Click first arrow
-         WebElement arrow1 = wait.until(ExpectedConditions.elementToBeClickable(
-                 By.xpath("(//button[contains(@class,'shrink-0') and contains(@class,'rounded-full') and not(contains(@class,'w-8'))])[1]")));
-         js.executeScript("arguments[0].scrollIntoView({block:'center'});", arrow1);
-         Thread.sleep(1000);
-         js.executeScript("arguments[0].click();", arrow1);
-         System.out.println("First arrow clicked!");
-         Thread.sleep(1500);
+        	WebElement actionsMenuBtn = wait.until(ExpectedConditions.elementToBeClickable(
 
-         // Click second arrow
-         WebElement arrow2 = wait.until(ExpectedConditions.elementToBeClickable(
-                 By.xpath("(//button[contains(@class,'shrink-0') and contains(@class,'rounded-full') and not(contains(@class,'w-8'))])[2]")));
-         js.executeScript("arguments[0].scrollIntoView({block:'center'});", arrow2);
-         Thread.sleep(1000);
-         js.executeScript("arguments[0].click();", arrow2);
-         System.out.println("Second arrow clicked!");
-         
+        	        By.xpath("//button[@type='button' and @aria-label='Open actions menu']")
+
+        	));
+
+        	try {
+
+        	    actionsMenuBtn.click();
+
+        	} catch (Exception e) {
+
+        	    ((JavascriptExecutor) driver).executeScript(
+        	            "arguments[0].click();",
+        	            actionsMenuBtn
+        	    );
+
+        	}
+
+        	Thread.sleep(1000);
+
+        	System.out.println("Clicked Open Actions Menu successfully");
+        	WebElement deleteProjectBtn = wait.until(ExpectedConditions.elementToBeClickable(
+        	        By.xpath("//button[@role='menuitem' and contains(.,'Delete Project')]")
+        	));
+
+        	try {
+        	    deleteProjectBtn.click();
+        	} catch (Exception e) {
+        	    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", deleteProjectBtn);
+        	}
+
+        	Thread.sleep(1000);
+
+        	System.out.println("Clicked Delete Project");
+        	
+        	WebElement deleteBtn = wait.until(ExpectedConditions.elementToBeClickable(
+        	        By.xpath("//button[@type='submit' and normalize-space()='Delete']")
+        	));
+
+        	try {
+        	    deleteBtn.click();
+        	} catch (Exception e) {
+        	    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", deleteBtn);
+        	}
+
+        	Thread.sleep(1000);
+
+        	System.out.println("Clicked Delete");
       // ======================================
       // SEARCH INPUT
       // ======================================
 
-      // Wait for page to load completely
-      Thread.sleep(5000);
+        	WebElement searchInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
+        	        By.xpath("//input[@placeholder='Search projects and folders']")
+        	));
 
-      // Scroll down slightly
-      ((JavascriptExecutor) driver).executeScript("window.scrollBy(0,500)");
-      Thread.sleep(2000);
+        	searchInput.clear();
+        	searchInput.sendKeys("Test");
 
-      // Locate Search Input
-      WebElement searchInput = wait.until(
-              ExpectedConditions.visibilityOfElementLocated(
-                      By.xpath("//input[@placeholder='Search projects and folders']")
-              )
-      );
-      ((JavascriptExecutor) driver).executeScript(
-              "arguments[0].scrollIntoView({block:'center'});",
-              searchInput
-      );
-      Thread.sleep(2000);
+        	Thread.sleep(2000);
+
+        	System.out.println("Searched: Test");
 
       // Type "Test"
       searchInput.clear();

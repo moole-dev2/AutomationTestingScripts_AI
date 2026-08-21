@@ -144,8 +144,16 @@ public class CreatTeam {
       }
 
       System.out.println("TEAM CREATED SUCCESSFULLY!");
+      
+      WebElement actionsButton = wait.until(
+    	        ExpectedConditions.elementToBeClickable(
+    	                By.xpath("//button[starts-with(@aria-label,'Actions for ')]")
+    	        )
+    	);
 
-      // 1. Click on the team name "Testing"
+    	actionsButton.click();
+
+   /*   // 1. Click on the team name "Testing"
       WebElement teamName = wait.until(ExpectedConditions.elementToBeClickable(
               By.xpath("//h2[contains(@class,'font-semibold') and text()='Testing']")
       ));
@@ -162,7 +170,7 @@ public class CreatTeam {
               By.xpath("//button[@type='submit' and normalize-space()='Add']")
       ));
       addButton.click();
-      System.out.println("ADDED THE REPOSITORY SUCCESSFULLY!");
+      System.out.println("ADDED THE REPOSITORY SUCCESSFULLY!");*/
 
       // =====================================================
       // DELETE REPOSITORY FROM TEAM
@@ -170,48 +178,140 @@ public class CreatTeam {
 
       Thread.sleep(4000);
 
-      // Click Delete Repository button
-      WebElement deleteRepoBtn = wait.until(
-              ExpectedConditions.elementToBeClickable(
-                      By.xpath("//button[@aria-label='Remove repository from team']")
-              )
-      );
+      WebElement deleteButton = wait.until(
+    	        ExpectedConditions.elementToBeClickable(
+    	                By.xpath("//button[@role='menuitem' and contains(normalize-space(.),'Delete')]")
+    	        )
+    	);
 
-      try {
-          deleteRepoBtn.click();
-      } catch (Exception e) {
-          ((JavascriptExecutor) driver).executeScript(
-                  "arguments[0].click();",
-                  deleteRepoBtn
-          );
-      }
+    	deleteButton.click();
 
       System.out.println("Clicked Delete Repository Button");
 
       Thread.sleep(3000);
+      
+      WebElement cancelButton = wait.until(
+    	        ExpectedConditions.elementToBeClickable(
+    	                By.xpath("//button[@type='button' and normalize-space()='Cancel']")
+    	        )
+    	);
 
-      // Click Remove button
-      WebElement removeBtn = wait.until(
-              ExpectedConditions.elementToBeClickable(
-                      By.xpath("//button[@type='submit' and normalize-space()='Remove']")
-              )
-      );
+    	cancelButton.click();
+          Thread.sleep(3000);
 
-      try {
-          removeBtn.click();
-      } catch (Exception e) {
-          ((JavascriptExecutor) driver).executeScript(
-                  "arguments[0].click();",
-                  removeBtn
-          );
-      }
+    	
+    	 WebElement actionsButton1 = wait.until(
+     	        ExpectedConditions.elementToBeClickable(
+     	                By.xpath("//button[starts-with(@aria-label,'Actions for ')]")
+     	        )
+     	);
 
-      System.out.println("Repository Removed Successfully!");
+     	actionsButton1.click();
+          Thread.sleep(3000);
+
+     	
+     	WebElement removeTeamButton = wait.until(
+     	        ExpectedConditions.elementToBeClickable(
+     	                By.xpath("//button[@role='menuitem' and .//span[normalize-space()='Remove Team']]")
+     	        )
+     	);
+
+     	removeTeamButton.click();
+        Thread.sleep(3000);
+
+        WebElement cancelButton1 = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        By.xpath("//button[@type='button' and normalize-space()='Cancel']")
+                )
+        );
+
+        cancelButton1.click();
+          Thread.sleep(3000);
+
+   	 WebElement actionsButton11 = wait.until(
+    	        ExpectedConditions.elementToBeClickable(
+    	                By.xpath("//button[starts-with(@aria-label,'Actions for ')]")
+    	        )
+    	);
+
+    	actionsButton11.click();
+    	
+    	WebElement editTeamButton = wait.until(
+    	        ExpectedConditions.elementToBeClickable(
+    	                By.xpath("//button[@role='menuitem' and .//span[normalize-space()='Edit Team']]")
+    	        )
+    	);
+
+    	editTeamButton.click();
+    	
+    	   WebElement teamInput1 = longWait.until(ExpectedConditions.visibilityOfElementLocated(
+    	              By.xpath("//input[@id='name']")
+    	      ));
+    	      try {
+    	          Thread.sleep(3000);
+    	      } catch (InterruptedException e) {
+    	          e.printStackTrace();
+    	      }
+    	      
+    	      System.out.println("Input field visible");
+
+    	      // Step 6: Enter team name
+    	      teamInput1.clear();
+    	      teamInput1.sendKeys("Test");
+    	      try {
+    	          Thread.sleep(3000);
+    	      } catch (InterruptedException e) {
+    	          e.printStackTrace();
+    	      }
+    	      System.out.println("Entered team name");
+    	      
+    	      WebElement saveButton = wait.until(
+    	    	        ExpectedConditions.elementToBeClickable(
+    	    	                By.xpath("//button[@type='submit' and normalize-space()='Save']")
+    	    	        )
+    	    	);
+
+    	    	saveButton.click();
+  	          Thread.sleep(3000);
+  	        WebElement actionsButton2 = wait.until(
+  	    	        ExpectedConditions.elementToBeClickable(
+  	    	                By.xpath("//button[starts-with(@aria-label,'Actions for ')]")
+  	    	        )
+  	    	);
+
+  	    	actionsButton2.click();
+	          Thread.sleep(3000);
+	          WebElement deleteButton1 = wait.until(
+	      	        ExpectedConditions.elementToBeClickable(
+	      	                By.xpath("//button[@role='menuitem' and contains(normalize-space(.),'Delete')]")
+	      	        )
+	      	);
+
+	      	deleteButton1.click();
+
+	        System.out.println("Clicked Delete Repository Button");
+
+	        Thread.sleep(3000);
+	        
+	        
+
+
+  	          
+   
+
+      // Click Delete button
+      WebElement deleteButton11 = wait.until(
+    	        ExpectedConditions.elementToBeClickable(
+    	                By.xpath("//button[@type='submit' and .//span[normalize-space()='Delete']]")
+    	        )
+    	);
+
+    	deleteButton11.click();
 
       Thread.sleep(3000);
       
    // ======================================
-   // BACK TO TEAMS PAGE
+ /*  // BACK TO TEAMS PAGE
    // ======================================
 
    WebElement teamsBreadcrumb = wait.until(
@@ -385,7 +485,7 @@ public class CreatTeam {
 		
 		System.out.println("Team Deleted Successfully");
 		
-		Thread.sleep(5000);
+		Thread.sleep(5000);*/
 
 
 

@@ -68,9 +68,13 @@ public class IntegrationGL {
             Thread.sleep(5000);
 
             // --- Step 6: Click Next ---
-            WebElement nextBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[contains(text(),'Next')]")));
-            nextBtn.click();
+            WebElement connectButton = wait.until(
+            	    ExpectedConditions.elementToBeClickable(
+            	        By.xpath("//button[@type='submit' and @name='provider' and @value='gitlab']")
+            	    )
+            	);
+
+            	connectButton.click();
             
             WebElement userName = wait.until(
                     ExpectedConditions.visibilityOfElementLocated(
@@ -87,7 +91,8 @@ public class IntegrationGL {
                     By.id("personalAccessToken")
             ));
             gitlabToken.clear();
- gitlabToken.sendKeys("glpat-8kDQ37D5CdcoQb9BYUe0u2M6MQpvOjEKdTpsMmlmdg8.01.1713cfbrl");
+ gitlabToken.sendKeys("glpat-UrziHv3jNAQWGVoWw8PbsWM6MQpvOjEKdTpsMmlmdg8.01.171gi7li2\r\n"
+ 		);
  			
 			//--- Click Save Button ---
 		/*	WebElement saveBtn = wait.until(
@@ -100,7 +105,7 @@ public class IntegrationGL {
 			
 			System.out.println("Clicked Save Button");
 			
-			Thread.sleep(3000);*/
+			Thread.sleep(3000);
 			 
 			 WebElement updateBtn = wait.until(
 			         ExpectedConditions.elementToBeClickable(
@@ -108,7 +113,7 @@ public class IntegrationGL {
 			
 			 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", updateBtn);
 			// ================= WAIT AFTER UPDATE =================
-			 Thread.sleep(5000);
+			 Thread.sleep(5000);*/
 			 // ================= CLICK REPOSITORIES =================
             WebElement repoMenu = wait.until(driver1 -> {
                 try {
@@ -142,7 +147,7 @@ public class IntegrationGL {
             importRepo.click();
             System.out.println("Import Repositories page opened!");*/
 
-            WebElement gitLab = wait.until(
+     /*       WebElement gitLab = wait.until(
                     ExpectedConditions.elementToBeClickable(
                             By.xpath("//button[.//span[normalize-space()='GitLab']]")));
 
@@ -163,14 +168,49 @@ public class IntegrationGL {
                     By.xpath("//span[text()='node-test']")
             ));
             nodeTestRepo.click();
-            System.out.println("Repository 'node-test' clicked!");
+            System.out.println("Repository 'node-test' clicked!");*/
+            
+        /*    WebElement checkboxButton = wait.until(
+            	    ExpectedConditions.elementToBeClickable(
+            	        By.xpath("//button[.//input[@type='checkbox']]")
+            	    )
+            	);
 
-            // --- Step 10f: Click "Import & Scan" button ---
+            	checkboxButton.click();
+    			Thread.sleep(1000);*/
+
+            	
+    			// Select repository checkbox
+    			WebElement checkboxButton = wait.until(
+    			        ExpectedConditions.elementToBeClickable(
+    			                By.xpath("//button[.//input[@type='checkbox']]")
+    			        )
+    			);
+
+    			checkboxButton.click();
+
+    			Thread.sleep(2000);
+
+    			// Click Import button - works for 1, 2, or many repositories
+    			WebElement importButton = wait.until(
+    			        ExpectedConditions.elementToBeClickable(
+    			                By.xpath("//button[contains(normalize-space(.), 'Import') and contains(normalize-space(.), 'repositor')]")
+    			        )
+    			);
+
+    			importButton.click();
+
+    			Thread.sleep(2000);
+
+    			System.out.println("Repository import button clicked!");
+
+
+        /*    // --- Step 10f: Click "Import & Scan" button ---
             WebElement importScanBtn = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[contains(.,'Import & Scan')]")
             ));
             Thread.sleep(15000);
-            importScanBtn.click();
+            importScanBtn.click();*/
             System.out.println("'Import & Scan' button clicked!");
 
         } catch (Exception e) {

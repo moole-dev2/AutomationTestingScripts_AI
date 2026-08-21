@@ -82,31 +82,79 @@ public class NotificationsProj {
             	);
             	
             	// Find dropdown
-            	WebElement dropdown = wait.until(
-            	        ExpectedConditions.presenceOfElementLocated(
-            	                By.xpath("//button[contains(@aria-label,'Sort by')]")));
+            	// ================= SEVERITY DROPDOWN =================
 
-            	js.executeScript("arguments[0].scrollIntoView({block:'center'});", dropdown);
+            	By severityDropdown = By.xpath(
+            	        "//button[@type='button' " +
+            	        "and @aria-haspopup='listbox' " +
+            	        "and @aria-label='Severity' " +
+            	        "and .//span[normalize-space()='Low']]"
+            	);
+
+            	WebElement severity = wait.until(
+            	        ExpectedConditions.elementToBeClickable(severityDropdown)
+            	);
+
+            	js.executeScript(
+            	        "arguments[0].scrollIntoView({block:'center'});",
+            	        severity
+            	);
+
+            	Thread.sleep(500);
+
+            	// Highlight dropdown
+            	js.executeScript(
+            	        "arguments[0].style.border='3px solid red';",
+            	        severity
+            	);
+
+            	Thread.sleep(500);
+
+            	// Click dropdown
+            	js.executeScript(
+            	        "arguments[0].click();",
+            	        severity
+            	);
+
+            	System.out.println("Severity dropdown clicked successfully");
+
             	Thread.sleep(1000);
-
-            	// Highlight (optional)
-            	js.executeScript("arguments[0].style.border='3px solid red';", dropdown);
-
-            	// Click using JavaScript
-            	js.executeScript("arguments[0].click();", dropdown);
-
-            	Thread.sleep(3000);
 
             	// Now locate Critical
-            	WebElement critical = wait.until(
-            	        ExpectedConditions.presenceOfElementLocated(
-            	                By.xpath("//p[text()='Critical']")));
+            	// ================= SELECT CRITICAL =================
 
-            	js.executeScript("arguments[0].scrollIntoView({block:'center'});", critical);
+            	By criticalOption = By.xpath(
+            	        "//div[contains(@class,'cursor-pointer') and .//span[normalize-space()='Critical']]"
+            	);
+
+            	WebElement critical = wait.until(
+            	        ExpectedConditions.elementToBeClickable(criticalOption)
+            	);
+
+            	js.executeScript(
+            	        "arguments[0].scrollIntoView({block:'center'});",
+            	        critical
+            	);
+
+            	Thread.sleep(500);
+
+            	// Highlight Critical
+            	js.executeScript(
+            	        "arguments[0].style.border='3px solid red';",
+            	        critical
+            	);
+
+            	Thread.sleep(500);
+
+            	// Click Critical
+            	js.executeScript(
+            	        "arguments[0].click();",
+            	        critical
+            	);
+
+            	System.out.println("Critical selected successfully");
 
             	Thread.sleep(1000);
-
-            	js.executeScript("arguments[0].click();", critical);
             
             	
         	

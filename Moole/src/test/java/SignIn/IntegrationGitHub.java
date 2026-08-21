@@ -171,7 +171,7 @@ public class IntegrationGitHub {
             	        "arguments[0].click();", importBtn);
 
             	System.out.println("Import Repository button clicked successfully.");
-            	Thread.sleep(1000);
+            	Thread.sleep(5000);
 
 
         } catch (Exception e) {

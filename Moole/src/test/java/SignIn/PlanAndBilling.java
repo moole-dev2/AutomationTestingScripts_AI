@@ -119,17 +119,31 @@ public class PlanAndBilling {
             // =========================
             // CANCEL SUBSCRIPTION
             // =========================
+            
             WebElement cancel = wait.until(
-                    ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'Cancel Subscription')]"))
+                    ExpectedConditions.presenceOfElementLocated(
+                            By.xpath("//button[normalize-space()='Cancel Subscription']")
+                    )
             );
 
             visibleClick(driver, cancel);
+
+            System.out.println("Clicked Cancel Subscription");
+
+            slowMotion(4);
+
+			WebElement cancel1 = wait.until(
+			        ExpectedConditions.presenceOfElementLocated(
+			                By.xpath("//button[@type='submit' and .//span[normalize-space()='Cancel Subscription']]")
+			        )
+			);
+            visibleClick(driver, cancel1);
             System.out.println("Clicked Cancel Subscription");
 
             slowMotion(4);
 
             // =========================
-            // KEEP PLAN
+      /*      // KEEP PLAN
             // =========================
             WebElement keepPlan = wait.until(
                     ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'Keep Plan')]"))
@@ -138,7 +152,7 @@ public class PlanAndBilling {
             visibleClick(driver, keepPlan);
             System.out.println("Clicked Keep Plan");
 
-            slowMotion(4);
+            slowMotion(4);*/
          // =========================
          // UPGRADE PLAN
          // =========================

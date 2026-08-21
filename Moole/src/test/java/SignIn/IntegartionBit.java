@@ -73,53 +73,53 @@ public class IntegartionBit {
 	        }
 
             // --- Step 6: Click Next ---
-            WebElement nextBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[contains(text(),'Next')]")));
-            nextBtn.click();
+            WebElement connect = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[normalize-space()='Connect']")
+                    )
+            );
 
+            connect.click();
             // --- Step 7: Enter Bitbucket Email ---
-            WebElement bbEmail = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//input[@type='email']")));
-            bbEmail.sendKeys("");
+            WebElement name = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//input[@id='name' and @type='text']")
+                    )
+            );
+
+            name.sendKeys("my_bitbucket_credentials");
 
             // --- Step 8: Enter API Token ---
-            WebElement tokenField = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//input[@type='password']")));
+            WebElement jsonKeyFile = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//input[@id='jsonKeyFile' and @type='text']")
+                    )
+            );
 
-            tokenField.sendKeys("ATATT3xFfGF0gxrUF8NF_uA0ZfNCSHlfCHCSvK2hlq2SUZzz8QOgOw85LMHTp9NlAiFcpYy0GheF3NiG1liOCjM8LLduZP8oTXMRX0Ia02HKpuVRGDqOYnjzqo5zxkFWtLmwwSzUvpHNvxFygYhbsk-td36jedTgPf87-orvz6EUD8BQGZNTq4I=991D4EED");  // replace with your token
+
+            jsonKeyFile.sendKeys("ATATT3xFfGF0o7g2Nny9hMI0wo97SSPOKR5VLORhM6rXYJu2RghL4_q44DfBi62vsJavEcaVOSbPayLmi6xVsDnSYc4KdrYpGeGsBizRSP-gBNbGtjtUkS9Wv4dK1NAMjPAs8at6RrRaxk-m1sw75khDHg3Nox_uYE3w-VfpyqEK-AtIPGl5aKM=E3C2DC72");
+
+        //    tokenField.sendKeys("ATATT3xFfGF0gxrUF8NF_uA0ZfNCSHlfCHCSvK2hlq2SUZzz8QOgOw85LMHTp9NlAiFcpYy0GheF3NiG1liOCjM8LLduZP8oTXMRX0Ia02HKpuVRGDqOYnjzqo5zxkFWtLmwwSzUvpHNvxFygYhbsk-td36jedTgPf87-orvz6EUD8BQGZNTq4I=991D4EED");  // replace with your token
           //  tokenField.sendKeys("");  // replace with your token
 //>>>>>>> branch 'main' of https://github.com/moole-dev2/Moole.AI_AutomationTesting.git
 
-     /*       // --- Step 9: Save Integration ---
-      * 
+           // --- Step 9: Save Integration ---
+      
          // Click Save button
-         // Click Save button
-            WebElement saveButton = wait.until(
+            WebElement save = wait.until(
                     ExpectedConditions.elementToBeClickable(
-                            By.xpath("//button[.//span[normalize-space()='Save']]")));
+                            By.xpath("//button[normalize-space()='Save']")
+                    )
+            );
 
-            JavascriptExecutor js = (JavascriptExecutor) driver;
-
-            js.executeScript("arguments[0].scrollIntoView({block:'center'});", saveButton);
-            Thread.sleep(1000);
-
-            // Highlight (Optional)
-            js.executeScript("arguments[0].style.border='3px solid red';", saveButton);
-
-            // Click
-            js.executeScript("arguments[0].click();", saveButton);
-
-            Thread.sleep(2000);
-
-            System.out.println("Save button clicked successfully.");*/
-            
-            WebElement updateBtn = wait.until(
+            save.click();
+       /*     WebElement updateBtn = wait.until(
                     ExpectedConditions.elementToBeClickable(
                             By.xpath("//button[contains(.,'Update')]")));
 
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", updateBtn);
          // ================= WAIT AFTER UPDATE =================
-            Thread.sleep(5000);
+            Thread.sleep(5000);*/
 
             // wait for page stability
             wait.until(ExpectedConditions.invisibilityOfElementLocated(
@@ -178,7 +178,7 @@ public class IntegartionBit {
             e.printStackTrace();
         } finally {
             // Optional: close driver
-           driver.quit();
+           //driver.quit();
         }
     }
 }

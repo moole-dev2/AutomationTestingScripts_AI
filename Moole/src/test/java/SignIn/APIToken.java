@@ -438,30 +438,137 @@ public class APIToken {
     }
 
     // ================= FULL DELETE FLOW (open menu -> Delete -> type name -> Remove) =================
+ // ================= FULL DELETE FLOW =================
     public static void deleteToken(WebDriver driver,
                                    WebDriverWait wait,
                                    JavascriptExecutor js,
-                                   String tokenNameText) {
+                                   String tokenNameText) throws InterruptedException {
 
+        // Open Actions Menu -> Delete Token
         clickDeleteOption(driver, wait, js);
 
-        WebElement deleteInput = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='text']"))
-        );
+        System.out.println("Clicked Delete Token option");
 
+        Thread.sleep(1500);
+
+        // =========================================================
+        // ENTER TOKEN NAME
+        // =========================================================
+        // Try to find the confirmation input using common attributes
+        // instead of only input[@type='text'].
+
+        WebElement deleteInput = null;
+
+        String[] inputPaths = {
+                "//input[contains(@placeholder,'token')]",
+                "//input[contains(@placeholder,'Token')]",
+                "//input[contains(@placeholder,'name')]",
+                "//input[contains(@placeholder,'Name')]",
+                "//input[contains(@name,'token')]",
+                "//input[contains(@name,'Token')]",
+                "//input[contains(@name,'name')]",
+                "//input[contains(@name,'Name')]",
+                "//input[@type='text']"
+        };
+
+        for (String xpath : inputPaths) {
+
+            try {
+
+                List<WebElement> inputs =
+                        driver.findElements(By.xpath(xpath));
+
+                for (WebElement input : inputs) {
+
+                    if (input.isDisplayed() && input.isEnabled()) {
+
+                        deleteInput = input;
+
+                        System.out.println(
+                                "Delete confirmation input found using: "
+                                        + xpath
+                        );
+
+                        break;
+                    }
+                }
+
+                if (deleteInput != null) {
+                    break;
+                }
+
+            } catch (Exception ignored) {
+            }
+        }
+
+        if (deleteInput == null) {
+
+            System.out.println(
+                    "Delete confirmation input was not found."
+            );
+
+            throw new RuntimeException(
+                    "Delete confirmation input was not found."
+            );
+        }
+
+        deleteInput.clear();
         deleteInput.sendKeys(tokenNameText);
 
-        WebElement removeBtn = wait.until(
+        System.out.println(
+                "Entered token name: " + tokenNameText
+        );
+
+        Thread.sleep(500);
+
+        // =========================================================
+        // NEW DELETE BUTTON
+        // =========================================================
+        //
+        // HTML:
+        //
+        // <button type="submit"
+        //        class="... bg-error ...">
+        //     <span class="flex items-center gap-2">
+        //         Delete
+        //     </span>
+        // </button>
+        //
+        // =========================================================
+
+        WebElement deleteBtn = wait.until(
                 ExpectedConditions.elementToBeClickable(
-                        By.xpath("//button[@type='submit' and .//span[text()='Remove']]")
+                        By.xpath(
+                                "//button[@type='submit' " +
+                                "and contains(@class,'bg-error') " +
+                                "and .//span[normalize-space()='Delete']]"
+                        )
                 )
         );
 
-        js.executeScript("arguments[0].click();", removeBtn);
+        js.executeScript(
+                "arguments[0].scrollIntoView({block:'center'});",
+                deleteBtn
+        );
 
-        System.out.println("Deleted Token");
+        Thread.sleep(500);
+
+        try {
+
+            deleteBtn.click();
+
+        } catch (Exception e) {
+
+            js.executeScript(
+                    "arguments[0].click();",
+                    deleteBtn
+            );
+        }
+
+        System.out.println("Deleted Token Successfully");
+
+        Thread.sleep(2000);
     }
-
     // ================= DEBUG HELPER =================
     public static void dumpButtons(JavascriptExecutor js, String reason) {
         System.out.println(reason);
