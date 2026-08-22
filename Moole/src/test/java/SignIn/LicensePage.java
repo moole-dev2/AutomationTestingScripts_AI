@@ -6,12 +6,13 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import Utils.ConfigReader;
+
 import java.time.Duration;
 import java.util.Scanner;
+
 import org.testng.annotations.Test;
-
-
 
 public class LicensePage {
 
@@ -22,35 +23,67 @@ public class LicensePage {
         options.addArguments("--start-maximized");
 
         WebDriver driver = new ChromeDriver(options);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+
+        WebDriverWait wait = new WebDriverWait(
+                driver,
+                Duration.ofSeconds(30)
+        );
+
         JavascriptExecutor js = (JavascriptExecutor) driver;
         Actions actions = new Actions(driver);
 
         try {
-        	
-        	driver.get(ConfigReader.getProperty("baseUrl"));
+
+            // =====================================================
+            // OPEN WEBSITE
+            // =====================================================
+
+            driver.get(ConfigReader.getProperty("baseUrl"));
             driver.manage().window().maximize();
+
             Thread.sleep(2000);
-            System.out.println("Opened the Webiste");
+
+            System.out.println("Opened the Website");
 
 
-            // ---------- Handle Privacy Popup ----------
+            // =====================================================
+            // HANDLE PRIVACY POPUP
+            // =====================================================
+
             try {
-                WebElement okBtn = driver.findElement(By.xpath("//button[normalize-space()='OK']"));
-                js.executeScript("arguments[0].click();", okBtn);
+
+                WebElement okBtn = driver.findElement(
+                        By.xpath("//button[normalize-space()='OK']")
+                );
+
+                js.executeScript(
+                        "arguments[0].click();",
+                        okBtn
+                );
+
                 Thread.sleep(1000);
+
                 System.out.println("Privacy popup closed");
+
             } catch (Exception e) {
+
                 System.out.println("No popup present");
             }
-            
 
-            // ================= LOGIN =================
+
+            // =====================================================
+            // LOGIN
+            // =====================================================
+
             driver.get("https://moole.ai/auth/signin");
 
-            wait.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//input[@type='email']")))
-                    .sendKeys("moole.dev.2@gmail.com");
+            wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//input[@type='email']")
+                    )
+            ).sendKeys("moole.dev.2@gmail.com");
+
+
             WebElement signIn = wait.until(
                     ExpectedConditions.elementToBeClickable(
                             By.xpath("//button[@data-tour='signup-submit']")
@@ -61,435 +94,933 @@ public class LicensePage {
 
             System.out.println("Sign in button clicked");
             System.out.println("Complete OTP and press ENTER");
+
             new Scanner(System.in).nextLine();
 
             sleep(2000);
 
-            // ================= OPEN LICENSE PAGE =================
-            driver.get("https://moole.ai/app/settings/organization/license-policy");
+
+            // =====================================================
+            // OPEN LICENSE POLICY PAGE
+            // =====================================================
+
+            driver.get(
+                    "https://moole.ai/app/settings/organization/license-policy"
+            );
 
             sleep(5000);
 
-            // =====================================================
-            // CASE 1: MEDIUM → CLEAR → ADD NOTES → APPLY
-            // =====================================================
-            System.out.println("CASE 1 START");
 
+            // =====================================================
+            // CASE 1
+            // MEDIUM → CLEAR → ADD NOTES → APPLY
+            // =====================================================
+
+            System.out.println("=================================");
+            System.out.println("CASE 1 START");
+            System.out.println("=================================");
+
+
+            // Select MEDIUM
             selectPolicy(wait, js, "Medium");
+
             sleep(2000);
 
+
+            // Open Notes
             openNotes(wait, js);
+
             sleep(1500);
 
+
+            // Clear Notes
             clearNotes(wait);
+
             sleep(1000);
 
-            enterNotes(wait, actions, "First entry - Medium");
+
+            // Enter Notes
+            enterNotes(
+                    wait,
+                    actions,
+                    "First entry - Medium"
+            );
+
             sleep(1000);
 
+
+            // Click Add Notes
             clickAddNotes(wait, js);
+
             sleep(1500);
 
+
+            // Apply License Policy
             clickApply(wait, js);
+
             sleep(4000);
 
             System.out.println("CASE 1 DONE");
 
-            // =====================================================
-            // CASE 2: CRITICAL → CLEAR ONLY → CLOSE → APPLY
-            // =====================================================
-            System.out.println("CASE 2 START");
 
-            selectPolicy(wait, js, "Critical");
+            // =====================================================
+            // CASE 2
+            // LOW → CLEAR ONLY → CLOSE → APPLY
+            // =====================================================
+
+            System.out.println("=================================");
+            System.out.println("CASE 2 START");
+            System.out.println("=================================");
+
+
+            // Select LOW
+            selectPolicy(wait, js, "Low");
+
             sleep(2000);
 
+
+            // Open Notes
             openNotes(wait, js);
+
             sleep(1500);
 
+
+            // Clear Notes
             clearNotes(wait);
+
             sleep(1000);
 
+
+            // Close Notes
             clickCloseNotes(wait, js);
+
             sleep(1500);
 
+
+            // Apply License Policy
             clickApply(wait, js);
+
             sleep(3000);
 
             System.out.println("CASE 2 DONE");
+
+
+            // =====================================================
+            // SEARCH 1 START
+            // =====================================================
+
             System.out.println("SEARCH 1 START");
-            
-         // ================= LICENSE INFO ICON CLICK =================
+
+
+            // =====================================================
+            // LICENSE INFO ICON CLICK
+            // =====================================================
+
             WebElement licenseInfo = wait.until(
                     ExpectedConditions.presenceOfElementLocated(
-                            By.xpath("//*[contains(@aria-label,'License Info')]")
+                            By.xpath(
+                                    "//*[contains(@aria-label,'License Info')]"
+                            )
                     )
             );
 
             js.executeScript(
-                    "arguments[0].dispatchEvent(new MouseEvent('click',{bubbles:true}))",
+                    "arguments[0].dispatchEvent(" +
+                    "new MouseEvent('click',{bubbles:true}))",
                     licenseInfo
             );
+
             Thread.sleep(1000);
 
-            System.out.println("License Info clicked using JS event");
-            
-         // ================= CLOSE POPUP BUTTON =================
+            System.out.println(
+                    "License Info clicked using JS event"
+            );
+
+
+            // =====================================================
+            // CLOSE POPUP
+            // =====================================================
 
             WebElement closePopup = wait.until(
                     ExpectedConditions.elementToBeClickable(
-                            By.xpath("//button[@aria-label='Close popup']")
+                            By.xpath(
+                                    "//button[@aria-label='Close popup']"
+                            )
                     )
             );
 
-            // scroll into view (React UI safety)
-            js.executeScript("arguments[0].scrollIntoView({block:'center'});", closePopup);
+            js.executeScript(
+                    "arguments[0].scrollIntoView({block:'center'});",
+                    closePopup
+            );
+
             Thread.sleep(1000);
 
-            // click using JS (most reliable for SVG buttons)
-            js.executeScript("arguments[0].click();", closePopup);
+            js.executeScript(
+                    "arguments[0].click();",
+                    closePopup
+            );
 
-            System.out.println("Popup closed successfully");
+            System.out.println(
+                    "Popup closed successfully"
+            );
 
             Thread.sleep(1500);
 
-         // Correct License Policy search box
-         WebElement search1 = wait.until(
-                 ExpectedConditions.presenceOfElementLocated(
-                         By.xpath("//input[@id='searchQuery' and contains(@placeholder,'License Policy')]")
-                 )
-         );
 
-         // bring into view
-         js.executeScript("arguments[0].scrollIntoView({block:'center'});", search1);
-         sleep(800);
+            // =====================================================
+            // LICENSE POLICY SEARCH
+            // NEW SEARCH BOX
+            // =====================================================
 
-         // force focus
-         js.executeScript("arguments[0].click();", search1);
-         sleep(500);
-
-         // clear properly (React-safe)
-         search1.sendKeys(Keys.CONTROL + "a");
-         search1.sendKeys(Keys.BACK_SPACE);
-
-         // type slowly (prevents interactable issue)
-         search1.sendKeys("AGPL-3.0-or-later");
-         sleep(500);
-
-         search1.sendKeys(Keys.ENTER);
-
-         System.out.println("SEARCH 1 DONE");
-         
-      // ================= CLEAR =================
-         search1 = wait.until(
-                 ExpectedConditions.presenceOfElementLocated(
-                         By.xpath("//input[@id='searchQuery' and contains(@placeholder,'License Policy')]")
-                 )
-         );
-
-         js.executeScript("arguments[0].click();", search1);
-         Thread.sleep(500);
-
-         search1.sendKeys(Keys.CONTROL + "a");
-         search1.sendKeys(Keys.BACK_SPACE);
-
-         Thread.sleep(1000);
-
-         System.out.println("Final clear done for Search 1");
-
-         // ================= SEARCH 2: LGPL =================
-         search1.sendKeys("JJJJ");
-         search1.sendKeys(Keys.ENTER);
-
-         Thread.sleep(2000);
-
-         System.out.println("JJJJ");
-         
-         System.out.println("JJJJ not found");
-
-         System.out.println("SEARCH 1 COMPLETE");
-         
-         
-         // ================= CLEAR =================
-            search1 = wait.until(
+            WebElement search1 = wait.until(
                     ExpectedConditions.presenceOfElementLocated(
-                            By.xpath("//input[@id='searchQuery' and contains(@placeholder,'License Policy')]")
+                            By.xpath(
+                                    "//input[@placeholder='Search by License Policy']"
+                            )
                     )
             );
 
-            js.executeScript("arguments[0].click();", search1);
-            Thread.sleep(500);
+            js.executeScript(
+                    "arguments[0].scrollIntoView({block:'center'});",
+                    search1
+            );
 
-            search1.sendKeys(Keys.CONTROL + "a");
-            search1.sendKeys(Keys.BACK_SPACE);
+            sleep(800);
+
+            js.executeScript(
+                    "arguments[0].click();",
+                    search1
+            );
+
+            sleep(500);
+
+
+            // Clear search
+            search1.sendKeys(
+                    Keys.CONTROL + "a"
+            );
+
+            search1.sendKeys(
+                    Keys.BACK_SPACE
+            );
+
+
+            // Search AGPL
+            search1.sendKeys(
+                    "AGPL-3.0-or-later"
+            );
+
+            sleep(500);
+
+            search1.sendKeys(
+                    Keys.ENTER
+            );
+
+            System.out.println(
+                    "SEARCH 1 DONE"
+            );
+
+
+            // =====================================================
+            // CLEAR SEARCH
+            // =====================================================
+
+            search1 = wait.until(
+                    ExpectedConditions.presenceOfElementLocated(
+                            By.xpath(
+                                    "//input[@placeholder='Search by License Policy']"
+                            )
+                    )
+            );
+
+            js.executeScript(
+                    "arguments[0].click();",
+                    search1
+            );
+
+            sleep(500);
+
+            search1.sendKeys(
+                    Keys.CONTROL + "a"
+            );
+
+            search1.sendKeys(
+                    Keys.BACK_SPACE
+            );
+
+            sleep(1000);
+
+            System.out.println(
+                    "Final clear done for Search 1"
+            );
+
+
+            // =====================================================
+            // SEARCH JJJJ
+            // =====================================================
+
+            search1.sendKeys("JJJJ");
+
+            search1.sendKeys(
+                    Keys.ENTER
+            );
+
+            sleep(2000);
+
+            System.out.println("JJJJ");
+            System.out.println("JJJJ not found");
+            System.out.println("SEARCH 1 COMPLETE");
+
+
+            // =====================================================
+            // CLEAR SEARCH
+            // =====================================================
+
+            search1 = wait.until(
+                    ExpectedConditions.presenceOfElementLocated(
+                            By.xpath(
+                                    "//input[@placeholder='Search by License Policy']"
+                            )
+                    )
+            );
+
+            js.executeScript(
+                    "arguments[0].click();",
+                    search1
+            );
+
+            sleep(500);
+
+            search1.sendKeys(
+                    Keys.CONTROL + "a"
+            );
+
+            search1.sendKeys(
+                    Keys.BACK_SPACE
+            );
+
+            sleep(1000);
+
+            System.out.println(
+                    "Final clear done for Search 1"
+            );
+
+
+            // =====================================================
+            // PROJECT SEARCH
+            // =====================================================
+
+            System.out.println(
+                    "PROJECT SEARCH START"
+            );
+
+
+            search(
+                    wait,
+                    js,
+                    actions,
+                    "//input[@id='searchQuery' " +
+                    "and contains(@placeholder,'override')]",
+                    "Project"
+            );
+
+            sleep(2000);
+
+            System.out.println(
+                    "WAITING FOR PROJECT DROPDOWN"
+            );
+
+
+            // =====================================================
+            // PROJECT DROPDOWN
+            // =====================================================
+
+            WebElement dropdownList = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath(
+                                    "//ul[contains(@class,'absolute') " +
+                                    "and contains(@class,'overflow-y-auto')]"
+                            )
+                    )
+            );
 
             Thread.sleep(1000);
 
-            System.out.println("Final clear done for Search 1");
-         
 
             // =====================================================
-            // SEARCH 2 (Project Search)
+            // SELECT PROJECT
             // =====================================================
-            System.out.println("PROJECT SEARCH START");
 
-            search(wait, js, actions,
-                    "//input[@id='searchQuery' and contains(@placeholder,'override')]",
-                    "Project");
+            WebElement projectItem = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath(
+                                    "//ul[contains(@class,'overflow-y-auto')]" +
+                                    "//li[contains(.,'Project')]"
+                            )
+                    )
+            );
 
-            sleep(2000);
-            System.out.println("WAITING FOR PROJECT DROPDOWN");
+            js.executeScript(
+                    "arguments[0].scrollIntoView({block:'center'});",
+                    projectItem
+            );
 
-         // wait for dropdown list
-         WebElement dropdownList = wait.until(
-                 ExpectedConditions.visibilityOfElementLocated(
-                         By.xpath("//ul[contains(@class,'absolute') and contains(@class,'overflow-y-auto')]")
-                 )
-         );
+            Thread.sleep(500);
 
-         Thread.sleep(1000);
+            js.executeScript(
+                    "arguments[0].click();",
+                    projectItem
+            );
 
-       // click the FIRST matching "My Project" item
-         WebElement projectItem = wait.until(
-                 ExpectedConditions.elementToBeClickable(
-                         By.xpath("//ul[contains(@class,'overflow-y-auto')]//li[contains(.,'Project')]")
-                 )
-         );
+            System.out.println(
+                    "PROJECT CLICKED"
+            );
 
-         js.executeScript("arguments[0].scrollIntoView({block:'center'});", projectItem);
-         Thread.sleep(500);
+            Thread.sleep(2000);
 
-         js.executeScript("arguments[0].click();", projectItem);
 
-         System.out.println("PROJECT CLICKED");
-         
-         Thread.sleep(2000);
+            // =====================================================
+            // PROJECT TOGGLE
+            // =====================================================
 
-         
-      // IMPORTANT: re-locate element (prevents stale)
-         WebElement projectToggle = wait.until(
-                 ExpectedConditions.elementToBeClickable(
-                         By.xpath("//input[@type='checkbox' and following-sibling::div[contains(@class,'peer')]]")
-                 )
-         );
+            WebElement projectToggle = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath(
+                                    "//input[@type='checkbox' " +
+                                    "and following-sibling::div[contains(@class,'peer')]]"
+                            )
+                    )
+            );
 
-         // toggle OFF
-         js.executeScript("arguments[0].click();", projectToggle);
+            js.executeScript(
+                    "arguments[0].click();",
+                    projectToggle
+            );
 
-         System.out.println("PROJECT UNSELECTED");
+            System.out.println(
+                    "PROJECT UNSELECTED"
+            );
 
-         Thread.sleep(2000);
-         
-         
-         // ================= SEARCH JJJJ =================
+            Thread.sleep(2000);
 
-         WebElement projectSearch = wait.until(
-                 ExpectedConditions.presenceOfElementLocated(
-                         By.xpath("//input[@id='searchQuery' and contains(@placeholder,'override')]")
-                 )
-         );
 
-         js.executeScript("arguments[0].click();", projectSearch);
-         Thread.sleep(500);
+            // =====================================================
+            // SEARCH JJJJ
+            // =====================================================
 
-         projectSearch.sendKeys(Keys.CONTROL + "a");
-         projectSearch.sendKeys(Keys.BACK_SPACE);
+            WebElement projectSearch = wait.until(
+                    ExpectedConditions.presenceOfElementLocated(
+                            By.xpath(
+                                    "//input[@id='searchQuery' " +
+                                    "and contains(@placeholder,'override')]"
+                            )
+                    )
+            );
 
-         Thread.sleep(1000);
+            js.executeScript(
+                    "arguments[0].click();",
+                    projectSearch
+            );
 
-         projectSearch.sendKeys("JJJJ");
-         projectSearch.sendKeys(Keys.ENTER);
+            Thread.sleep(500);
 
-         System.out.println("SEARCHED: JJJJ");
+            projectSearch.sendKeys(
+                    Keys.CONTROL + "a"
+            );
 
-         Thread.sleep(2000);
+            projectSearch.sendKeys(
+                    Keys.BACK_SPACE
+            );
 
-         // ================= CLEAR SEARCH =================
+            Thread.sleep(1000);
 
-         projectSearch.sendKeys(Keys.CONTROL + "a");
-         projectSearch.sendKeys(Keys.BACK_SPACE);
+            projectSearch.sendKeys("JJJJ");
 
-         Thread.sleep(1000);
+            projectSearch.sendKeys(
+                    Keys.ENTER
+            );
 
-         System.out.println("SEARCH CLEARED");
-         System.out.println("TEST COMPLETED");
+            System.out.println(
+                    "SEARCHED: JJJJ"
+            );
 
-         // small wait for UI update
-         Thread.sleep(2000);
+            Thread.sleep(2000);
 
-            System.out.println("TEST COMPLETED");
+
+            // =====================================================
+            // CLEAR PROJECT SEARCH
+            // =====================================================
+
+            projectSearch.sendKeys(
+                    Keys.CONTROL + "a"
+            );
+
+            projectSearch.sendKeys(
+                    Keys.BACK_SPACE
+            );
+
+            Thread.sleep(1000);
+
+            System.out.println(
+                    "SEARCH CLEARED"
+            );
+
+
+            // =====================================================
+            // TEST COMPLETED
+            // =====================================================
+
+            System.out.println(
+                    "TEST COMPLETED"
+            );
+
+            Thread.sleep(2000);
+
 
         } catch (Exception e) {
+
             e.printStackTrace();
+
         } finally {
+
             driver.quit();
         }
     }
 
-    // ================= POLICY =================
-    static void selectPolicy(WebDriverWait wait, JavascriptExecutor js, String policy) {
 
-        WebElement dropdown = wait.until(
-                ExpectedConditions.elementToBeClickable(
-                        By.xpath("//button[contains(@aria-label,'Sort')]")
-                )
-        );
-        js.executeScript("arguments[0].click();", dropdown);
-        sleep(1000);
+    // =============================================================
+    // SELECT SEVERITY
+    // =============================================================
 
-        WebElement option = wait.until(
-                ExpectedConditions.elementToBeClickable(
-                        By.xpath("//*[normalize-space()='" + policy + "']")
-                )
-        );
-        js.executeScript("arguments[0].click();", option);
-
-        System.out.println("Selected Policy: " + policy);
-    }
-
-    // ================= NOTES =================
-    static void openNotes(WebDriverWait wait, JavascriptExecutor js) {
-
-        WebElement addNotes = wait.until(
-                ExpectedConditions.elementToBeClickable(
-                        By.xpath("//p[@aria-label='Add Notes']")
-                )
-        );
-        js.executeScript("arguments[0].click();", addNotes);
-
-        System.out.println("Opened Notes");
-    }
-
-    static void clearNotes(WebDriverWait wait) {
-
-        WebElement notes = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath("//textarea[@placeholder='Write your notes']")
-                )
-        );
-
-        notes.click();
-        notes.sendKeys(Keys.CONTROL + "a");
-        notes.sendKeys(Keys.BACK_SPACE);
-
-        System.out.println("Notes Cleared");
-    }
-
-    static void enterNotes(WebDriverWait wait, Actions actions, String text) {
-
-        WebElement notes = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath("//textarea[@placeholder='Write your notes']")
-                )
-        );
-
-        notes.click();
-        actions.moveToElement(notes).click().sendKeys(text).perform();
-
-        System.out.println("Notes Entered");
-    }
-
-    static void clickAddNotes(WebDriverWait wait, JavascriptExecutor js) {
-
-        WebElement btn = wait.until(
-                ExpectedConditions.elementToBeClickable(
-                        By.xpath("//button[normalize-space()='Add Notes']")
-                )
-        );
-
-        js.executeScript("arguments[0].click();", btn);
-
-        System.out.println("Clicked Add Notes");
-    }
-
-    static void clickApply(WebDriverWait wait, JavascriptExecutor js) {
+    static void selectPolicy(
+            WebDriverWait wait,
+            JavascriptExecutor js,
+            String policy) {
 
         try {
 
-            // Scroll to bottom of page
-            js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-            Thread.sleep(2000);
+            System.out.println(
+                    "Selecting Severity: " + policy
+            );
 
-            // Locate Apply License Policy button
-            WebElement apply = wait.until(
-                    ExpectedConditions.presenceOfElementLocated(
-                            By.xpath("//button[normalize-space()='Apply License Policy']")
+
+            // =====================================================
+            // CLICK SEVERITY DROPDOWN
+            // =====================================================
+
+            WebElement dropdown = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath(
+                                    "//button[@aria-label='Severity']"
+                            )
                     )
             );
 
-            // Scroll button into view
+            js.executeScript(
+                    "arguments[0].scrollIntoView({block:'center'});",
+                    dropdown
+            );
+
+            sleep(500);
+
+            js.executeScript(
+                    "arguments[0].click();",
+                    dropdown
+            );
+
+            System.out.println(
+                    "Severity dropdown clicked"
+            );
+
+            sleep(1000);
+
+
+            // =====================================================
+            // SELECT MEDIUM / LOW
+            // =====================================================
+
+            WebElement option = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath(
+                                    "//div[contains(@class,'cursor-pointer')" +
+                                    " and .//span[normalize-space()='" +
+                                    policy +
+                                    "']]"
+                            )
+                    )
+            );
+
+            js.executeScript(
+                    "arguments[0].scrollIntoView({block:'center'});",
+                    option
+            );
+
+            sleep(500);
+
+
+            // Click selected option
+            js.executeScript(
+                    "arguments[0].click();",
+                    option
+            );
+
+            System.out.println(
+                    "Selected Severity: " + policy
+            );
+
+
+            // =====================================================
+            // VERIFY SELECTION
+            // =====================================================
+
+            wait.until(
+                    ExpectedConditions.textToBePresentInElementLocated(
+                            By.xpath(
+                                    "//button[@aria-label='Severity']"
+                            ),
+                            policy
+                    )
+            );
+
+            System.out.println(
+                    "Verified Severity: " + policy
+            );
+
+            sleep(1000);
+
+
+        } catch (Exception e) {
+
+            System.out.println(
+                    "Unable to select Severity: " + policy
+            );
+
+            e.printStackTrace();
+
+            throw e;
+        }
+    }
+
+
+    // =============================================================
+    // OPEN NOTES
+    // =============================================================
+
+    static void openNotes(
+            WebDriverWait wait,
+            JavascriptExecutor js) {
+
+        WebElement addNotes = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        By.xpath(
+                                "//button[@aria-label='Add Notes']"
+                        )
+                )
+        );
+
+        js.executeScript(
+                "arguments[0].scrollIntoView({block:'center'});",
+                addNotes
+        );
+
+        sleep(500);
+
+        js.executeScript(
+                "arguments[0].click();",
+                addNotes
+        );
+
+        System.out.println(
+                "Opened Notes"
+        );
+
+        // Wait for new textarea
+        wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath(
+                                "//textarea[@placeholder='Write your notes...']"
+                        )
+                )
+        );
+
+        sleep(1000);
+    }
+
+
+    // =============================================================
+    // CLEAR NOTES
+    // =============================================================
+
+    static void clearNotes(
+            WebDriverWait wait) {
+
+        WebElement notes = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath(
+                                "//textarea[@placeholder='Write your notes...']"
+                        )
+                )
+        );
+
+        notes.click();
+
+        notes.sendKeys(
+                Keys.CONTROL + "a"
+        );
+
+        notes.sendKeys(
+                Keys.BACK_SPACE
+        );
+
+        System.out.println(
+                "Notes Cleared"
+        );
+    }
+
+
+    // =============================================================
+    // ENTER NOTES
+    // =============================================================
+
+    static void enterNotes(
+            WebDriverWait wait,
+            Actions actions,
+            String text) {
+
+        WebElement notes = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath(
+                                "//textarea[@placeholder='Write your notes...']"
+                        )
+                )
+        );
+
+        notes.click();
+
+        actions.moveToElement(notes)
+               .click()
+               .sendKeys(text)
+               .perform();
+
+        System.out.println(
+                "Notes Entered"
+        );
+    }
+
+
+    // =============================================================
+    // CLICK ADD NOTES
+    // =============================================================
+
+    static void clickAddNotes(
+            WebDriverWait wait,
+            JavascriptExecutor js) {
+
+        WebElement btn = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        By.xpath(
+                                "//button[@aria-label='Add Notes']"
+                        )
+                )
+        );
+
+        js.executeScript(
+                "arguments[0].scrollIntoView({block:'center'});",
+                btn
+        );
+
+        sleep(500);
+
+        js.executeScript(
+                "arguments[0].click();",
+                btn
+        );
+
+        System.out.println(
+                "Clicked Add Notes"
+        );
+
+        sleep(1000);
+    }
+
+
+    // =============================================================
+    // APPLY LICENSE POLICY
+    // =============================================================
+
+    static void clickApply(
+            WebDriverWait wait,
+            JavascriptExecutor js) {
+
+        try {
+
+            System.out.println(
+                    "Looking for Apply license policy button"
+            );
+
+            WebElement apply = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath(
+                                    "//button[normalize-space()='Apply license policy']"
+                            )
+                    )
+            );
+
             js.executeScript(
                     "arguments[0].scrollIntoView({block:'center'});",
                     apply
             );
 
-            Thread.sleep(1000);
+            sleep(1000);
 
-            // Wait until clickable
-            wait.until(ExpectedConditions.elementToBeClickable(apply));
+            js.executeScript(
+                    "arguments[0].click();",
+                    apply
+            );
 
-            // Click using JavaScript
-            js.executeScript("arguments[0].click();", apply);
+            System.out.println(
+                    "Applied License Policy Successfully"
+            );
 
-            System.out.println("Applied License Policy Successfully");
-
-            Thread.sleep(3000);
+            sleep(3000);
 
         } catch (Exception e) {
-            System.out.println("Failed to click Apply License Policy");
+
+            System.out.println(
+                    "Failed to click Apply license policy"
+            );
+
             e.printStackTrace();
+
+            throw e;
         }
     }
 
-    static void clickCloseNotes(WebDriverWait wait, JavascriptExecutor js) {
+
+    // =============================================================
+    // CLOSE NOTES
+    // =============================================================
+
+    static void clickCloseNotes(
+            WebDriverWait wait,
+            JavascriptExecutor js) {
 
         WebElement close = wait.until(
                 ExpectedConditions.elementToBeClickable(
-                        By.xpath("//button[normalize-space()='Close Notes']")
+                        By.xpath(
+                                "//button[normalize-space()='Close Notes']"
+                        )
                 )
         );
 
-        js.executeScript("arguments[0].click();", close);
-
-        System.out.println("Closed Notes");
-    }
-
-    // ================= SEARCH (FIX FOR BOTH SEARCH BOXES) =================
-    static void search(WebDriverWait wait, JavascriptExecutor js, Actions actions,
-                       String xpath, String value) {
-
-        WebElement box = wait.until(
-                ExpectedConditions.presenceOfElementLocated(By.xpath(xpath))
+        js.executeScript(
+                "arguments[0].click();",
+                close
         );
 
-        js.executeScript("arguments[0].scrollIntoView({block:'center'});", box);
-        sleep(500);
-
-        js.executeScript("arguments[0].click();", box);
-        sleep(500);
-
-        box.sendKeys(Keys.CONTROL + "a");
-        box.sendKeys(Keys.BACK_SPACE);
-
-        sleep(500);
-
-        actions.moveToElement(box).click().sendKeys(value + Keys.ENTER).perform();
-
-        System.out.println("Search Done: " + value);
+        System.out.println(
+                "Closed Notes"
+        );
     }
 
-    static void clearSearch(WebDriverWait wait, JavascriptExecutor js, String xpath) {
+
+    // =============================================================
+    // SEARCH
+    // =============================================================
+
+    static void search(
+            WebDriverWait wait,
+            JavascriptExecutor js,
+            Actions actions,
+            String xpath,
+            String value) {
 
         WebElement box = wait.until(
-                ExpectedConditions.presenceOfElementLocated(By.xpath(xpath))
+                ExpectedConditions.presenceOfElementLocated(
+                        By.xpath(xpath)
+                )
         );
 
-        js.executeScript("arguments[0].value='';", box);
-        js.executeScript("arguments[0].dispatchEvent(new Event('input',{bubbles:true}));", box);
+        js.executeScript(
+                "arguments[0].scrollIntoView({block:'center'});",
+                box
+        );
 
-        System.out.println("Search Cleared");
+        sleep(500);
+
+        js.executeScript(
+                "arguments[0].click();",
+                box
+        );
+
+        sleep(500);
+
+        box.sendKeys(
+                Keys.CONTROL + "a"
+        );
+
+        box.sendKeys(
+                Keys.BACK_SPACE
+        );
+
+        sleep(500);
+
+        actions.moveToElement(box)
+               .click()
+               .sendKeys(value + Keys.ENTER)
+               .perform();
+
+        System.out.println(
+                "Search Done: " + value
+        );
     }
+
+
+    // =============================================================
+    // CLEAR SEARCH
+    // =============================================================
+
+    static void clearSearch(
+            WebDriverWait wait,
+            JavascriptExecutor js,
+            String xpath) {
+
+        WebElement box = wait.until(
+                ExpectedConditions.presenceOfElementLocated(
+                        By.xpath(xpath)
+                )
+        );
+
+        js.executeScript(
+                "arguments[0].value='';",
+                box
+        );
+
+        js.executeScript(
+                "arguments[0].dispatchEvent(" +
+                "new Event('input',{bubbles:true}));",
+                box
+        );
+
+        System.out.println(
+                "Search Cleared"
+        );
+    }
+
+
+    // =============================================================
+    // SLEEP
+    // =============================================================
 
     static void sleep(long ms) {
-        try { Thread.sleep(ms); } catch (Exception ignored) {}
+
+        try {
+
+            Thread.sleep(ms);
+
+        } catch (Exception ignored) {
+
+        }
     }
 }
