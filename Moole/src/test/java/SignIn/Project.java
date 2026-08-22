@@ -22,39 +22,38 @@ public class Project {
     @Test
     public void ProjectTest() throws InterruptedException {
 
-        // --- ChromeOptions to use existing profile ---
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("user-data-dir=C:\\Users\\psiri\\AppData\\Local\\Google\\User Data");
-        options.addArguments("profile-directory=Profile 1");
+    	 WebDriver driver = new ChromeDriver();
+         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+         JavascriptExecutor js = (JavascriptExecutor) driver;
 
-        WebDriver driver = new ChromeDriver(options);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+         try {
+         	driver.get(ConfigReader.getProperty("baseUrl"));
+             driver.manage().window().maximize();
 
-        try {
-        	driver.get(ConfigReader.getProperty("baseUrl"));
-            // --- Step 1: Open Moole.ai and Sign In ---
-            driver.get("https://moole.ai/auth/signin");
-            driver.manage().window().maximize();
+             // ---------------- LOGIN ----------------
+             driver.get("https://moole.ai/auth/signin");
+             driver.manage().window().maximize();
+             Thread.sleep(3000);
 
-            WebElement emailField = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//input[@type='email']")));
-            emailField.sendKeys("moole.dev.2@gmail.com");
+             WebElement emailField = wait.until(
+                     ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='email']"))
+             );
+             emailField.sendKeys("moole.dev.2@gmail.com");
 
-            WebElement signIn = wait.until(
-                    ExpectedConditions.elementToBeClickable(
-                            By.xpath("//button[@data-tour='signup-submit']")
-                    )
-            );
+             WebElement signIn = wait.until(
+                     ExpectedConditions.elementToBeClickable(
+                             By.xpath("//button[@data-tour='signup-submit']")
+                     )
+             );
 
-            signIn.click();
+             signIn.click();
 
-            System.out.println("Sign in button clicked");
-            // --- Step 2: Wait for OTP manually ---
-            System.out.println("Enter OTP manually in the browser, then press Enter here...");
-            @SuppressWarnings("resource")
-            Scanner scanner = new Scanner(System.in);
-            scanner.nextLine();
-            Thread.sleep(2000);
+             System.out.println("Sign in button clicked");
+
+             System.out.println("Enter OTP manually...");
+             new Scanner(System.in).nextLine();
+
+             Thread.sleep(3000);
 
             // --- Step 3: Navigate directly to Integrations page ---
             driver.get("https://moole.ai/app/settings/project/integrations");
@@ -68,12 +67,12 @@ public class Project {
             projectPicker.click();
             System.out.println("Project picker clicked!");
 
-            // --- Step 5: Click first button inside the picker ---
+       /*     // --- Step 5: Click first button inside the picker ---
             WebElement firstButton = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("/html/body/div[2]/main/div[3]/div[2]/div[2]/div/div[1]/button")));
             Thread.sleep(5000); 
             firstButton.click();
-            System.out.println("First button inside picker clicked!");
+            System.out.println("First button inside picker clicked!");*/
 
             // --- Step 6: Click the "All" button in the picker ---
             WebElement allButton = wait.until(ExpectedConditions.elementToBeClickable(

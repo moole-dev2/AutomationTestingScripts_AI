@@ -87,8 +87,7 @@ public class NotificationsProj {
             	By severityDropdown = By.xpath(
             	        "//button[@type='button' " +
             	        "and @aria-haspopup='listbox' " +
-            	        "and @aria-label='Severity' " +
-            	        "and .//span[normalize-space()='Low']]"
+            	        "and @aria-label='Severity']"
             	);
 
             	WebElement severity = wait.until(
@@ -119,7 +118,6 @@ public class NotificationsProj {
             	System.out.println("Severity dropdown clicked successfully");
 
             	Thread.sleep(1000);
-
             	// Now locate Critical
             	// ================= SELECT CRITICAL =================
 
