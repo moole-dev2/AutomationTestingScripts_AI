@@ -75,11 +75,102 @@ public class Project {
             System.out.println("First button inside picker clicked!");*/
 
             // --- Step 6: Click the "All" button in the picker ---
-            WebElement allButton = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("/html/body/div[2]/main/div[3]/div[2]/div[4]/button[2]")));
-            Thread.sleep(5000);
-            allButton.click();
-            System.out.println("'All' button clicked!");
+            
+         // ================= CLICK CURRENT PROJECT =================
+         // ================= CLICK CURRENT PROJECT - FIRST TIME =================
+            WebElement currentProject = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//div[contains(@class,'truncate') and @aria-label]")
+                    )
+            );
+
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", currentProject);
+            Thread.sleep(500);
+
+            String projectName = currentProject.getAttribute("aria-label");
+            System.out.println("Current project: " + projectName);
+
+            js.executeScript("arguments[0].click();", currentProject);
+
+            System.out.println("Current project clicked - First time");
+            Thread.sleep(1000);
+
+
+            // ================= CLICK CURRENT PROJECT - SECOND TIME =================
+            currentProject = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//div[contains(@class,'truncate') and @aria-label]")
+                    )
+            );
+
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", currentProject);
+            Thread.sleep(500);
+
+            js.executeScript("arguments[0].click();", currentProject);
+
+            System.out.println("Current project clicked - Second time");
+            Thread.sleep(1000);
+
+         // ================= SEARCH RECENT PROJECTS - MOOLE =================
+            WebElement searchProject = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//input[@placeholder='Search recent projects...']")
+                    )
+            );
+
+            searchProject.clear();
+            searchProject.sendKeys("moole");
+
+            System.out.println("moole entered in recent projects search");
+            Thread.sleep(1000);
+
+
+            // ================= CLEAR MOOLE =================
+            searchProject = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//input[@placeholder='Search recent projects...']")
+                    )
+            );
+
+            searchProject.clear();
+
+            System.out.println("moole search cleared");
+            Thread.sleep(1000);
+
+
+            // ================= SEARCH AGAIN - MOLE =================
+            searchProject = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//input[@placeholder='Search recent projects...']")
+                    )
+            );
+
+            searchProject.sendKeys("mole");
+
+            System.out.println("mole entered in recent projects search");
+            Thread.sleep(1000);
+
+        // ================= CLEAR MOLE =================
+         // ================= CLEAR MOLE =================
+            searchProject.click();
+            searchProject.sendKeys(org.openqa.selenium.Keys.CONTROL + "a");
+            searchProject.sendKeys(org.openqa.selenium.Keys.BACK_SPACE);
+
+            System.out.println("mole search cleared");
+            Thread.sleep(1000);
+
+            // ================= CLICK ALL =================
+            WebElement allButton = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[normalize-space()='All']")
+                    )
+            );
+
+            js.executeScript("arguments[0].click();", allButton);
+
+            System.out.println("All button clicked");
+            Thread.sleep(1500);
+        
             
          // ======================================
          // ARROW BUTTON
@@ -93,25 +184,21 @@ public class Project {
          Thread.sleep(2000);
 
          // Click Arrow button
-         WebElement arrowBtn = wait.until(
-                 ExpectedConditions.presenceOfElementLocated(
-                         By.xpath("//button[contains(@class,'w-8 h-8') and contains(@class,'rounded-full') and contains(@class,'shrink-0')]")
+      // ================= CLICK DOWN ARROW =================
+         WebElement downArrow = wait.until(
+                 ExpectedConditions.elementToBeClickable(
+                         By.xpath("//span[normalize-space()='Messier 83-Ross 24816']/ancestor::div[contains(@class,'flex items-center py-3')]//button")
                  )
          );
-         ((JavascriptExecutor) driver).executeScript(
-                 "arguments[0].scrollIntoView({block:'center'});",
-                 arrowBtn
-         );
-         Thread.sleep(2000);
-         ((JavascriptExecutor) driver).executeScript(
-                 "arguments[0].click();",
-                 arrowBtn
-         );
-         System.out.println("Clicked Arrow Button");
-         Thread.sleep(3000);
-         
+
+         js.executeScript("arguments[0].scrollIntoView({block:'center'});", downArrow);
+         Thread.sleep(500);
+         js.executeScript("arguments[0].click();", downArrow);
+
+         System.out.println("Down arrow clicked");
+         Thread.sleep(1000);
       // ======================================
-      // SECOND ARROW BUTTON
+   /*   // SECOND ARROW BUTTON
       // ======================================
 
       // Wait for page to load completely
@@ -139,7 +226,7 @@ public class Project {
       System.out.println("Clicked Second Arrow Button");
       Thread.sleep(3000);
       
-  
+  */
    // ======================================
    // CLICK MOOLE PROJECT
    // ======================================
@@ -167,7 +254,9 @@ public class Project {
            mooleProject
    );
    System.out.println("Clicked Moole Project");
-   Thread.sleep(3000);
+   Thread.sleep(5000);
+   
+   
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
