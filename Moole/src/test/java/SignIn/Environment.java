@@ -302,7 +302,7 @@ public class Environment {
             Thread.sleep(1000);
 
 
-            // ================= SEARCH REPOSITORY =================
+           // ================= SEARCH REPOSITORY =================
             // Same input ID is reused, so use the placeholder to identify it
             WebElement repoSearch = wait.until(
                     ExpectedConditions.elementToBeClickable(
@@ -317,89 +317,164 @@ public class Environment {
             Thread.sleep(1000);
 
 
-            // ================= CLICK NODE-TEST =================
-            WebElement nodeTest = wait.until(
-                    ExpectedConditions.elementToBeClickable(
-                            By.xpath("//button[.//span[normalize-space()='node-test']]")
-                    )
-            );
+          
+    /*     // ================= CLICK NODE-TEST =================
 
-            js.executeScript("arguments[0].scrollIntoView({block:'center'});", nodeTest);
-            Thread.sleep(500);
-            js.executeScript("arguments[0].click();", nodeTest);
+         By nodeTestLocator = By.xpath(
+                 "//*[normalize-space()='node-test']"
+         );
 
-            System.out.println("node-test repository clicked");
-            Thread.sleep(1000);
+         WebElement nodeTest = wait.until(
+                 ExpectedConditions.visibilityOfElementLocated(
+                         nodeTestLocator
+                 )
+         );
+
+         js.executeScript(
+                 "arguments[0].scrollIntoView({block:'center'});",
+                 nodeTest
+         );
+
+         Thread.sleep(500);
+
+         js.executeScript(
+                 "arguments[0].click();",
+                 nodeTest
+         );
+
+         System.out.println("node-test repository clicked");
+
+         Thread.sleep(1000);
+*/
+
+         // ================= CLICK BACK TO ENVIRONMENTS =================
+
+         By backToEnvironmentsLocator = By.xpath(
+                 "//button[contains(normalize-space(.), 'Back to Environments')]"
+         );
+
+         WebElement backToEnvironments = wait.until(
+                 ExpectedConditions.visibilityOfElementLocated(
+                         backToEnvironmentsLocator
+                 )
+         );
+
+         js.executeScript(
+                 "arguments[0].scrollIntoView({block:'center'});",
+                 backToEnvironments
+         );
+
+         Thread.sleep(500);
+
+         js.executeScript(
+                 "arguments[0].click();",
+                 backToEnvironments
+         );
+
+         System.out.println("Back to Environments clicked");
+
+         Thread.sleep(1500);
+        
+
+      // ================= CLICK ACTIONS FOR TESTING ENVIRONMENT =================
+
+      By testingActionsLocator = By.xpath(
+              "//*[normalize-space()='TESTING']/following::button[@aria-label='More actions'][1]"
+      );
+
+      WebElement testingActions = wait.until(
+              ExpectedConditions.elementToBeClickable(testingActionsLocator)
+      );
+
+      js.executeScript(
+              "arguments[0].scrollIntoView({block:'center'});",
+              testingActions
+      );
+
+      Thread.sleep(500);
+
+      js.executeScript(
+              "arguments[0].click();",
+              testingActions
+      );
+
+      System.out.println("TESTING environment Actions clicked");
+
+      Thread.sleep(1000);
+   
+
+		   // ================= CLICK DELETE ENVIRONMENT =================
+		
+		   By deleteEnvironmentLocator = By.xpath(
+		           "//button[.//p[contains(normalize-space(), 'Delete environment')]]"
+		   );
+		
+		   WebElement deleteEnvironment = wait.until(
+		           ExpectedConditions.elementToBeClickable(
+		                   deleteEnvironmentLocator
+		           )
+		   );
+		
+		   js.executeScript(
+		           "arguments[0].scrollIntoView({block:'center'});",
+		           deleteEnvironment
+		   );
+		
+		   Thread.sleep(500);
+		
+		   js.executeScript(
+		           "arguments[0].click();",
+		           deleteEnvironment
+		   );
+		
+		   System.out.println("Delete Environment clicked");
+		
+		   Thread.sleep(1000);
+		   
+		 
+				// ================= ENTER TESTING =================
+
+				WebElement testingInput = wait.until(
+				        ExpectedConditions.elementToBeClickable(
+				                By.xpath("//input[@placeholder='TESTING']")
+				        )
+				);
+
+				testingInput.clear();
+				testingInput.sendKeys("TESTING");
+
+				System.out.println("TESTING entered");
+
+				Thread.sleep(500);
+			
 
 
-            // ================= CLICK BACK TO ENVIRONMENTS =================
-            WebElement backToEnvironments = wait.until(
-                    ExpectedConditions.elementToBeClickable(
-                            By.xpath("//button[normalize-space()='Back to Environments']")
-                    )
-            );
+		// ================= CLICK DELETE ENVIRONMENT =================
 
-            js.executeScript(
-                    "arguments[0].scrollIntoView({block:'center'});",
-                    backToEnvironments
-            );
+		WebElement deleteEnvironmentButton = wait.until(
+		        ExpectedConditions.elementToBeClickable(
+		                By.xpath("//button[@type='submit' and normalize-space()='Delete environment']")
+		        )
+		);
 
-            Thread.sleep(500);
+		js.executeScript(
+		        "arguments[0].scrollIntoView({block:'center'});",
+		        deleteEnvironmentButton
+		);
 
-            js.executeScript(
-                    "arguments[0].click();",
-                    backToEnvironments
-            );
+		Thread.sleep(500);
 
-            System.out.println("Back to Environments clicked");
-            Thread.sleep(1500);
+		js.executeScript(
+		        "arguments[0].click();",
+		        deleteEnvironmentButton
+		);
 
-         // ================= CLICK MORE ACTIONS =================
-            WebElement moreActions1 = wait.until(
-                    ExpectedConditions.elementToBeClickable(
-                            By.xpath("//button[@aria-label='More actions']")
-                    )
-            );
+		System.out.println("Delete environment button clicked");
 
-            js.executeScript("arguments[0].scrollIntoView({block:'center'});", moreActions1);
-            Thread.sleep(500);
-            js.executeScript("arguments[0].click();", moreActions1);
+		Thread.sleep(1500);
+	
 
-            System.out.println("More actions clicked");
-            Thread.sleep(1000);
-        // ================= CLICK MORE ACTIONS =================
-            By moreActionsLocator = By.xpath("//button[@aria-label='More actions']");
-
-            WebElement moreActions11 = wait.until(
-                    ExpectedConditions.elementToBeClickable(moreActionsLocator)
-            );
-
-            js.executeScript("arguments[0].scrollIntoView({block:'center'});", moreActions11);
-            Thread.sleep(500);
-            js.executeScript("arguments[0].click();", moreActions11);
-
-            System.out.println("More actions clicked");
-            Thread.sleep(1000);
-
-
-            // ================= WAIT FOR DELETE OPTION =================
-            // Use text() without depending on the Unicode ellipsis
-            By deleteEnvironmentLocator = By.xpath(
-                    "//button[.//p[contains(normalize-space(),'Delete environment')]]"
-            );
-
-            WebElement deleteEnvironment = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(deleteEnvironmentLocator)
-            );
-
-            System.out.println("Delete environment option displayed");
-
-            js.executeScript("arguments[0].scrollIntoView({block:'center'});", deleteEnvironment);
-            Thread.sleep(300);
-            js.executeScript("arguments[0].click();", deleteEnvironment);
-
-            System.out.println("Delete environment clicked");
-            Thread.sleep(1000);
+/*
 
             // ================= CLICK CANCEL =================
             WebElement cancelButton = wait.until(
@@ -414,7 +489,7 @@ public class Environment {
 
             System.out.println("Cancel button clicked");
             Thread.sleep(1000);
-            
+            */
             
         } catch (Exception e) {
             e.printStackTrace();
