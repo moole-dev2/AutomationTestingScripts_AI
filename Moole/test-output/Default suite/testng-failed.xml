@@ -3,11 +3,11 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="SignIn.BillingN">
+      <class name="SignIn.IntegartionBit">
         <methods>
-          <include name="BillingNTest"/>
+          <include name="IntegrationBitTest"/>
         </methods>
-      </class> <!-- SignIn.BillingN -->
+      </class> <!-- SignIn.IntegartionBit -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
