@@ -1,4 +1,9 @@
+
 package SignIn;
+
+import java.time.Duration;
+import java.util.List;
+import java.util.Scanner;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -8,41 +13,39 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import Utils.ConfigReader;
-import java.time.Duration;
-import java.util.Scanner;
+import org.testng.Assert;
 import org.testng.annotations.Test;
-
-
 
 public class IntegartionBit {
 
     @Test
     public void IntegrationBitTest() throws InterruptedException {
 
-        // ChromeOptions to use existing profile (so cookies/OTP sessions persist if needed) ---
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("user-data-dir=C:\\Users\\psiri\\AppData\\Local\\Google\\Chrome\\User Data");
-        options.addArguments("profile-directory=Profile 1");
 
-        WebDriver driver = new ChromeDriver();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        options.addArguments("--start-maximized");
+        options.addArguments("--disable-notifications");
+        options.addArguments("--remote-allow-origins=*");
+
+        WebDriver driver = new ChromeDriver(options);
+
+        WebDriverWait wait =
+                new WebDriverWait(driver, Duration.ofSeconds(20));
 
         try {
-            // --- Step 1: Open Moole.ai and click Sign In ---
-        	driver.get(ConfigReader.getProperty("baseUrl"));
-            driver.manage().window().maximize();
-            driver.get("https://moole.ai/auth/signin");
-            try {
-	            Thread.sleep(5000);
-	        } catch (InterruptedException e) {
-	            e.printStackTrace();
-	        }
 
-            // --- Step 2: Enter Email ---
-            WebElement emailField = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='email']")));
-            emailField.sendKeys("moole.dev.2@gmail.com");
+            // ================= SIGN IN =================
+
+            driver.get("https://moole.ai/auth/signin");
+
+            WebElement email = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath("//input[@type='email']")
+                    )
+            );
+
+            email.sendKeys("moole.dev.2@gmail.com");
+
             WebElement signIn = wait.until(
                     ExpectedConditions.elementToBeClickable(
                             By.xpath("//button[@data-tour='signup-submit']")
@@ -52,133 +55,343 @@ public class IntegartionBit {
             signIn.click();
 
             System.out.println("Sign in button clicked");
-            // --- Step 3: Wait for OTP manually ---
-            System.out.println("Please enter your OTP manually in the browser, then press Enter here...");
-            @SuppressWarnings("resource")
+
+            // ================= OTP =================
+
+            System.out.println(
+                    "Enter OTP in browser and press Enter here..."
+            );
+
             Scanner scanner = new Scanner(System.in);
             scanner.nextLine();
-            Thread.sleep(1000); // waits until you press Enter
 
-            // --- Step 4: Navigate directly to Integrations page ---
-            driver.get("https://moole.ai/app/settings/project/integrations");
-
-            // --- Step 5: Click Bitbucket Integration ---
-            WebElement bitbucketBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//img[@alt='Bitbucket']")));
-            bitbucketBtn.click();
-            try {
-	            Thread.sleep(5000);
-	        } catch (InterruptedException e) {
-	            e.printStackTrace();
-	        }
-
-            // --- Step 6: Click Next ---
-            WebElement connect = wait.until(
-                    ExpectedConditions.elementToBeClickable(
-                            By.xpath("//button[normalize-space()='Connect']")
-                    )
-            );
-
-            connect.click();
-            // --- Step 7: Enter Bitbucket Email ---
-            WebElement name = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(
-                            By.xpath("//input[@id='name' and @type='text']")
-                    )
-            );
-
-            name.sendKeys("my_bitbucket_credentials");
-
-            // --- Step 8: Enter API Token ---
-            WebElement jsonKeyFile = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(
-                            By.xpath("//input[@id='jsonKeyFile' and @type='text']")
-                    )
-            );
-
-
-            jsonKeyFile.sendKeys("ATATT3xFfGF0o7g2Nny9hMI0wo97SSPOKR5VLORhM6rXYJu2RghL4_q44DfBi62vsJavEcaVOSbPayLmi6xVsDnSYc4KdrYpGeGsBizRSP-gBNbGtjtUkS9Wv4dK1NAMjPAs8at6RrRaxk-m1sw75khDHg3Nox_uYE3w-VfpyqEK-AtIPGl5aKM=E3C2DC72");
-
-        //    tokenField.sendKeys("ATATT3xFfGF0gxrUF8NF_uA0ZfNCSHlfCHCSvK2hlq2SUZzz8QOgOw85LMHTp9NlAiFcpYy0GheF3NiG1liOCjM8LLduZP8oTXMRX0Ia02HKpuVRGDqOYnjzqo5zxkFWtLmwwSzUvpHNvxFygYhbsk-td36jedTgPf87-orvz6EUD8BQGZNTq4I=991D4EED");  // replace with your token
-          //  tokenField.sendKeys("");  // replace with your token
-//>>>>>>> branch 'main' of https://github.com/moole-dev2/Moole.AI_AutomationTesting.git
-
-           // --- Step 9: Save Integration ---
-      
-         // Click Save button
-            WebElement save = wait.until(
-                    ExpectedConditions.elementToBeClickable(
-                            By.xpath("//button[normalize-space()='Save']")
-                    )
-            );
-
-            save.click();
-       /*     WebElement updateBtn = wait.until(
-                    ExpectedConditions.elementToBeClickable(
-                            By.xpath("//button[contains(.,'Update')]")));
-
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", updateBtn);
-         // ================= WAIT AFTER UPDATE =================
-            Thread.sleep(5000);*/
-
-            // wait for page stability
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(
-                    By.xpath("//div[contains(@class,'loading') or contains(@class,'spinner') or contains(@class,'backdrop')]")
-            ));
-
-            // ================= CLICK REPOSITORIES =================
-            WebElement repoMenu = wait.until(driver1 -> {
-                try {
-                    return driver1.findElement(
-                            By.xpath("//a[@href='/project/list-repos' or .//img[contains(@alt,'Repositories')]]")
-                    );
-                } catch (Exception e) {
-                    return null;
-                }
-            });
-
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", repoMenu);
             Thread.sleep(1000);
 
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", repoMenu);
+            // ================= INTEGRATIONS =================
 
-            System.out.println("Repositories clicked");
-            
-            // --- Step 10b: Click "ADD Repositories" ---
-            WebElement addRepository = wait.until(
-                    ExpectedConditions.elementToBeClickable(
-                            By.xpath("//button[@type='button' and .//span[text()='Add Repository']]")));
+            driver.get(
+                    "https://moole.ai/app/settings/project/integrations"
+            );
 
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addRepository);
-            
-            WebElement repoSearch = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(
-                            By.xpath("//input[@placeholder='Search your repositories']")));
-
-            repoSearch.clear();
-            repoSearch.sendKeys("node-test");
-            
-            WebElement repoRow = wait.until(
-                    ExpectedConditions.elementToBeClickable(
-                            By.xpath("//span[contains(text(),'node-test')]/ancestor::div[contains(@class,'cursor-pointer')]")));
-
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", repoRow);
-            
-            WebElement importRepoBtn = wait.until(
-                    ExpectedConditions.elementToBeClickable(
-                            By.xpath("//button[contains(.,'Import') and contains(.,'repository')]")));
-
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", importRepoBtn);
             Thread.sleep(3000);
 
-            
-            
-      
+            // ================= BITBUCKET CONNECT =================
+
+            WebElement connect = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath(
+                                    "//button[@name='provider' and @value='bitbucket']"
+                            )
+                    )
+            );
+
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({block:'center'});",
+                    connect
+            );
+
+            Thread.sleep(1000);
+
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].click();",
+                    connect
+            );
+
+            System.out.println("Bitbucket Connect clicked");
+
+            Thread.sleep(3000);
+
+            System.out.println(
+                    "After Connect URL = " + driver.getCurrentUrl()
+            );
+
+            System.out.println(
+                    "After Connect Title = " + driver.getTitle()
+            );
+
+            // ================= BITBUCKET CREDENTIALS =================
+
+            WebElement bitbucketEmail = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.id("email")
+                    )
+            );
+
+            bitbucketEmail.clear();
+            bitbucketEmail.sendKeys("moole.dev.2@gmail.com");
+
+            System.out.println("Bitbucket email entered");
+
+            WebElement apiTokenField = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.id("apiToken")
+                    )
+            );
+
+            apiTokenField.clear();
+
+            // IMPORTANT:
+            // Replace YOUR_BITBUCKET_TOKEN with your token.
+            // Do not commit the real token to GitHub.
+            apiTokenField.sendKeys("YOUR_BITBUCKET_TOKEN");
+
+            System.out.println("Bitbucket API token entered");
+
+            // ================= CHECK REDIRECT =================
+
+            System.out.println(
+                    "URL immediately after token = "
+                    + driver.getCurrentUrl()
+            );
+
+            Thread.sleep(1000);
+
+            System.out.println(
+                    "URL after 1 second = "
+                    + driver.getCurrentUrl()
+            );
+
+            // ================= UPDATE CREDENTIALS =================
+
+            List<WebElement> updateButtons = driver.findElements(
+                    By.xpath("//button[normalize-space()='Update Credentials']")
+            );
+
+            System.out.println(
+                    "Update Credentials button count = "
+                    + updateButtons.size()
+            );
+
+            if (updateButtons.size() > 0) {
+
+                WebElement updateCredentials = updateButtons.get(0);
+
+                System.out.println(
+                        "Update Credentials button found"
+                );
+
+                ((JavascriptExecutor) driver).executeScript(
+                        "arguments[0].scrollIntoView({block:'center'});",
+                        updateCredentials
+                );
+
+                Thread.sleep(500);
+
+                ((JavascriptExecutor) driver).executeScript(
+                        "arguments[0].click();",
+                        updateCredentials
+                );
+
+                System.out.println(
+                        "Update Credentials clicked"
+                );
+
+                Thread.sleep(5000);
+
+            } else {
+
+                System.out.println(
+                        "Update Credentials button NOT found"
+                );
+
+                System.out.println(
+                        "Current URL = " + driver.getCurrentUrl()
+                );
+
+                System.out.println(
+                        "Current Title = " + driver.getTitle()
+                );
+            }
+
+            // ================= REPOSITORIES =================
+
+            WebElement repositories = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath(
+                                    "//a[@href='/app/project/list-repos']"
+                            )
+                    )
+            );
+
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({block:'center'});",
+                    repositories
+            );
+
+            Thread.sleep(500);
+
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].click();",
+                    repositories
+            );
+
+            System.out.println(
+                    "Repositories clicked"
+            );
+
+            Thread.sleep(3000);
+
+            // ================= ADD REPOSITORY =================
+
+            WebElement addRepository = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath(
+                                    "//button[contains(normalize-space(.),'Add Repository')]"
+                            )
+                    )
+            );
+
+            addRepository.click();
+
+            System.out.println(
+                    "Add Repository clicked"
+            );
+
+            // ================= SEARCH REPOSITORY =================
+
+            WebElement search = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.xpath(
+                                    "//input[@placeholder='Search your repositories']"
+                            )
+                    )
+            );
+
+            search.clear();
+            search.sendKeys("node-test");
+
+            System.out.println(
+                    "Searching for node-test"
+            );
+
+            Thread.sleep(2000);
+
+            // ================= SELECT NODE-TEST =================
+
+            WebElement nodeTest = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath(
+                                    "//span[contains(normalize-space(.),'node-test')]/ancestor::div[contains(@class,'cursor-pointer')][1]"
+                            )
+                    )
+            );
+
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].click();",
+                    nodeTest
+            );
+
+            System.out.println(
+                    "node-test selected"
+            );
+
+         // ================= IMPORT SELECTED REPOSITORIES =================
+
+         By importButtonLocator = By.xpath(
+                 "//button[starts-with(normalize-space(.),'Import ')]"
+         );
+
+         // Wait for Import button
+         wait.until(
+                 ExpectedConditions.presenceOfElementLocated(
+                         importButtonLocator
+                 )
+         );
+
+         System.out.println("Import button is available");
+
+         // Find fresh Import button
+         WebElement importButton = wait.until(
+                 ExpectedConditions.elementToBeClickable(
+                         importButtonLocator
+                 )
+         );
+
+         // Scroll to Import button
+         ((JavascriptExecutor) driver).executeScript(
+                 "arguments[0].scrollIntoView({block:'center'});",
+                 importButton
+         );
+
+         Thread.sleep(1000);
+
+         // Re-find button because the page can refresh/re-render
+         importButton = wait.until(
+                 ExpectedConditions.elementToBeClickable(
+                         importButtonLocator
+                 )
+         );
+
+         // Click Import
+         ((JavascriptExecutor) driver).executeScript(
+                 "arguments[0].click();",
+                 importButton
+         );
+
+         System.out.println("Import button clicked");
+
+         // ================= WAIT FOR IMPORT TO COMPLETE =================
+
+         // Give the application time to start the import
+         Thread.sleep(5000);
+
+         System.out.println(
+                 "Waiting for repository import to complete..."
+         );
+
+         // Wait up to 60 seconds for the Import button to disappear
+         // This indicates that the import operation/modal has finished.
+         try {
+
+             new WebDriverWait(driver, Duration.ofSeconds(60))
+                     .until(
+                             ExpectedConditions.invisibilityOfElementLocated(
+                                     importButtonLocator
+                             )
+                     );
+
+             System.out.println(
+                     "Import button disappeared. Import operation completed."
+             );
+
+         } catch (Exception e) {
+
+             System.out.println(
+                     "Import button is still present after 60 seconds."
+             );
+
+             System.out.println(
+                     "Current URL = " + driver.getCurrentUrl()
+             );
+         }
+
+         // Additional time for repository data to appear
+         Thread.sleep(5000);
+
+         System.out.println(
+                 "Current URL after Import = " +
+                 driver.getCurrentUrl()
+         );
+
+         System.out.println(
+                 "Bitbucket repository import completed"
+         );
+       
+
+
         } catch (Exception e) {
+
             e.printStackTrace();
+
+            Assert.fail(
+                    "Bitbucket automation failed: "
+                    + e.getMessage()
+            );
+
         } finally {
-            // Optional: close driver
-           //driver.quit();
+
+            // Keep browser open while debugging.
+            driver.quit();
         }
     }
 }
