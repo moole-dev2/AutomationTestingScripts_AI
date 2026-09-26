@@ -63,36 +63,36 @@ public class TheSignal {
 
             scroll(js);
 
-            // =========================================================
-            // CLICK READ MORE (FIRST CARD)
-            // =========================================================
-            safeClick(driver, wait, js,
-                    "(//button[contains(.,'Read More')])[1]",
-                    "Read More");
+         // =========================================================
+         // CLICK READ MORE (FIRST CARD)
+         // =========================================================
+         safeClick(driver, wait, js,
+                 "(//a[contains(@href,'/resources/blogs/') and contains(normalize-space(.),'Read More')])[1]",
+                 "Read More");
 
-            Thread.sleep(4000);
+         Thread.sleep(4000);
 
-            scroll(js);
+         scroll(js);
 
-            // =========================================================
-            // WHY IT MATTERS (FIXED LOCATOR)
-            // =========================================================
-            safeClick(driver, wait, js,
-                    "//button[.//span[contains(.,'Why It Matters')]]",
-                    "Why It Matters");
+         // =========================================================
+         // WHY IT MATTERS
+         // =========================================================
+         safeClick(driver, wait, js,
+                 "//*[self::button or self::a][contains(normalize-space(.),'Why It Matters')]",
+                 "Why It Matters");
 
-            Thread.sleep(3000);
+         Thread.sleep(3000);
 
-            // =========================================================
-            // SECOND READ MORE
-            // =========================================================
-            safeClick(driver, wait, js,
-                    "(//button[contains(.,'Read More')])[last()]",
-                    "Second Read More");
+         // =========================================================
+         // SECOND READ MORE
+         // =========================================================
+         safeClick(driver, wait, js,
+                 "(//a[contains(@href,'/resources/blogs/') and contains(normalize-space(.),'Read More')])[last()]",
+                 "Second Read More");
 
-            Thread.sleep(4000);
+         Thread.sleep(4000);
 
-            scroll(js);
+         scroll(js);
 
             // =========================================================
             // NAVIGATE BACK STEPS SAFELY
