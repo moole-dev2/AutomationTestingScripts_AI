@@ -2,16 +2,16 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2026-09-19T16:36:35 CDT" name="Default suite" finished-at="2026-09-19T16:37:23 CDT" duration-ms="47673">
+  <suite started-at="2026-09-26T16:57:18 CDT" name="Default suite" finished-at="2026-09-26T16:57:28 CDT" duration-ms="10298">
     <groups>
     </groups>
-    <test started-at="2026-09-19T16:36:35 CDT" name="Default test" finished-at="2026-09-19T16:37:23 CDT" duration-ms="47673">
-      <class name="SignIn.IntegartionBit">
-        <test-method signature="IntegrationBitTest()[pri:0, instance:SignIn.IntegartionBit@57a3af25]" started-at="2026-09-19T16:36:35 CDT" name="IntegrationBitTest" finished-at="2026-09-19T16:37:23 CDT" duration-ms="47625" status="PASS">
+    <test started-at="2026-09-26T16:57:18 CDT" name="Default test" finished-at="2026-09-26T16:57:28 CDT" duration-ms="10298">
+      <class name="Home.SubscriptionEmail">
+        <test-method signature="SubscriptionEmailTest()[pri:0, instance:Home.SubscriptionEmail@57a3af25]" started-at="2026-09-26T16:57:18 CDT" name="SubscriptionEmailTest" finished-at="2026-09-26T16:57:28 CDT" duration-ms="10275" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- IntegrationBitTest -->
-      </class> <!-- SignIn.IntegartionBit -->
+        </test-method> <!-- SubscriptionEmailTest -->
+      </class> <!-- Home.SubscriptionEmail -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
