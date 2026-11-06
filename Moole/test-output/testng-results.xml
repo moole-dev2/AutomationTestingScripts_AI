@@ -2,16 +2,16 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2026-09-26T16:57:18 CDT" name="Default suite" finished-at="2026-09-26T16:57:28 CDT" duration-ms="10298">
+  <suite started-at="2026-11-06T15:51:05 CST" name="Default suite" finished-at="2026-11-06T15:51:57 CST" duration-ms="51846">
     <groups>
     </groups>
-    <test started-at="2026-09-26T16:57:18 CDT" name="Default test" finished-at="2026-09-26T16:57:28 CDT" duration-ms="10298">
-      <class name="Home.SubscriptionEmail">
-        <test-method signature="SubscriptionEmailTest()[pri:0, instance:Home.SubscriptionEmail@57a3af25]" started-at="2026-09-26T16:57:18 CDT" name="SubscriptionEmailTest" finished-at="2026-09-26T16:57:28 CDT" duration-ms="10275" status="PASS">
+    <test started-at="2026-11-06T15:51:05 CST" name="Default test" finished-at="2026-11-06T15:51:57 CST" duration-ms="51846">
+      <class name="Company.Leadership">
+        <test-method signature="verifyAboutPage()[pri:0, instance:Company.Leadership@7f3b84b8]" started-at="2026-11-06T15:51:05 CST" name="verifyAboutPage" finished-at="2026-11-06T15:51:57 CST" duration-ms="51820" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- SubscriptionEmailTest -->
-      </class> <!-- Home.SubscriptionEmail -->
+        </test-method> <!-- verifyAboutPage -->
+      </class> <!-- Company.Leadership -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
