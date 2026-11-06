@@ -2,16 +2,16 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2026-11-06T15:51:05 CST" name="Default suite" finished-at="2026-11-06T15:51:57 CST" duration-ms="51846">
+  <suite started-at="2026-11-06T16:49:30 CST" name="Default suite" finished-at="2026-11-06T16:50:13 CST" duration-ms="42978">
     <groups>
     </groups>
-    <test started-at="2026-11-06T15:51:05 CST" name="Default test" finished-at="2026-11-06T15:51:57 CST" duration-ms="51846">
-      <class name="Company.Leadership">
-        <test-method signature="verifyAboutPage()[pri:0, instance:Company.Leadership@7f3b84b8]" started-at="2026-11-06T15:51:05 CST" name="verifyAboutPage" finished-at="2026-11-06T15:51:57 CST" duration-ms="51820" status="PASS">
+    <test started-at="2026-11-06T16:49:30 CST" name="Default test" finished-at="2026-11-06T16:50:13 CST" duration-ms="42978">
+      <class name="SignIn.AddingRepositories">
+        <test-method signature="DashboardPageTest()[pri:0, instance:SignIn.AddingRepositories@6069db50]" started-at="2026-11-06T16:49:30 CST" name="DashboardPageTest" finished-at="2026-11-06T16:50:13 CST" duration-ms="42954" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- verifyAboutPage -->
-      </class> <!-- Company.Leadership -->
+        </test-method> <!-- DashboardPageTest -->
+      </class> <!-- SignIn.AddingRepositories -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
