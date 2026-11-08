@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
 
 
 
-public class FooterLinksTest {
+public class ProductsLinksTest {
 
     @Test
     public void FooterLinksTestTest() throws InterruptedException {
