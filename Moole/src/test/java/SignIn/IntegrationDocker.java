@@ -104,7 +104,7 @@ public class IntegrationDocker {
 						);
 
 						accessToken.click();
-						accessToken.sendKeys("dckr_pat_xz47ouCnp0mk79ZCtfrKRo0yMy8");
+						//accessToken.sendKeys("dckr_pat_xz47ouCnp0mk79ZCtfrKRo0yMy8");
 						Thread.sleep(500);
 
 
