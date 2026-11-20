@@ -77,6 +77,7 @@ public class Repositories {
             );
 
             filterButton.click();
+            
 
             Thread.sleep(1000);
 
