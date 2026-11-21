@@ -2,16 +2,16 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2026-11-19T19:44:08 CST" name="Default suite" finished-at="2026-11-19T19:44:57 CST" duration-ms="48435">
+  <suite started-at="2026-11-20T19:26:15 CST" name="Default suite" finished-at="2026-11-20T19:29:03 CST" duration-ms="168164">
     <groups>
     </groups>
-    <test started-at="2026-11-19T19:44:08 CST" name="Default test" finished-at="2026-11-19T19:44:57 CST" duration-ms="48435">
-      <class name="SignIn.ContainerSecurity">
-        <test-method signature="IntegrationGitHubTest()[pri:0, instance:SignIn.ContainerSecurity@6069db50]" started-at="2026-11-19T19:44:08 CST" name="IntegrationGitHubTest" finished-at="2026-11-19T19:44:57 CST" duration-ms="48409" status="PASS">
+    <test started-at="2026-11-20T19:26:15 CST" name="Default test" finished-at="2026-11-20T19:29:03 CST" duration-ms="168164">
+      <class name="SignIn.ContainerSecurityViewReport">
+        <test-method signature="IntegrationGitHubTest()[pri:0, instance:SignIn.ContainerSecurityViewReport@6069db50]" started-at="2026-11-20T19:26:15 CST" name="IntegrationGitHubTest" finished-at="2026-11-20T19:29:03 CST" duration-ms="168137" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- IntegrationGitHubTest -->
-      </class> <!-- SignIn.ContainerSecurity -->
+      </class> <!-- SignIn.ContainerSecurityViewReport -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
