@@ -2,6 +2,7 @@ package SignIn;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -156,65 +157,54 @@ public class ContainerSecurity {
 		            
 
 		            // ================= CLEAR SEARCH FIELD AGAIN =================
-
-		            searchInput.clear();
-
-		            System.out.println("Search field cleared again");
+		            searchInput.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+		            searchInput.sendKeys(Keys.BACK_SPACE);
+		            
 		                 
 		            // ================= ACTIONS BUTTON =================
 
-		               WebElement actionsButton = wait.until(
-		                       ExpectedConditions.elementToBeClickable(
-		                               By.xpath("//button[@aria-label='Actions for node-test']")
-		                       )
-		               );
 
-		               js.executeScript(
-		                       "arguments[0].scrollIntoView({block:'center'});",
-		                       actionsButton
-		               );
+		            WebElement actionsImage = wait.until(
+		                    ExpectedConditions.elementToBeClickable(
+		                            By.xpath("//button[@aria-label='Actions for mooletaran/my-java-cve-image']")
+		                    )
+		            );
 
-		               Thread.sleep(500);
+		            js.executeScript("arguments[0].scrollIntoView({block:'center'});", actionsImage);
+		            Thread.sleep(500);
 
-		               actionsButton.click();
+		            actionsImage.click();
 
-		               System.out.println("Actions button clicked");
+		            System.out.println("Actions for mooletaran/my-java-cve-image clicked");
 
-		               Thread.sleep(1000);
-		            // ================= REMOVE REPOSITORY =================
+		            Thread.sleep(1000);		              
+		         // ================= CLICK REMOVE IMAGE =================
 
-		               WebElement removeRepository = wait.until(
-		                       ExpectedConditions.elementToBeClickable(
-		                               By.xpath("//button[@role='menuitem' and .//span[normalize-space()='Remove repository']]")
-		                       )
-		               );
+		            WebElement removeImage = wait.until(
+		                    ExpectedConditions.elementToBeClickable(
+		                            By.xpath("//button[@role='menuitem' and .//span[normalize-space()='Remove image']]")
+		                    )
+		            );
 
-		               js.executeScript(
-		                       "arguments[0].scrollIntoView({block:'center'});",
-		                       removeRepository
-		               );
+		            removeImage.click();
 
-		               Thread.sleep(500);
+		            System.out.println("Remove image clicked");
 
-		               removeRepository.click();
+		            Thread.sleep(1000);
 
-		               System.out.println("Remove repository clicked");
+		            // ================= CLICK CANCEL BUTTON =================
 
-		               Thread.sleep(1000);
-		               
-		            // ================= CANCEL BUTTON =================
+		            WebElement cancelButton = wait.until(
+		                    ExpectedConditions.elementToBeClickable(
+		                            By.xpath("//button[normalize-space()='Cancel']")
+		                    )
+		            );
 
-		               WebElement cancelButton = wait.until(
-		                       ExpectedConditions.elementToBeClickable(
-		                               By.xpath("//button[normalize-space()='Cancel']")
-		                       )
-		               );
+		            cancelButton.click();
 
-		               cancelButton.click();
+		            System.out.println("Cancel button clicked");
 
-		               System.out.println("Cancel button clicked");
-
-		               Thread.sleep(1000);
+		            Thread.sleep(1000);
 		               
 		            // ================= CLICK ENV =================
 
@@ -231,11 +221,11 @@ public class ContainerSecurity {
 		               Thread.sleep(1000);
 
 
-		               // ================= CLICK ADD TO PRODUCTION =================
+		            // ================= CLICK ADD TO PRODUCTION =================
 
 		               WebElement productionButton = wait.until(
 		                       ExpectedConditions.elementToBeClickable(
-		                               By.xpath("//button[.//p[normalize-space()='Add to environment'] and .//span[normalize-space()='Production']]")
+		                               By.xpath("//button[.//span[normalize-space()='Production'] and .//span[normalize-space()='Add to environment']]")
 		                       )
 		               );
 
@@ -246,7 +236,7 @@ public class ContainerSecurity {
 		               Thread.sleep(1000);
 
 
-		               // ================= REMOVE FROM PRODUCTION ICON =================
+		               // ================= CLICK REMOVE FROM PRODUCTION ICON =================
 
 		               WebElement removeProductionIcon = wait.until(
 		                       ExpectedConditions.elementToBeClickable(
@@ -259,48 +249,62 @@ public class ContainerSecurity {
 		               System.out.println("Remove from Production icon clicked");
 
 		               Thread.sleep(1000);
-
-
-		               // ================= CONFIRM REMOVE FROM PRODUCTION =================
-
-		               WebElement removeProductionButton = wait.until(
-		                       ExpectedConditions.elementToBeClickable(
-		                               By.xpath("//button[normalize-space()='Remove from Production']")
-		                       )
-		               );
-
-		               removeProductionButton.click();
-
-		               System.out.println("Remove from Production confirmed");
-
-		               Thread.sleep(1500);
 		               
-		            // ================= ACTIONS FOR MAIN =================
+		            // ================= CONFIRM REMOVE BUTTON =================
 
-		               WebElement actionsMain = wait.until(
+		               WebElement removeButton = wait.until(
 		                       ExpectedConditions.elementToBeClickable(
-		                               By.xpath("//button[@aria-label='Actions for main']")
+		                               By.xpath("//button[normalize-space()='Remove']")
 		                       )
 		               );
 
-		               actionsMain.click();
+		               removeButton.click();
 
-		               System.out.println("Actions for main clicked");
+		               System.out.println("Remove button clicked");
+
+		               Thread.sleep(1000);
+		               
+		            // ================= CLICK ACTIONS FOR 1.2 =================
+
+		               WebElement actionsForTag = wait.until(
+		                       ExpectedConditions.elementToBeClickable(
+		                               By.xpath("//button[@aria-label='Actions for 1.2']")
+		                       )
+		               );
+
+		               actionsForTag.click();
+
+		               System.out.println("Actions for 1.2 clicked");
 
 		               Thread.sleep(1000);
 
 
-		               // ================= STOP TRACKING THIS BRANCH =================
+		               // ================= CLICK STOP TRACKING THIS TAG =================
 
-		               WebElement stopTrackingBranch = wait.until(
+		               WebElement stopTrackingTag = wait.until(
 		                       ExpectedConditions.elementToBeClickable(
-		                               By.xpath("//button[@role='menuitem' and .//span[normalize-space()='Stop tracking this branch']]")
+		                               By.xpath("//button[@role='menuitem' and .//span[normalize-space()='Stop tracking this tag']]")
 		                       )
 		               );
 
-		               stopTrackingBranch.click();
+		               stopTrackingTag.click();
 
-		               System.out.println("Stop tracking this branch clicked");
+		               System.out.println("Stop tracking this tag clicked");
+
+		               Thread.sleep(1000);
+
+
+		               // ================= CLICK STOP TRACKING BUTTON =================
+
+		               WebElement stopTrackingButton = wait.until(
+		                       ExpectedConditions.elementToBeClickable(
+		                               By.xpath("//button[@type='submit' and .//span[normalize-space()='Stop tracking']]")
+		                       )
+		               );
+
+		               stopTrackingButton.click();
+
+		               System.out.println("Stop tracking confirmed");
 
 		               Thread.sleep(1000);
 
@@ -319,22 +323,21 @@ public class ContainerSecurity {
 
 		               Thread.sleep(1000);
 		               
-		               // ================= ACTIONS FOR MAIN AGAIN =================
+		               // ================= CLICK ACTIONS FOR 1.2 =================
 
-		               WebElement actionsMainAgain = wait.until(
+		               WebElement actionsForTag1 = wait.until(
 		                       ExpectedConditions.elementToBeClickable(
-		                               By.xpath("//button[@aria-label='Actions for main']")
+		                               By.xpath("//button[@aria-label='Actions for 1.2']")
 		                       )
 		               );
 
-		               actionsMainAgain.click();
+		               actionsForTag1.click();
 
-		               System.out.println("Actions for main clicked again");
+		               System.out.println("Actions for 1.2 clicked");
 
 		               Thread.sleep(1000);
-
-
-		               // ================= CLICK RESCAN MENU ITEM =================
+		               
+		            // ================= CLICK RESCAN MENU ITEM =================
 
 		               WebElement rescanMenu = wait.until(
 		                       ExpectedConditions.elementToBeClickable(
@@ -344,64 +347,142 @@ public class ContainerSecurity {
 
 		               rescanMenu.click();
 
-		               System.out.println("Rescan menu item clicked");
+		               System.out.println("Rescan clicked");
+
+		               // ================= WAIT FOR SCAN =================
+
+		               Thread.sleep(15000);
+
+		               System.out.println("Waited 15 seconds for rescan to complete");
+		               
+		            // ================= CLICK TRACK ANOTHER TAG =================
+
+		               WebElement trackAnotherTag = wait.until(
+		                       ExpectedConditions.elementToBeClickable(
+		                               By.xpath("//button[contains(.,'Track another tag from') and contains(.,'mooletaran/my-java-cve-image')]")
+		                       )
+		               );
+
+		               trackAnotherTag.click();
+
+		               System.out.println("Track another tag clicked");
 
 		               Thread.sleep(1000);
 
 
-		               // ================= CLICK TOGGLE =================
+		               // ================= ENTER TAG 1.3 =================
 
-		               WebElement rescanToggle = wait.until(
-		                       ExpectedConditions.elementToBeClickable(
-		                               By.xpath("//button[@role='switch']")
+		               WebElement tagSearch = wait.until(
+		                       ExpectedConditions.visibilityOfElementLocated(
+		                               By.xpath("//input[@placeholder='Search tags…']")
 		                       )
 		               );
 
-		               rescanToggle.click();
+		               tagSearch.sendKeys("1.3");
 
-		               System.out.println("Rescan toggle clicked");
+		               System.out.println("Entered tag 1.3");
+
+		               Thread.sleep(1500);
+
+
+		               // ================= CLEAR SEARCH USING BACKSPACE =================
+
+		               tagSearch.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+		               tagSearch.sendKeys(Keys.BACK_SPACE);
+
+		               System.out.println("Search field cleared using Backspace");
 
 		               Thread.sleep(1000);
 
 
-		               // ================= CLICK RESCAN BUTTON =================
+		               // ================= CLICK TAG ENVIRONMENT DROPDOWN =================
 
-		               WebElement rescanButton = wait.until(
+		               WebElement tagEnvironment = wait.until(
 		                       ExpectedConditions.elementToBeClickable(
-		                               By.xpath("//button[normalize-space()='Rescan']")
+		                               By.xpath("//button[@aria-label='Tag environment…']")
 		                       )
 		               );
 
-		               rescanButton.click();
+		               tagEnvironment.click();
 
-		               System.out.println("Rescan button clicked");
+		               System.out.println("Tag environment dropdown clicked");
+
+		               Thread.sleep(1000);
+
+
+		               // ================= SELECT PRODUCTION =================
+
+		               WebElement selectProduction = wait.until(
+		                       ExpectedConditions.elementToBeClickable(
+		                               By.xpath("//div[contains(@class,'cursor-pointer') and .//span[normalize-space()='Production']]")
+		                       )
+		               );
+
+		               selectProduction.click();
+
+		               System.out.println("Production selected");
+
+		               Thread.sleep(1000);
+
+
+		               // ================= CLICK TRACK BUTTON =================
+
+		               WebElement trackButton = wait.until(
+		                       ExpectedConditions.elementToBeClickable(
+		                               By.xpath("//button[.//span[normalize-space()='Track']]")
+		                       )
+		               );
+
+		               trackButton.click();
+
+		               System.out.println("Track button clicked");
 
 		               Thread.sleep(15000);
 		               
-		            // ================= TRACK ANOTHER BRANCH =================
 
-		               WebElement trackAnotherBranch = wait.until(
+		               WebElement actionsForTag11 = wait.until(
 		                       ExpectedConditions.elementToBeClickable(
-		                               By.xpath("//button[.//span[contains(normalize-space(),'Track another branch from')]]")
+		                               By.xpath("//button[@aria-label='Actions for 1.2']")
 		                       )
 		               );
 
-		               js.executeScript(
-		                       "arguments[0].scrollIntoView({block:'center'});",
-		                       trackAnotherBranch
-		               );
+		               actionsForTag11.click();
 
-		               Thread.sleep(500);
-
-		               trackAnotherBranch.click();
-
-		               System.out.println("Track another branch button clicked");
+		               System.out.println("Actions for 1.2 clicked");
 
 		               Thread.sleep(1000);
 		               
-                    
-                    
-                    
+
+		               // ================= CLICK STOP TRACKING THIS TAG =================
+
+		               WebElement stopTrackingTag1 = wait.until(
+		                       ExpectedConditions.elementToBeClickable(
+		                               By.xpath("//button[@role='menuitem' and .//span[normalize-space()='Stop tracking this tag']]")
+		                       )
+		               );
+
+		               stopTrackingTag1.click();
+
+		               System.out.println("Stop tracking this tag clicked");
+
+		               Thread.sleep(1000);
+
+
+		               // ================= CLICK STOP TRACKING BUTTON =================
+
+		               WebElement stopTrackingButton1 = wait.until(
+		                       ExpectedConditions.elementToBeClickable(
+		                               By.xpath("//button[@type='submit' and .//span[normalize-space()='Stop tracking']]")
+		                       )
+		               );
+
+		               stopTrackingButton1.click();
+
+		               System.out.println("Stop tracking confirmed");
+
+		               Thread.sleep(2000);
+		               
+	            
         } catch (Exception e) {
             e.printStackTrace();
             
